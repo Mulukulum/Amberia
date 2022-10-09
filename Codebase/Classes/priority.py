@@ -1,8 +1,5 @@
 
 
-
-
-
 #This Class defines a Priority Object
 #Each task contains one of these, each object has a prioritylevel and a color associated with it
 #There can be a maximum of 10 priority levels, where 10 is the lowest and 1 in the highest
@@ -21,10 +18,10 @@ class Priority:
     def __repr__(self) -> str:
         return f'Priority Level {self.PriorityLevel}'
     
-    #This classmethod returns the color of a priority level either as an integer
+    #This classmethod returns the color of a priority level as an integer
 
     @classmethod
-    def GetColor(cls,PrLevel,ReturnHex=False) -> int :
+    def GetColor(cls,PrLevel) -> int :
         from csv import reader,QUOTE_NONE
         QUOTE_NONE                                      #Instructing the reader to Quote Nothing
         from os import path                                 #To Get the Path of the directory where code is stored
@@ -50,6 +47,6 @@ class Priority:
         else:
             return False
         return True
-#Priority.GetColor(2)
+
     
         
