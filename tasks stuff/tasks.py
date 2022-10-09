@@ -7,7 +7,7 @@ class task:
         if labels==None: #checks if any labels are selected
             self.labels=[] #makes it an empty list instead of None
         else: 
-            self.labels=[labels] #makes a list of the selected labels
+            self.labels=list(labels) #makes a list of the selected labels
 
     def set_label(self,new_label):
         if new_label in self.labels: #checks if the label is already selected
