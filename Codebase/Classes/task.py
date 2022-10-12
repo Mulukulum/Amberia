@@ -25,5 +25,21 @@ class task:
     def __repr__(self):                         
         return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.priority},{self.DueDate},{self.Labels})" 
         #Repr returns how to create the task
+    
+    def reconfigure(self,TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=None):
+        self.TaskTitle=TaskTitle                        #Changes the title to a newly provided title
+        self.TaskDesc=TaskDesc                          #Changes the desc to a newly provided desc
+        self.DueDate=DueDate                            #Changes the due date to a newly provided due date
+        if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
+            self.priority=Priority(priority)            #If so, then give the task its priority
+        else:
+            self.priority=Priority(10)                  #If not, then set it to a default value of 10
+            #Line for error log
+
+        if Labels==None:                                #Checks if any labels are selected
+            self.Labels=[]                              #Makes it an empty list instead of None
+        else: 
+            self.Labels=list(Labels)      
+    
 
     
