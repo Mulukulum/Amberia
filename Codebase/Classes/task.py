@@ -1,7 +1,7 @@
 from priority import Priority
 
 class task:
-    def __init__(self, TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=None): #initializes the class
+    def __init__(self, TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=None): #Initializes the class
         self.TaskTitle=TaskTitle
         self.TaskDesc=TaskDesc
         self.DueDate=DueDate
@@ -11,19 +11,19 @@ class task:
             self.priority=Priority(10)                  #If not, then set it to a default value of 10
             #Line for error log
 
-        if Labels==None: #checks if any labels are selected
-            self.Labels=[] #makes it an empty list instead of None
+        if Labels==None:                                #Checks if any labels are selected
+            self.Labels=[]                              #Makes it an empty list instead of None
         else: 
-            self.Labels=list(Labels) #makes a list of the selected labels
+            self.Labels=list(Labels)                    #Makes a list of the selected labels
 
-    def set_label(self,new_label):
-        if new_label in self.Labels: #checks if the label is already selected
-            self.Labels.remove(new_label) #removes the label if it is already selected
+    def set_label(self,NewLabel):
+        if NewLabel in self.Labels:                     #Checks if the label is already selected
+            self.Labels.remove(NewLabel)                #Removes the label if it is already selected
         else: 
-            self.Labels.append(new_label)  #adds the label if it isnt selected
+            self.Labels.append(NewLabel)                #Adds the label if it isnt selected
 
     def __repr__(self):                         
         return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.priority},{self.DueDate},{self.Labels})" 
-        #repr returns how to create the task
+        #Repr returns how to create the task
 
     
