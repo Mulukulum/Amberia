@@ -7,6 +7,13 @@
 class Priority: 
     
     ValidPriorites=(1,2,3,4,5,6,7,8,9,10)                 #Sets a tuple containing whole numbers from 1 to 10
+                  
+    @classmethod
+    def ValidatePriority(cls,PrLevel) -> bool :     #Class method that ensures priority level call is valid
+        ValidPriorites=(1,2,3,4,5,6,7,8,9,10)       #Sets a tuple containing whole numbers from 1 to 10
+        if PrLevel in ValidPriorites:
+            return True
+        else: return False
     
     #Initialising class
     def __init__(self,PriorityLevel=10) -> None:
@@ -21,7 +28,7 @@ class Priority:
 
     @classmethod
     def GetColor(cls,PrLevel) -> int :
-        if PrLevel not in cls.ValidPriorites:          #If Priority is invalid, return None
+        if cls.ValidatePriority(PrLevel)==False:          #If Priority is invalid, return None
             #Place for ErrorLog Function
             return None
         from csv import reader,QUOTE_NONE
@@ -39,11 +46,11 @@ class Priority:
                 return None
         return Color
     
-    #Method to update priority level of said priority object
+    #Method to update priority level of priority object
     def UpdatePriorityLevel(self,NewLevel):
-        if NewLevel in self.ValidPriorites :
+        if self.ValidatePriority(NewLevel) :
             self.PriorityLevel=NewLevel 
-            ...                                #This updates the color as well (this i'm not doing rn because we haven't setup sql)
+            ...                                   #This updates the color as well (this i'm not doing rn because we haven't setup sql)
         else:
             return False
         return True

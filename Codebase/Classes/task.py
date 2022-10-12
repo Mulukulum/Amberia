@@ -1,7 +1,9 @@
+from priority import Priority
+
 class task:
-    def __init__(self, task_title, task_desc=None, priority=None, due_date=None, labels=None): #initializes the class
-        self.task_title=task_title
-        self.task_desc=task_desc
+    def __init__(self, TaskTitle, TaskDesc=None, priority=None, due_date=None, labels=None): #initializes the class
+        self.TaskTitle=TaskTitle
+        self.TaskDesc=TaskDesc
         self.priority=priority
         self.due_date=due_date
         if labels==None: #checks if any labels are selected
@@ -16,6 +18,7 @@ class task:
             self.labels.append(new_label)  #adds the label if it isnt selected
 
     def __repr__(self):
-        return "task('{}','{}','{}',{},{},{})".format(self.task_title,self.task_desc,self.priority,self.due_date,self.labels) #repr returning how to recreate the task
+        return "task('{}','{}','{}',{},{},{})".format(self.TaskTitle,self.TaskDesc,self.priority,self.due_date,self.labels) #repr returning how to recreate the task
+        return f"task({self.TaskTitle}"
 
     
