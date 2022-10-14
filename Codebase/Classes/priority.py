@@ -5,8 +5,7 @@
 #There can be a maximum of 10 priority levels, where 10 is the lowest and 1 in the highest
 
 class Priority: 
-    
-    ValidPriorites=(1,2,3,4,5,6,7,8,9,10)                 #Sets a tuple containing whole numbers from 1 to 10
+
                   
     @classmethod
     def IsValidPriority(cls,PrLevel) -> bool :     #Class method that ensures priority level call is valid
