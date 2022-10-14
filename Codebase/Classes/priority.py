@@ -6,7 +6,6 @@
 
 class Priority: 
 
-                  
     @classmethod
     def IsValidPriority(cls,PrLevel) -> bool :     #Class method that ensures priority level call is valid
         ValidPriorites=(1,2,3,4,5,6,7,8,9,10)      #Sets a tuple containing whole numbers from 1 to 10
