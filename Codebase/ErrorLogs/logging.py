@@ -4,14 +4,14 @@ from os.path import dirname
 LogPath=((dirname(__file__).partition("Codebase")[0]))+("LogFiles\\")         #Gets the path of the logs Folder
 
 def ErrorLog(text=None,FileName=__file__):
-    if text==None:
+    if text==None or type(text) != str :
         return None
     else:
         _WriteToMaster(text,FileName,type='ERROR')
         _WriteToErrors(text,FileName)
 
 def Log(text=None,FileName=__file__):
-    if text==None:
+    if text==None or type(text) != str :
         return None
     else:
         _WriteToMaster(text,FileName,type='LOG')
