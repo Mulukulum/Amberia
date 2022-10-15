@@ -1,4 +1,4 @@
-from priority import Priority
+from Codebase.Classes.priority import Priority
 
 class task:
     def __init__(self, TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=None): #Initializes the class
