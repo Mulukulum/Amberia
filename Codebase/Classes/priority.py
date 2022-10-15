@@ -1,5 +1,4 @@
-
-
+from Codebase.ErrorLogs.logging import CreateLog
 #This Class defines a Priority Object
 #Each task contains one of these, each object has a prioritylevel and a color associated with it
 #There can be a maximum of 10 priority levels, where 10 is the lowest and 1 in the highest
@@ -29,7 +28,7 @@ class Priority:
     @classmethod
     def GetColor(cls,PrLevel) -> int :
         if cls.IsValidPriority(PrLevel)==False:          #If Priority is invalid, return None
-            #Place for ErrorLog Function
+            
             return None
         from csv import reader,QUOTE_NONE
         QUOTE_NONE                                          #Instructing the reader to Quote Nothing
@@ -54,7 +53,6 @@ class Priority:
         else:
             return False
         return True
-
 
     
         
