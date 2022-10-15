@@ -52,5 +52,5 @@ class Priority:
         else:
             return False
         return True
-    
+
         
