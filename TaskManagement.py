@@ -1,18 +1,5 @@
 
 
-class Task:
-    def __init__(self, prio, date, time=None, labels=None, tasks=None, notes=None):
-        self.priority = prio
-        self.duedate = date
-        self.duetime = time
-        self.labels = labels
-        self.notes = notes
-        self.tasks = tasks
-
-    def __str__(self):
-        return 'Task with priority ' + str(self.priority) + '\n'\
-                'Due on ' + self.duedate
-
 class Section:
     def __init__(self, name, project=None, tasks=[]):
         self.name = name                 #Initialize name of section
@@ -96,27 +83,3 @@ class Project:
         return f"Project({self.name},{self.color},{self.sections},{self.subprojects},{self.parentprojects})"
 
 
-T1 = Task(1, "2022-10-24", "0530")
-T2 = Task(2, "2022-10-25", "0930")
-print(T1)
-
-print('-----------------')
-
-
-P1 = Project("Math", "Blue")
-P2 = Project("Science", "Red")
-P1.add_parentproject(P2)
-
-S1 = Section("Geometry")
-S1.set_project(P1)
-S1.add_task(T1)
-S1.add_task(T2)
-
-print(S1)
-
-print('-----------------')
-
-P1. add_section(S1)
-print(P1)
-
-S1.display_tasks()
