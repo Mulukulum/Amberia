@@ -1,5 +1,5 @@
-from priority import Priority
-
+from Codebase.Classes.priority import Priority
+from Codebase.ErrorLogs.logging import Log,ErrorLog
 class task:
     def __init__(self, TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=None): #Initializes the class
         self.TaskTitle=TaskTitle
@@ -9,7 +9,7 @@ class task:
             self.priority=Priority(priority)            #If so, then give the task its priority
         else:
             self.priority=Priority(10)                  #If not, then set it to a default value of 10
-            #Line for error log
+            Log(f"Task {self.TaskTitle} given no priority. Default Value Assigned")
 
         if Labels==None:                                #Checks if any labels are selected
             self.Labels=[]                              #Makes it an empty list instead of None
