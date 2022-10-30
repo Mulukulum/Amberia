@@ -3,11 +3,7 @@ from Codebase.ErrorLogs.logging import ErrorLog,Log
 #Each task contains one of these, each object has a prioritylevel and a color associated with it
 #There can be a maximum of 10 priority levels, where 10 is the lowest and 1 in the highest
 class Priority: 
-<<<<<<< HEAD
 
-=======
-                  
->>>>>>> dev
     @classmethod
     def IsValidPriority(cls,PrLevel) -> bool :     #Class method that ensures priority level call is valid
         ValidPriorites=(1,2,3,4,5,6,7,8,9,10)      #Sets a tuple containing whole numbers from 1 to 10
