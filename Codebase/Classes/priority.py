@@ -1,11 +1,13 @@
-
-
+from Codebase.ErrorLogs.logging import ErrorLog,Log 
 #This Class defines a Priority Object
 #Each task contains one of these, each object has a prioritylevel and a color associated with it
 #There can be a maximum of 10 priority levels, where 10 is the lowest and 1 in the highest
-
 class Priority: 
+<<<<<<< HEAD
 
+=======
+                  
+>>>>>>> dev
     @classmethod
     def IsValidPriority(cls,PrLevel) -> bool :     #Class method that ensures priority level call is valid
         ValidPriorites=(1,2,3,4,5,6,7,8,9,10)      #Sets a tuple containing whole numbers from 1 to 10
@@ -27,7 +29,7 @@ class Priority:
     @classmethod
     def GetColor(cls,PrLevel) -> int :
         if cls.IsValidPriority(PrLevel)==False:          #If Priority is invalid, return None
-            #Place for ErrorLog Function
+            ErrorLog(f"Unable to get Priority Color due to Invalid Priority Level input")
             return None
         from csv import reader,QUOTE_NONE
         QUOTE_NONE                                          #Instructing the reader to Quote Nothing
@@ -40,7 +42,7 @@ class Priority:
             try:
                 Color= list(Reader)[PrLevel]                #This gets the color that is stored as an integer
             except IndexError:
-                #Place for ErrorLog Function Call
+                ErrorLog("WARNING : THIS ERROR SHOULD BE IMPOSSIBLE. Unable to retrieve color due to out of range priority level")
                 return None
         return Color
     
@@ -53,6 +55,4 @@ class Priority:
             return False
         return True
 
-
-    
         
