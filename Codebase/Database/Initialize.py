@@ -70,13 +70,14 @@ AttribDict={
     'sections':'sectionid INTEGER PRIMARY KEY, title TEXT NOT NULL, taskcount INTEGER NOT NULL, parentprojectid INTEGER NOT NULL, sectiontemplate INTEGER',
     'colors':'level INTEGER PRIMARY KEY, hexcode TEXT NOT NULL',
     }
-
+CriticalError=None
 for table in CheckList:                                 #For the tables that have to be checked
     if CheckAndCreate(Cursor,table,AttribDict[table]):  #iterate through each one and ensure the tables exist
         StartLog(f"TABLE {table} exists with Attributes {AttribDict[table]}")                                            #If they exist, Log it into a new file
     else:
         ErrorLog(f"Could not create TABLE {table} with Attributes {AttribDict[table]}")     #If they don't exist, log which one doesn't exist and shut the whole thing down
-
-
+        CriticalError=True
 Con.commit()
 Con.close()
+if CriticalError:
+    ErrorLog("CRITICAL: Database could not be initialised. Check Start Logs for more information")
