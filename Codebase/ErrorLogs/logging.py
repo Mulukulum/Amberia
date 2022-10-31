@@ -17,6 +17,13 @@ def Log(text=None,FileName=__file__):
         _WriteToMaster(text,FileName,type='LOG')
         _WriteToLogs(text,FileName)
 
+def Log(text=None,FileName=__file__):
+    if text==None or type(text) != str :
+        return None
+    else:
+        _WriteToMaster(text,FileName,type='STARTUP')
+        _WriteToStartLogs(text,FileName)
+
 '''
 B7^:::~7Y55J?5GGGPB#B#####B#BBBB&&#&@&&&&@@@@@@&#GB#&@@&&&&#&&&&&@@@@@@@@@@&&&&&@@@@@@@&&@@@&@@@@&@@
 B?5!~^~?PP5JJPBGGB####&&##BBGG#GB&####&&@&@@@@@@&B#&##&&@@@&&&&&&&&@@@@@@@&@@&&&&&&@@@@&@@@@@@@&@@@@
@@ -70,16 +77,21 @@ BJJYY5#B&&GG&@@&&&##BBBPB###B##&&@&#&&&@@@@@@@@@@@@@@@@@@&@@@@@@@@@@@@@@@@@@@@@@
 #Don't worry about any of these functions they're all perfectly tested
 def _WriteToMaster(text,file,type):
     with open(LogPath+'Master.log','a') as Master: #Opens the file in an appropriate filepath in append mode
-        Master.write(f"{type} : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} "+"\n") 
+        Master.write(f"{type} : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} \n") 
         #This code is just formatting stuff don't even worry about it
         Master.write(text+'\n')
 
 def _WriteToErrors(text,file):
     with open(LogPath+'Errors.log','a') as Errors:
-        Errors.write(f"ERROR : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} "+"\n")
+        Errors.write(f"ERROR : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} \n")
         Errors.write(text+'\n')
 
 def _WriteToLogs(text,file):
     with open(LogPath+'Logs.log','a') as Logs:
-        Logs.write(f"LOG : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} "+"\n")
+        Logs.write(f"LOG : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} \n")
         Logs.write(text+'\n')
+
+def _WriteToStartLogs(text,file):
+    with open(LogPath+'Start.log','a') as Startup:
+        Startup.write(f"STARTUP : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} \n")
+        Startup.write(text+'\n')
