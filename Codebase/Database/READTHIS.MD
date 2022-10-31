@@ -1,5 +1,8 @@
 #DO NOT TOUCH ANYTHING IN THIS DATABASE FOLDER
 
+Format of Storage of data is listed in "Instructions.MD" 
+The file is in this same folder
+
 
 
 
