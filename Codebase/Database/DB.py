@@ -1,11 +1,8 @@
 import sqlite3
-
-from os.path import dirname
-FilePath=dirname(__file__)+"\Data\Amber.db"     #Gets the path of the database
-del dirname
-
-Connector=sqlite3.connect(FilePath)       #Creates the database file if it doesn't exist already
-Cursor=Connector.cursor()
-
-Connector.commit()
-Connector.close()
+from Codebase.Database import DataBasePath
+from Codebase.Database.Functions.BaseFunctions import Check
+Con=sqlite3.connect(DataBasePath)       #Creates the database file if it doesn't exist already
+Cursor=Con.cursor()
+print(Check(Cursor))
+Con.commit()
+Con.close()
