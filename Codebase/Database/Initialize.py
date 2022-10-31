@@ -73,18 +73,9 @@ AttribDict={
 
 for table in CheckList:                                 #For the tables that have to be checked
     if CheckAndCreate(Cursor,table,AttribDict[table]):  #iterate through each one and ensure the tables exist
-        pass                                            #If they exist, do nothing
+        pass                                            #If they exist, Log it into a new file
     else:
         ErrorLog(f"Could not create TABLE {table} with Attributes {AttribDict[table]}")                                 #If they don't exist, log which one doesn't exist and shut the whole thing down
-        ...
-    
-
-
-
-
-
-
-
 
 
 Con.commit()
