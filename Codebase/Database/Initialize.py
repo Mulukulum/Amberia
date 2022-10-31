@@ -1,7 +1,7 @@
 import sqlite3
 from Codebase.Database import DataBasePath      #Gets the path of the database on the machine
 from Codebase.Database.Functions.StartUp import CheckAndCreate
-from Codebase.ErrorLogs.logging import Log,ErrorLog
+from Codebase.ErrorLogs.logging import StartLog,ErrorLog
 
 
 
@@ -73,7 +73,7 @@ AttribDict={
 
 for table in CheckList:                                 #For the tables that have to be checked
     if CheckAndCreate(Cursor,table,AttribDict[table]):  #iterate through each one and ensure the tables exist
-        ... #I still have to implement this                                            #If they exist, Log it into a new file
+        StartLog(f"TABLE {table} exists with Attributes {AttribDict[table]}")                                            #If they exist, Log it into a new file
     else:
         ErrorLog(f"Could not create TABLE {table} with Attributes {AttribDict[table]}")     #If they don't exist, log which one doesn't exist and shut the whole thing down
 

@@ -17,7 +17,7 @@ def Log(text=None,FileName=__file__):
         _WriteToMaster(text,FileName,type='LOG')
         _WriteToLogs(text,FileName)
 
-def Log(text=None,FileName=__file__):
+def StartLog(text=None,FileName=__file__):
     if text==None or type(text) != str :
         return None
     else:
