@@ -2,6 +2,7 @@ from os.path import dirname
 import sqlite3
 from Codebase.Database.Functions.StartUp import CheckAndCreate
 from Codebase.ErrorLogs.logging import StartLog,ErrorLog
+StartLog("Initialisation Requested")
 
 DataBasePath=dirname(__file__)+r"\Data\Amber.db"
 
@@ -74,13 +75,11 @@ for table in CheckList:                                 #For the tables that hav
     if CheckAndCreate(Cursor,table,AttribDict[table]):  #iterate through each one and ensure the tables exist
         StartLog(f"TABLE {table} exists with Attributes {AttribDict[table]}")         #If they exist, Log it into a file
     else:
-        ErrorLog(f"Could not create TABLE {table} with Attributes {AttribDict[table]}",__file__)   #If they don't exist, log which one doesn't exist and shut the whole thing down
+        ErrorLog(f"Could not create TABLE {table} with Attributes {AttribDict[table]}")   #If they don't exist, log which one doesn't exist and shut the whole thing down
         CriticalError=True
 Con.commit()
 Con.close()
 if CriticalError:
-    ErrorLog("CRITICAL: Database could not be initialised. Check Start Logs for more information",__file__)
-def GetPathDatabase():
-    return DataBasePath
+    ErrorLog("CRITICAL: Database could not be initialised. Check Start Logs for more information")
 #Now that all tables have been created, database can have values put into it.
 #Initialization of Database is done at this point.

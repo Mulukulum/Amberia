@@ -6,5 +6,5 @@ def CheckForError():
         InitSuccess=False
     else:
         InitSuccess=True
-    return Initialize.GetPathDatabase()
+    return Initialize.DataBasePath
 DataBasePath=CheckForError()
