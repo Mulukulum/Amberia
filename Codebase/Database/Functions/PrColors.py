@@ -14,6 +14,6 @@ Colors={
 
 def DefaultColor(con):
     for ClrLevel,ColorCode in Colors:                                 
-        con.execute(f"""DELETE * FROM colors;""")                     #Clears the table of any values
-        con.execute(f"""INSERT INTO colors ({AttribDict['colors']}) VALUES (?,?);""",(ClrLevel,hex(ColorCode).upper())) #And inserts default values
+        con.execute(f"""DELETE * FROM prcolors;""")                     #Clears the table of any values
+        con.execute(f"""INSERT INTO prcolors ({AttribDict['colors']}) VALUES (?,?);""",(ClrLevel,hex(ColorCode).upper())) #And inserts default values
 

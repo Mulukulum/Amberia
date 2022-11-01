@@ -50,7 +50,7 @@ taskcount INTEGER NOT NULL
 parentprojectid INTEGER NOT NULL
 sectiontemplate INTEGER
 
-colors
+prcolors
 Attributes:-
 level INTEGER PRIMARY KEY
 hexcode TEXT NOT NULL
@@ -61,14 +61,14 @@ CheckList=('projects',
             'labels',
             'tasks',
             'sections',
-            'colors')
+            'prcolors')
 
 AttribDict={
     'projects':'id INTEGER PRIMARY KEY, parentid INTEGER, title TEXT NOT NULL, color TEXT NOT NULL, sectioncount INTEGER NOT NULL, projectcount INTEGER NOT NULL, projecttemplate INTEGER',
     'labels':'title TEXT PRIMARY KEY, color TEXT NOT NULL,taskcount INTEGER NOT NULL',
     'tasks':'taskid INTEGER PRIMARY KEY, title TEXT NOT NULL, parentid INTEGER NOT NULL, sectionid INTEGER, priority INTEGER NOT NULL, color INTEGER NOT NULL, tasktemplate INTEGER',
     'sections':'sectionid INTEGER PRIMARY KEY, title TEXT NOT NULL, taskcount INTEGER NOT NULL, parentprojectid INTEGER NOT NULL, sectiontemplate INTEGER',
-    'colors':'level INTEGER PRIMARY KEY, hexcode TEXT NOT NULL',
+    'prcolors':'level INTEGER PRIMARY KEY, hexcode TEXT NOT NULL',
     }
 CriticalError=False
 for table in CheckList:                                 #For the tables that have to be checked

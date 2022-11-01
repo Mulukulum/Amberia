@@ -1,10 +1,8 @@
 InitSuccess=None
-def CheckForError():
-    global InitSuccess
-    import Codebase.Database.Initialize as Initialize
-    if Initialize.CriticalError==True:
-        InitSuccess=False
-    else:
-        InitSuccess=True
-    return Initialize.DataBasePath
-DataBasePath=CheckForError()
+import Codebase.Database.Initialize as Initialize
+if Initialize.CriticalError==True:
+    InitSuccess=False
+else:
+    InitSuccess=True
+DataBasePath=Initialize.DataBasePath
+del Initialize
