@@ -8,18 +8,23 @@ MainExecutor-Executes the Queries
 SendQuery-This is the function thats actually accessed
 CurrentlyServing-Returns token no that is currently being served
 
-
 SendQuery issues a 'Token' using IdGenerator and IdValidator
 Keeping Track of the Token is the responsibility of the Caller
 You find out where you are in the line and accordingly check again after sometime if the result exists
 If it is, then get the result and leave.
 
 Other not that important functions:
-FetchData-returns None if data is not ready
-CancelRequest
+FetchDataState-Gets the state of the result
+GetResult-Gets the result (DOES NOT CHECK Wheter the data exists or not)
+CancelRequest-Self Explanatory
 
 Notes for implementing this:
-Use a whileloop to keep checking if your result is accessible in the FetchData function
+Use a whileloop to keep checking if your result is accessible in the FetchDataState function.
+Implement a sleep timer of around 0.2 Seconds between each check.
+If it is, then getting the result will automatically clean up your request.
+
+
+
 
 
 
