@@ -1,19 +1,25 @@
+Kiosk.py contains an execution function that will ensure no two functions can use the connection at the same time.
+
+Firstly, we start by defining the following functions:
+
+IdGenerator-Generates a random ID 
+IdValidator-Validates that random ID to check that nothing else is using the DB
+MainExecutor-Executes the Queries
+SendQuery-This is the function thats actually accessed
+CurrentlyServing-Returns token no that is currently being served
 
 
+SendQuery issues a 'Token' using IdGenerator and IdValidator
+Keeping Track of the Token is the responsibility of the Caller
+You find out where you are in the line and accordingly check again after sometime if the result exists
+If it is, then get the result and leave.
 
+Other not that important functions:
+FetchData-returns None if data is not ready
+CancelRequest
 
-
-
-
-
-
-
-
-
-
-
-
-
+Notes for implementing this:
+Use a whileloop to keep checking if your result is accessible in the FetchData function
 
 
 
