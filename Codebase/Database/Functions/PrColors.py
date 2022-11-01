@@ -1,4 +1,5 @@
-from Codebase.Database.Initialize import AttribDict 
+from Codebase.Database.Initialize import AttribDict
+
 Colors={
     1:16399941,
     2:16070549,
@@ -16,4 +17,5 @@ def DefaultColor(con):
     for ClrLevel,ColorCode in Colors:                                 
         con.execute(f"""DELETE * FROM prcolors;""")                     #Clears the table of any values
         con.execute(f"""INSERT INTO prcolors ({AttribDict['colors']}) VALUES (?,?);""",(ClrLevel,hex(ColorCode).upper())) #And inserts default values
+
 
