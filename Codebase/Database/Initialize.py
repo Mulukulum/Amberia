@@ -1,4 +1,5 @@
 import sqlite3
+from Codebase import Database
 from Codebase.Database import DataBasePath      #Gets the path of the database on the machine
 from Codebase.Database.Functions.StartUp import CheckAndCreate
 from Codebase.ErrorLogs.logging import StartLog,ErrorLog
@@ -70,14 +71,17 @@ AttribDict={
     'sections':'sectionid INTEGER PRIMARY KEY, title TEXT NOT NULL, taskcount INTEGER NOT NULL, parentprojectid INTEGER NOT NULL, sectiontemplate INTEGER',
     'colors':'level INTEGER PRIMARY KEY, hexcode TEXT NOT NULL',
     }
+
 CriticalError=False
 for table in CheckList:                                 #For the tables that have to be checked
     if CheckAndCreate(Cursor,table,AttribDict[table]):  #iterate through each one and ensure the tables exist
-        StartLog(f"TABLE {table} exists with Attributes {AttribDict[table]}")                                            #If they exist, Log it into a new file
+        StartLog(f"TABLE {table} exists with Attributes {AttribDict[table]}")         #If they exist, Log it into a file
     else:
-        ErrorLog(f"Could not create TABLE {table} with Attributes {AttribDict[table]}")     #If they don't exist, log which one doesn't exist and shut the whole thing down
+        ErrorLog(f"Could not create TABLE {table} with Attributes {AttribDict[table]}")   #If they don't exist, log which one doesn't exist and shut the whole thing down
         CriticalError=True
 Con.commit()
 Con.close()
 if CriticalError:
     ErrorLog("CRITICAL: Database could not be initialised. Check Start Logs for more information")
+    Database.InitSuccess=False
+else: Database.InitSuccess=True

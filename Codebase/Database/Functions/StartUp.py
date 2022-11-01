@@ -12,7 +12,7 @@ def CheckAndCreate(cur,name,attributes):
 #Function to create a table
 def _CreateTable(cur,name,attributes):
     try:
-        cur.execute(f"""CREATE TABLE {name}({attributes})""")
+        cur.execute(f"""CREATE TABLE {name}({attributes});""")
     except:
         return False
 
