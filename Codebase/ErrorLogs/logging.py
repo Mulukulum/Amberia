@@ -1,35 +1,49 @@
 #Functions to log errors with other functions
 from datetime import datetime
 from os.path import dirname
+import math
 LogPath=((dirname(__file__).partition("Codebase")[0]))+("LogFiles\\")         #Gets the path of the logs Folder
+from inspect import stack
+FileConstant=6
 
-def ErrorLog(text=None,FileName=__file__):
+
+def ErrorLog(text=None,FileName=stack()[FileConstant].filename):
     if text==None or type(text) != str :
         return None
     else:
         _WriteToMaster(text,FileName,type='ERROR')
         _WriteToErrors(text,FileName)
 
-def Log(text=None,FileName=__file__):
+def Log(text=None,FileName=stack()[FileConstant].filename):
     if text==None or type(text) != str :
         return None
     else:
         _WriteToMaster(text,FileName,type='LOG')
         _WriteToLogs(text,FileName)
 
-def StartLog(text=None,FileName=__file__):
+def StartLog(text=None,FileName=stack()[FileConstant].filename):
     if text==None or type(text) != str :
         return None
     else:
         _WriteToMaster(text,FileName,type='STARTUP')
         _WriteToStartLogs(text,FileName)
 
-def DBLog(text=None,FileName=__file__):
+def DBLog(text=None,FileName=stack()[FileConstant].filename):
     if text==None or type(text) != str :
         return None
     else:
         _WriteToMaster(text,FileName,type='DATABASE')
         _WriteToDBLogs(text,FileName)
+
+def _Log(text=None,FileName=stack()):
+    if text==None or type(text) != str :
+        return None
+    for i in range(len(FileName)):
+        print(i,FileName[i].filename)
+    else:
+        _WriteToMaster(text,FileName,type='LOG')
+        _WriteToLogs(text,FileName)
+
 
 '''
 B7^:::~7Y55J?5GGGPB#B#####B#BBBB&&#&@&&&&@@@@@@&#GB#&@@&&&&#&&&&&@@@@@@@@@@&&&&&@@@@@@@&&@@@&@@@@&@@
