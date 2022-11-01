@@ -1,4 +1,3 @@
-from StartUp import CheckAndCreate
 from Codebase.Database.Initialize import AttribDict 
 Colors={
     1:16399941,
@@ -14,7 +13,6 @@ Colors={
 }
 
 def DefaultColor(con):
-    CheckAndCreate(con,'colors',AttribDict['colors'])                 #Create the color table if it doesn't exist
     for ClrLevel,ColorCode in Colors:                                 
         con.execute(f"""DELETE * FROM colors;""")                     #Clears the table of any values
         con.execute(f"""INSERT INTO colors ({AttribDict['colors']}) VALUES (?,?);""",(ClrLevel,hex(ColorCode).upper())) #And inserts default values
