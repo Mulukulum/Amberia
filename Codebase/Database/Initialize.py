@@ -85,3 +85,6 @@ if CriticalError:
     ErrorLog("CRITICAL: Database could not be initialised. Check Start Logs for more information",__file__)
     Database.InitSuccess=False
 else: Database.InitSuccess=True
+
+#Now that all tables have been created, database can have values put into it.
+#Initialization of Database is done at this point.
