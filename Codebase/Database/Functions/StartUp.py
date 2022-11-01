@@ -1,5 +1,4 @@
 
-from Codebase.Database import DataBasePath
 #The following function checks if a table exists in a database
 def CheckAndCreate(cur,name,attributes):
     cur.execute(f"""SELECT name FROM sqlite_master WHERE type='table' AND name='{name}';""")  #Checks if the table exists

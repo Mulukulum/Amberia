@@ -2,6 +2,7 @@ from os.path import dirname
 import sqlite3
 from Codebase.Database.Functions.StartUp import CheckAndCreate
 from Codebase.ErrorLogs.logging import StartLog,ErrorLog
+
 DataBasePath=dirname(__file__)+r"\Data\Amber.db"
 
 Con=sqlite3.connect(DataBasePath)       #Creates the database file if it doesn't exist already and makes a connection
@@ -54,7 +55,6 @@ level INTEGER PRIMARY KEY
 hexcode TEXT NOT NULL
 
 '''
-
 #Check if the Following Tables exist
 CheckList=('projects',
             'labels',
@@ -80,6 +80,7 @@ Con.commit()
 Con.close()
 if CriticalError:
     ErrorLog("CRITICAL: Database could not be initialised. Check Start Logs for more information",__file__)
-
+def GetPathDatabase():
+    return DataBasePath
 #Now that all tables have been created, database can have values put into it.
 #Initialization of Database is done at this point.
