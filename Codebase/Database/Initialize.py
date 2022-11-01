@@ -7,7 +7,7 @@ StartLog("Initialisation Requested")
 DataBasePath=dirname(__file__)+r"\Data\Amber.db"
 
 Con=sqlite3.connect(DataBasePath)       #Creates the database file if it doesn't exist already and makes a connection
-Cursor=Con.cursor()
+Cursor=Con.cursor()                     #Creates a cursor object from the connection that we can do operations with
 
 '''
 LIST OF TABLES
