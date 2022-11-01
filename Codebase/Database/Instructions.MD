@@ -4,7 +4,7 @@ ID of projects,sections,labels etc are all stored as integers
 Each of them have a parentid attribute which links to the ID of the parent of the said object.
 This way we can quickly arrange it into a tree datastructure with nodes, and operate using that.
 
-Alternatively all objects also have a relative ID thats stored as TEXT.
+Alternatively all objects also can have a relative ID thats stored as TEXT.
 The structure of the relative ID is as follows
 
 Relative IDs starting with 0's are reserved for template objects
