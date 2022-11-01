@@ -1,5 +1,4 @@
 import sqlite3
-from Codebase import Database
 from Codebase.Database import DataBasePath      #Gets the path of the database on the machine
 from Codebase.Database.Functions.StartUp import CheckAndCreate
 from Codebase.ErrorLogs.logging import StartLog,ErrorLog
