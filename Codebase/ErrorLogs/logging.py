@@ -35,7 +35,8 @@ def DBLog(text=None,FileName=stack()[FileConstant].filename):
         _WriteToMaster(text,FileName,type='DATABASE')
         _WriteToDBLogs(text,FileName)
 
-def _Log(text=None,FileName=stack()):
+#This function is for testing purposes only
+def _TestLog(text=None,FileName=stack()):
     if text==None or type(text) != str :
         return None
     for i in range(len(FileName)):
