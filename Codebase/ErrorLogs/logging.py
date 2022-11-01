@@ -24,6 +24,13 @@ def StartLog(text=None,FileName=__file__):
         _WriteToMaster(text,FileName,type='STARTUP')
         _WriteToStartLogs(text,FileName)
 
+def DBLog(text=None,FileName=__file__):
+    if text==None or type(text) != str :
+        return None
+    else:
+        _WriteToMaster(text,FileName,type='DATABASE')
+        _WriteToDBLogs(text,FileName)
+
 '''
 B7^:::~7Y55J?5GGGPB#B#####B#BBBB&&#&@&&&&@@@@@@&#GB#&@@&&&&#&&&&&@@@@@@@@@@&&&&&@@@@@@@&&@@@&@@@@&@@
 B?5!~^~?PP5JJPBGGB####&&##BBGG#GB&####&&@&@@@@@@&B#&##&&@@@&&&&&&&&@@@@@@@&@@&&&&&&@@@@&@@@@@@@&@@@@
@@ -94,4 +101,9 @@ def _WriteToLogs(text,file):
 def _WriteToStartLogs(text,file):
     with open(LogPath+'Start.log','a') as Startup:
         Startup.write(f"STARTUP : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} \n")
+        Startup.write(text+'\n')
+    
+def _WriteToDBLogs(text,file):
+    with open(LogPath+'DB.log','a') as Startup:
+        Startup.write(f"DATABASE : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} \n")
         Startup.write(text+'\n')
