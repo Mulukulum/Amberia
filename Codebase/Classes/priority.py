@@ -25,7 +25,7 @@ class Priority:
     @classmethod
     def GetColor(cls,PrLevel) -> int :
         if cls.IsValidPriority(PrLevel)==False:          #If Priority is invalid, return None
-            ErrorLog(f"Unable to get Priority Color due to Invalid Priority Level input {PrLevel}")
+            ErrorLog(f"Unable to get Priority Color due to Invalid Priority Level input {PrLevel}",__file__)
             return None
         from csv import reader,QUOTE_NONE
         QUOTE_NONE                                          #Instructing the reader to Quote Nothing
@@ -38,7 +38,7 @@ class Priority:
             try:
                 Color= list(Reader)[PrLevel]                #This gets the color that is stored as an integer
             except IndexError:
-                ErrorLog(f"WARNING : THIS ERROR SHOULD BE IMPOSSIBLE. Unable to retrieve color due to out of range priority level {PrLevel}")
+                ErrorLog(f"WARNING : THIS ERROR SHOULD BE IMPOSSIBLE. Unable to retrieve color due to out of range priority level {PrLevel}",__file__)
                 return None
         return Color
     
