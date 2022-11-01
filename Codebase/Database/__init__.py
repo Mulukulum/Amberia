@@ -1,5 +1,13 @@
-from os.path import dirname                                     
-DataBasePath=dirname(__file__)+r"\Data\Amber.db"            #Gets the path of the database
-del dirname
-import Initialize
+
 InitSuccess=None
+def CheckForError():
+    global InitSuccess
+    import Codebase.Database.Initialize as Initialize
+    if Initialize.CriticalError==True:
+        InitSuccess=False
+    else:
+        InitSuccess=True
+    return 
+DBP=CheckForError()
+print(DBP)
+print(InitSuccess)

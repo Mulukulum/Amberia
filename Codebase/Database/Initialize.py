@@ -1,9 +1,8 @@
+from os.path import dirname
 import sqlite3
-from Codebase.Database import DataBasePath      #Gets the path of the database on the machine
 from Codebase.Database.Functions.StartUp import CheckAndCreate
 from Codebase.ErrorLogs.logging import StartLog,ErrorLog
-
-
+DataBasePath=dirname(__file__)+r"\Data\Amber.db"
 
 Con=sqlite3.connect(DataBasePath)       #Creates the database file if it doesn't exist already and makes a connection
 Cursor=Con.cursor()
@@ -70,7 +69,6 @@ AttribDict={
     'sections':'sectionid INTEGER PRIMARY KEY, title TEXT NOT NULL, taskcount INTEGER NOT NULL, parentprojectid INTEGER NOT NULL, sectiontemplate INTEGER',
     'colors':'level INTEGER PRIMARY KEY, hexcode TEXT NOT NULL',
     }
-
 CriticalError=False
 for table in CheckList:                                 #For the tables that have to be checked
     if CheckAndCreate(Cursor,table,AttribDict[table]):  #iterate through each one and ensure the tables exist
@@ -82,8 +80,6 @@ Con.commit()
 Con.close()
 if CriticalError:
     ErrorLog("CRITICAL: Database could not be initialised. Check Start Logs for more information",__file__)
-    Database.InitSuccess=False
-else: Database.InitSuccess=True
 
 #Now that all tables have been created, database can have values put into it.
 #Initialization of Database is done at this point.
