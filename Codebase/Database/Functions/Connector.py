@@ -18,11 +18,14 @@ def EntryPoint(DataPath):
         ErrorLog("Could Not Activate Database")
 def RunDatabaseThread():
     global Connection,ShutDownRequest
-    Log("ThreadStarted")
     from time import sleep
-    print(f"{ShutDownRequest} is the request now")
+    sleep(0.1)
+    Log("ProcessStarted")
+    Log(f"{ShutDownRequest} is the request now")
     while ShutDownRequest==False:
-        sleep(1)
+        Log("Nap")
+        sleep(2)
+        Log("Wakey")
     else:    
         print("ShutDown Wanted")
         DBLog("Shutdown Requested")

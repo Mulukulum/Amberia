@@ -84,6 +84,8 @@ if CriticalError:
 from Codebase.Database.Functions.Connector import EntryPoint
 ProcessValue=EntryPoint(DataBasePath)
 print(ProcessValue)
+import time
+time.sleep(3)
 print("Finished")
 #Now that all tables have been created, database can have values put into it.
 #Initialization of Database is done at this point.
