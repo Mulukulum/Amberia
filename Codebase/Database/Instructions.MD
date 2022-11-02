@@ -31,14 +31,6 @@ The List of all Tables and their Attributes are in "Initialize.py"
 
 
 
-
-
-
-
-
-
-
-
 Incase we run into errors and issues with SQLite not being able to handle multiple functions using the DB at once
 then I should probably look into implementing this
 
