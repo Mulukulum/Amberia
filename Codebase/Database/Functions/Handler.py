@@ -30,7 +30,7 @@ def NoReturnSingleExecutor(con,cmd):
 
 def SingleExecutor(con,cmd):
     try:
-        res=con.execute(cmd)
+        res=con.execute(cmd)    
     except:
         ErrorLog(f"ERROR WHILE PROCESSING {cmd}")
         DBLog(f"ERROR WHILE PROCESSING {cmd}")
