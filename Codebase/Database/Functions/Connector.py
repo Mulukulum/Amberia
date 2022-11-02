@@ -1,26 +1,30 @@
 ShutDownRequest=False #Flag used to signal when to stop
 Connection=-1
+DataBasePath=None
+ConExists=False
 from Codebase.ErrorLogs.logging import ErrorLog,DBLog,Log
-def EntryPoint():
-    from threading import Thread
+def EntryPoint(DataPath):
+    global Connection,DataBasePath
+    DataBasePath=DataPath
+    Connection=_ActivateDatabase()
+    from multiprocessing import Process as Proc
+    print(f"global con is {Connection}")
     try:
-        thread=Thread(target=RunDatabaseThread,daemon=False)
-        thread.start()
-        return thread
+        print("Connection is Good to Go")
+        Process=Proc(target=RunDatabaseThread)
+        Process.start()
+        return Process
     except:
         ErrorLog("Could Not Activate Database")
 def RunDatabaseThread():
     global Connection,ShutDownRequest
-    import sys
-    Connection=_ActivateDatabase()
-    ErrorLog("ThreadStarted")
+    Log("ThreadStarted")
     from time import sleep
-    print(f"{ShutDownRequest} is the request now",file=sys.stdout,flush=True)
+    print(f"{ShutDownRequest} is the request now")
     while ShutDownRequest==False:
-        Log('Sleeping...')
-        sleep(0.5)
-        Log('Slept')
+        sleep(1)
     else:    
+        print("ShutDown Wanted")
         DBLog("Shutdown Requested")
         TryCount=5
         while TryCount:
@@ -33,15 +37,14 @@ def RunDatabaseThread():
                 ErrorLog("Connection Failed to Close")
                 DBLog("Connection Failed to Close")
         Log("Loop Terminated")
-    print("ThreadDone")
-    
+    print("ProcessDone")
 
-def GetConnection():
+def GetCursor():
     global Connection
-    return Connection
+    print(f"Connection Is {Connection}")
+    return Connection.cursor()
 
 def _ActivateDatabase():
-    from Codebase.Database import DataBasePath
     import sqlite3
     from Codebase.ErrorLogs.logging import ErrorLog,DBOnlyLog,DBLog,StartLog
     StartLog("Database Activation Requested")
@@ -55,8 +58,6 @@ def _ActivateDatabase():
 
 def SignalShutDown():
     global ShutDownRequest
-    print(ShutDownRequest)
     ShutDownRequest=True
-    print(ShutDownRequest)
 
     

@@ -1,4 +1,4 @@
-from Codebase.Database.Functions import PrColors
+from Codebase.Database.Functions.Connector import SignalShutDown,GetCursor
 from Codebase.ErrorLogs.logging import ErrorLog,Log
 #This Class defines a Priority Object
 #Each task contains one of these, each object has a prioritylevel and a color associated with it
@@ -44,10 +44,18 @@ class Priority:
     '''
     @classmethod
     def GetColor(cls,PrLevel) -> int :
+        from time import sleep
         if cls.IsValidPriority(PrLevel)==False:          #If Priority is invalid, return None
             ErrorLog(f"Unable to get Priority Color due to Invalid Priority Level input {PrLevel}")
             return None
-        
+        Cur=GetCursor()
+        A=Cur.execute("SELECT 2*3;").fetchall()
+        Cur.connection.commit()
+        SignalShutDown()
+        print("Sleep 1")
+        sleep(1)
+        print("Signalled")
+        return A
     
     #Method to update priority level of priority object
     def UpdatePriorityLevel(self,NewLevel):

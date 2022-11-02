@@ -1,17 +1,19 @@
 InitSuccess=None
 import Codebase.Database.Initialize as Initialize
-print("Done Initialize")
 if Initialize.CriticalError==True:
     InitSuccess=False
 else:
     InitSuccess=True
 DataBasePath=Initialize.DataBasePath
-EndThread=Initialize.ThreadValue
+EndProcess=Initialize.ProcessValue
+print(EndProcess,'hi')
+'''
+print(EndProcess,'is the process')
 from Codebase.Database.Functions.Connector import SignalShutDown
-print('C')
-import time
-time.sleep(5)
+from time import sleep
+sleep(10)
+print(f"{EndProcess} is process now ShutDown")
 SignalShutDown()
-print('B')
-print(EndThread)
-print("Done Closing Thread")
+print(f"{EndProcess} is process now")
+print('ShutDown')
+'''
