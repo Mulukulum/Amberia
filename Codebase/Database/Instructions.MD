@@ -1,6 +1,3 @@
-Incase we run into errors and issues with SQLite not being able to handle multiple functions using the DB at once
-then I should probably look into implementing this
-
 
 ID of projects,sections,labels etc are all stored as integers
 
@@ -29,6 +26,18 @@ Basically, i'm asking for a huffman tree.
 RelativeIDs are not currently going to be implemented because they don't serve a purpose that you can't accomplish using the regular IDs
 
 The List of all Tables and their Attributes are in "Initialize.py"
+
+
+
+
+
+
+
+
+
+
+
+
 
 Incase we run into errors and issues with SQLite not being able to handle multiple functions using the DB at once
 then I should probably look into implementing this
