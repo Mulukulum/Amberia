@@ -1,21 +1,32 @@
-import sqlite3
-from time import sleep
-
 ShutDownRequest=False #Flag used to signal when to stop
+def EntryPoint():
+    print("Entry Request")
+    ShutDownRequest=False #Flag used to signal when to stop
+    Connection=ActivateDatabase()
+    def GetCursor():
+        global Connection
+        return Connection.cursor()
 
 def ActivateDatabase():
     from Codebase.Database import DataBasePath
-
-
-def ReadDB(con,cmd):
+    import sqlite3
+    from Codebase.ErrorLogs.logging import ErrorLog,DBOnlyLog,DBLog,StartLog
+    StartLog("Database Activation Requested")
     try:
-        res=con.execute(cmd).fetchall()
-        con.commit()
+        con=sqlite3.connect(DataBasePath)
+        DBOnlyLog("Database Activated For Usage")
+        return con
     except:
-        return -1
-    else:
-        return res
+        DBLog("Database Activation Failure")
+        ErrorLog("Database Activation Failure")
 
-def _ShutDown(con):
-    ...
+def SignalShutDown():
+    global ShutDownRequest
+    ShutDownRequest=True
+
+def _CheckShutDown():
+    from time import sleep
+    while ShutDownRequest==False:
+        sleep(5) ; print('Sleeping...')
+
     

@@ -1,7 +1,6 @@
 #Functions to log errors with other functions
 from datetime import datetime
 from os.path import dirname
-import math
 LogPath=((dirname(__file__).partition("Codebase")[0]))+("LogFiles\\")         #Gets the path of the logs Folder
 from inspect import stack
 FileConstant=6
@@ -33,6 +32,12 @@ def DBLog(text=None,FileName=stack()[FileConstant].filename):
         return None
     else:
         _WriteToMaster(text,FileName,type='DATABASE')
+        _WriteToDBLogs(text,FileName)
+
+def DBOnlyLog(text=None,FileName=stack()[FileConstant].filename):
+    if text==None or type(text) != str :
+        return None
+    else:
         _WriteToDBLogs(text,FileName)
 
 #This function is for testing purposes only
