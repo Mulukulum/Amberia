@@ -13,7 +13,7 @@ def EntryPoint(DataPath):
         print("Connection is Good to Go")
         Process=Proc(target=RunDatabaseThread)
         Process.start()
-        return Process
+        #return Process
     except:
         ErrorLog("Could Not Activate Database")
 def RunDatabaseThread():

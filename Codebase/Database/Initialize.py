@@ -82,8 +82,9 @@ Con.close()
 if CriticalError:
     ErrorLog("CRITICAL: Database could not be initialised. Check Start Logs for more information")
 from Codebase.Database.Functions.Connector import EntryPoint
-ProcessValue=EntryPoint(DataBasePath)
-print(ProcessValue)
+EntryPoint(DataBasePath)
+#print(ProcessValue)
+#ProcessValue.start()
 import time
 time.sleep(3)
 print("Finished")

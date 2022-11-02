@@ -52,9 +52,6 @@ class Priority:
         A=Cur.execute("SELECT 2*3;").fetchall()
         Cur.connection.commit()
         SignalShutDown()
-        print("Sleep 1")
-        sleep(1)
-        print("Signalled")
         return A
     
     #Method to update priority level of priority object
