@@ -8,6 +8,11 @@ def IDGenerator():
 def ValidateID(no):
     return True
 
-def MainExecutor(con,cmd):
-    con.execute(cmd)
-    ...
+def MainExecutor(con,cmd,iter=None):
+    if iter!=None:
+        for i in iter:
+            res=con.execute(cmd,i)
+    else:
+        res=con.execute()
+    return res.fetchall()
+
