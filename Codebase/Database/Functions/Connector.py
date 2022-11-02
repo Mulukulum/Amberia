@@ -1,23 +1,26 @@
 ShutDownRequest=False #Flag used to signal when to stop
 Connection=-1
-from Codebase.ErrorLogs.logging import ErrorLog,DBLog
+from Codebase.ErrorLogs.logging import ErrorLog,DBLog,Log
 def EntryPoint():
     from threading import Thread
     try:
-        thread=Thread(target=RunDatabaseThread)
+        thread=Thread(target=RunDatabaseThread,daemon=False)
         thread.start()
         return thread
     except:
         ErrorLog("Could Not Activate Database")
 def RunDatabaseThread():
     global Connection,ShutDownRequest
+    import sys
     Connection=_ActivateDatabase()
+    ErrorLog("ThreadStarted")
     from time import sleep
+    print(f"{ShutDownRequest} is the request now")
     while ShutDownRequest==False:
-        print('Sleeping...')
+        sleep(5)
+        Log('Sleeping...')
     else:    
         DBLog("Shutdown Requested")
-        print("ShutDown")
         TryCount=5
         while TryCount:
             try:
@@ -28,6 +31,8 @@ def RunDatabaseThread():
                 TryCount-=1
                 ErrorLog("Connection Failed to Close")
                 DBLog("Connection Failed to Close")
+        Log("Loop Terminated")
+    
 
 def GetConnection():
     global Connection
@@ -48,6 +53,8 @@ def _ActivateDatabase():
 
 def SignalShutDown():
     global ShutDownRequest
+    print(ShutDownRequest)
     ShutDownRequest=True
+    print(ShutDownRequest)
 
     

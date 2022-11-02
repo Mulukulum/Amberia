@@ -10,11 +10,8 @@ DataBasePath=Initialize.DataBasePath
 print("D")
 EndThread=Initialize.ThreadValue
 print('A')
-from Codebase.Database.Functions.Connector import SignalShutDown,ShutDownRequest
+from Codebase.Database.Functions.Connector import SignalShutDown
 print('C')
-print(ShutDownRequest)
 SignalShutDown()
-print(ShutDownRequest)
 print('B')
-EndThread.join()
 print("Done Closing Thread")
