@@ -15,10 +15,11 @@ def RunDatabaseThread():
     Connection=_ActivateDatabase()
     ErrorLog("ThreadStarted")
     from time import sleep
-    print(f"{ShutDownRequest} is the request now")
+    print(f"{ShutDownRequest} is the request now",file=sys.stdout,flush=True)
     while ShutDownRequest==False:
-        sleep(5)
         Log('Sleeping...')
+        sleep(0.5)
+        Log('Slept')
     else:    
         DBLog("Shutdown Requested")
         TryCount=5
@@ -32,6 +33,7 @@ def RunDatabaseThread():
                 ErrorLog("Connection Failed to Close")
                 DBLog("Connection Failed to Close")
         Log("Loop Terminated")
+    print("ThreadDone")
     
 
 def GetConnection():

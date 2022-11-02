@@ -5,13 +5,13 @@ if Initialize.CriticalError==True:
     InitSuccess=False
 else:
     InitSuccess=True
-print("H")
 DataBasePath=Initialize.DataBasePath
-print("D")
 EndThread=Initialize.ThreadValue
-print('A')
 from Codebase.Database.Functions.Connector import SignalShutDown
 print('C')
+import time
+time.sleep(5)
 SignalShutDown()
 print('B')
+print(EndThread)
 print("Done Closing Thread")
