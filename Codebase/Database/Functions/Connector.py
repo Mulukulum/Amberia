@@ -1,13 +1,39 @@
 ShutDownRequest=False #Flag used to signal when to stop
+Connection=-1
+from Codebase.ErrorLogs.logging import ErrorLog,DBLog
 def EntryPoint():
-    print("Entry Request")
-    ShutDownRequest=False #Flag used to signal when to stop
-    Connection=ActivateDatabase()
-    def GetCursor():
-        global Connection
-        return Connection.cursor()
+    from threading import Thread
+    try:
+        thread=Thread(target=RunDatabaseThread)
+        thread.start()
+        return thread
+    except:
+        ErrorLog("Could Not Activate Database")
+def RunDatabaseThread():
+    global Connection,ShutDownRequest
+    Connection=_ActivateDatabase()
+    from time import sleep
+    while ShutDownRequest==False:
+        print('Sleeping...')
+    else:    
+        DBLog("Shutdown Requested")
+        print("ShutDown")
+        TryCount=5
+        while TryCount:
+            try:
+                Connection.commit()
+                Connection.close()
+                break
+            except:
+                TryCount-=1
+                ErrorLog("Connection Failed to Close")
+                DBLog("Connection Failed to Close")
 
-def ActivateDatabase():
+def GetConnection():
+    global Connection
+    return Connection
+
+def _ActivateDatabase():
     from Codebase.Database import DataBasePath
     import sqlite3
     from Codebase.ErrorLogs.logging import ErrorLog,DBOnlyLog,DBLog,StartLog
@@ -23,10 +49,5 @@ def ActivateDatabase():
 def SignalShutDown():
     global ShutDownRequest
     ShutDownRequest=True
-
-def _CheckShutDown():
-    from time import sleep
-    while ShutDownRequest==False:
-        sleep(5) ; print('Sleeping...')
 
     
