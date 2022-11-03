@@ -42,6 +42,22 @@ class Priority:
                 return None
         return Color
     '''
+    '''
+    Default Colors as integers
+    Colors={
+    1:16399941,
+    2:16070549,
+    3:8069048,
+    4:9201120,
+    5:2287801,
+    6:5177211,
+    7:432432,
+    8:13419293,
+    9:16729344,
+    10:16249827,
+}
+    '''
+
     @classmethod
     def GetColor(cls,PrLevel) -> int :
         if cls.IsValidPriority(PrLevel)==False:          #If Priority is invalid, return None
