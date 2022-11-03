@@ -81,7 +81,5 @@ Con.commit()
 Con.close()
 if CriticalError:
     ErrorLog("CRITICAL: Database could not be initialised. Check Start Logs for more information")
-from Codebase.Database.Functions.Connector import EntryPoint
-Connection=EntryPoint(DataBasePath)
 #Now that all tables have been created, database can have values put into it.
 #Initialization of Database is done at this point.
