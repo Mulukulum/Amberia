@@ -1,4 +1,4 @@
-def ExecuteCommand(cmd,iterable):
+def ExecuteCommand(cmd,iterable=None):
     import sqlite3
     from Codebase.Variables import DataBasePath
     con=sqlite3.connect(DataBasePath)
@@ -7,17 +7,20 @@ def ExecuteCommand(cmd,iterable):
         res=cursor.execute(cmd)
     else:
         res=cursor.execute(cmd,iterable)
-        res=res.fetchall()
+    res=res.fetchall()
     con.commit()
     con.close()
     return res
 
-def ExecuteManyCommands(cmd,iterable):
+def ExecuteManyCommands(cmd,iterable=None):
     import sqlite3
     from Codebase.Variables import DataBasePath
     con=sqlite3.connect(DataBasePath)
     cursor=con.cursor()
-    res=cursor.executemany(cmd,iterable)
+    if iter==None:
+        res=cursor.executemany(cmd)
+    else:
+        res=cursor.executemany(cmd,iterable)
     res=res.fetchall()
     con.commit()
     con.close()
@@ -28,7 +31,7 @@ def ExecuteScript(cmd):
     from Codebase.Variables import DataBasePath
     con=sqlite3.connect(DataBasePath)
     cursor=con.cursor()
-    res=cursor.executemany(cmd)
+    res=cursor.executescript(cmd)
     res=res.fetchall()
     con.commit()
     con.close()
