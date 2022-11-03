@@ -1,6 +1,6 @@
 from os.path import dirname
 import sqlite3
-from Codebase.Database.Functions.StartUp import CheckAndCreate
+from Codebase.Database.StartUp import CheckAndCreate
 from Codebase.ErrorLogs.logging import StartLog,ErrorLog
 StartLog("Initialisation Requested")
 
