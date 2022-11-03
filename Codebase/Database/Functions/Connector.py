@@ -7,15 +7,9 @@ def EntryPoint(DataPath):
     global Connection,DataBasePath
     DataBasePath=DataPath
     Connection=_ActivateDatabase()
-    from multiprocessing import Process as Proc
     print(f"global con is {Connection}")
-    try:
-        print("Connection is Good to Go")
-        Process=Proc(target=RunDatabaseThread)
-        Process.start()
-        #return Process
-    except:
-        ErrorLog("Could Not Activate Database")
+    return Connection
+
 def RunDatabaseThread():
     global Connection,ShutDownRequest
     from time import sleep
