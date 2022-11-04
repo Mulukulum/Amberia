@@ -27,7 +27,10 @@ class Priority:
 
     #Class Representation    
     def __repr__(self) -> str:
-        return f'Priority Level {self.PriorityLevel}'
+        return f'Priority({self.PriorityLevel})\nColor {self.Color}'
+    
+    def __str__(self) -> str:
+        return f'Priority Level {self.PriorityLevel}\nColor {self.Color}'
     
     '''
     Default Colors as integers
