@@ -49,7 +49,7 @@ class Priority:
     '''
 
     @classmethod
-    def GetColor(cls,PrLevel) -> str :
+    def GetColor(cls,PrLevel: int) -> str :
         if cls.IsValidPriority(PrLevel)==False:          #If Priority is invalid, return None
             ErrorLog(f"Unable to get Priority Color due to Invalid Priority Level input {PrLevel}")
             return None
@@ -66,7 +66,7 @@ class Priority:
             return cls.ColorCache[PrLevel]                  #Returns the default color
 
     #Method to update priority level of priority object
-    def UpdatePriorityLevel(self,NewLevel):
+    def UpdatePriorityLevel(self,NewLevel: int) -> bool :
         if self.IsValidPriority(NewLevel) :
             self.PriorityLevel=NewLevel           #Enforcing an official unofficial rule that:
             self.Color=self.ColorCache[NewLevel]  #ColorCache must always be populated
@@ -82,7 +82,8 @@ class Priority:
     @classmethod
     def UpdateColor(cls,PrLevel: int,NewColor: int) -> None:
         if cls.IsValidPriority(PrLevel)==False:
-            return None
+            return False
         NewColor=abs(NewColor)          #Optional Line to ensure negatives don't mess stuff up
         cls.ColorCache[PrLevel]=NewColor        #Updates the Cache with the new value
         ExecuteCommand("UPDATE prcolors SET clrvalue=? WHERE level=?;",(NewColor,PrLevel)) #Updates the database with the new values
+        return True
