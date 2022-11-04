@@ -1,87 +1,49 @@
 #DO NOT TOUCH ANYTHING IN THIS DATABASE FOLDER
 
-Format of Storage of data is listed in "Instructions.MD" 
-The file is in this same folder
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+LIST OF TABLES
+
+The following is a list of all tables and their attributes that should be present in the Database
+
+projects
+Attributes :-
+id INTEGER PRIMARY KEY
+parentid INTEGER
+title TEXT NOT NULL
+color TEXT NOT NULL
+sectioncount INTEGER NOT NULL
+projectcount INTEGER NOT NULL
+projecttemplate INTEGER
+
+labels 
+There is no ID here because having Labels with the same titles is a bad idea
+Attributes:-
+title TEXT PRIMARY KEY
+color TEXT NOT NULL
+taskcount INTEGER NOT NULL                          
+
+tasks
+(parentid is same as sectionid for a regular task, sectionid can be null for a subtask)
+Attributes:-
+taskid INTEGER PRIMARY KEY
+title TEXT NOT NULL
+parentid INTEGER NOT NULL 
+sectionid INTEGER
+priority INTEGER NOT NULL
+color INTEGER NOT NULL
+tasktemplate INTEGER
+
+sections
+Attributes:-
+sectionid INTEGER PRIMARY KEY
+title TEXT NOT NULL
+taskcount INTEGER NOT NULL
+parentprojectid INTEGER NOT NULL
+sectiontemplate INTEGER
+
+prcolors
+Attributes:-
+level INTEGER PRIMARY KEY
+hexcode TEXT NOT NULL
 
 
 
