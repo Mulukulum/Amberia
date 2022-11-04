@@ -59,7 +59,6 @@ class Priority:
 
     @classmethod
     def GetColor(cls,PrLevel) -> str :
-        from Codebase.Functions.Database import ExecuteCommand
         if cls.IsValidPriority(PrLevel)==False:          #If Priority is invalid, return None
             ErrorLog(f"Unable to get Priority Color due to Invalid Priority Level input {PrLevel}")
             return None
