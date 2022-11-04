@@ -58,14 +58,17 @@ class Priority:
     '''
 
     @classmethod
-    def GetColor(cls,PrLevel) -> int :
+    def GetColor(cls,PrLevel) -> str :
         from Codebase.Functions.Database import ExecuteCommand
         if cls.IsValidPriority(PrLevel)==False:          #If Priority is invalid, return None
             ErrorLog(f"Unable to get Priority Color due to Invalid Priority Level input {PrLevel}")
             return None
-        
+        Level=ExecuteCommand("""SELECT clrvalue FROM prcolors WHERE level=?;""",(PrLevel,))
+        try:
+            return Level[0]         #Return the Color value
+        except IndexError:
+            return 0
 
-    
     #Method to update priority level of priority object
     def UpdatePriorityLevel(self,NewLevel):
         if self.IsValidPriority(NewLevel) :
@@ -74,3 +77,4 @@ class Priority:
         else:
             return False
         return True
+print(Priority.GetColor(2))

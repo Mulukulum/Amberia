@@ -1,7 +1,5 @@
 #DO NOT TOUCH ANYTHING IN THIS DATABASE FOLDER
 
-LIST OF TABLES
-
 The following is a list of all tables and their attributes that should be present in the Database
 
 projects
@@ -45,7 +43,7 @@ Attributes:-
 level INTEGER PRIMARY KEY
 clrvalue INTEGER NOT NULL
 
-
+REMEMBER TO ALSO CHANGE THE CORRESPONDING VALUES IN INITIALIZE.PY BOTH IN THE DICTIONARY AND IN THE TUPLE
 
 
 
