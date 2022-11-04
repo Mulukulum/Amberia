@@ -73,7 +73,7 @@ AttribDict={
 CriticalError=False
 for table in CheckList:                                 #For the tables that have to be checked
     if CheckAndCreate(Cursor,table,AttribDict[table]):  #iterate through each one and ensure the tables exist
-        StartLog(f"TABLE {table} exists with Attributes {AttribDict[table]}")         #If they exist, Log it into a file
+        StartLog(f"TABLE {table} exists now with Attributes {AttribDict[table]}")         #If they exist, Log it into a file
     else:
         ErrorLog(f"Could not create TABLE {table} with Attributes {AttribDict[table]}")   #If they don't exist, log which one doesn't exist and shut the whole thing down
         CriticalError=True
@@ -81,5 +81,6 @@ Con.commit()                #Commits Changes
 Con.close()                 #Closes Connection
 if CriticalError:
     ErrorLog("CRITICAL: Database could not be initialised. Check Start Logs for more information")
+StartLog("Initialisation of Database Completed")
 #Now that all tables have been created, database can have values put into it.
 #Initialization of Database is done at this point.
