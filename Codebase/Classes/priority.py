@@ -80,10 +80,27 @@ class Priority:
         cls.ColorCache.update(Resultant)
 
     @classmethod
-    def UpdateColor(cls,PrLevel: int,NewColor: int) -> None:
+    def UpdateColor(cls,PrLevel: int,NewColor: int) -> bool:
         if cls.IsValidPriority(PrLevel)==False:
             return False
         NewColor=abs(NewColor)          #Optional Line to ensure negatives don't mess stuff up
         cls.ColorCache[PrLevel]=NewColor        #Updates the Cache with the new value
         ExecuteCommand("UPDATE prcolors SET clrvalue=? WHERE level=?;",(NewColor,PrLevel)) #Updates the database with the new values
         return True
+    
+    #Fast methods
+    #Don't use these methods unless you know the input is perfectly correct
+
+    @classmethod
+    def GetColorFast(cls,PrLevel: int) -> str :
+        return cls.ColorCache[PrLevel]                  #Returns the default color
+    
+    @classmethod
+    def UpdateColorFast(cls,PrLevel: int,NewColor: int) -> None:
+        cls.ColorCache[PrLevel]=NewColor        #Updates the Cache with the new value
+        ExecuteCommand("UPDATE prcolors SET clrvalue=? WHERE level=?;",(NewColor,PrLevel)) #Updates the database with the new values
+        return True
+    
+    def UpdatePriorityLevelFast(self,NewLevel: int) -> None :
+        self.PriorityLevel=NewLevel           #Enforcing an official unofficial rule that:
+        self.Color=self.ColorCache[NewLevel]  #ColorCache must always be populated
