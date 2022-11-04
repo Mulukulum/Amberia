@@ -1,4 +1,3 @@
-
 class Label:
     #Class initialisation
     def __init__(self,Title='',Color=None) -> None:
