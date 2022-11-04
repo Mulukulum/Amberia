@@ -77,4 +77,3 @@ class Priority:
         else:
             return False
         return True
-print(Priority.GetColor(2))
