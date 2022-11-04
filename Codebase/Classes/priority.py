@@ -27,7 +27,7 @@ class Priority:
 
     #Class Representation    
     def __repr__(self) -> str:
-        return f'Priority({self.PriorityLevel})\nColor {self.Color}'
+        return f'Priority({self.PriorityLevel})'
     
     def __str__(self) -> str:
         return f'Priority Level {self.PriorityLevel}\nColor {self.Color}'
@@ -68,8 +68,8 @@ class Priority:
     #Method to update priority level of priority object
     def UpdatePriorityLevel(self,NewLevel):
         if self.IsValidPriority(NewLevel) :
-            self.PriorityLevel=NewLevel           #We may directly get the color from ""Cache"" because during __init__ GetColor is called  
-            self.Color=self.ColorCache[NewLevel]  #GetColor ensures that cache is populated, so 
+            self.PriorityLevel=NewLevel           #Enforcing an official unofficial rule that:
+            self.Color=self.ColorCache[NewLevel]  #ColorCache must always be populated
         else:
             return False
         return True
@@ -78,3 +78,11 @@ class Priority:
     def FlushToCache(cls) -> None:      #Forcibly updates the current color values into cache
         Resultant=ExecuteCommand("""SELECT * FROM prcolors;""")
         cls.ColorCache.update(Resultant)
+
+    @classmethod
+    def UpdateColor(cls,PrLevel: int,NewColor: int) -> None:
+        if cls.IsValidPriority(PrLevel)==False:
+            return None
+        NewColor=abs(NewColor)          #Optional Line to ensure negatives don't mess stuff up
+        cls.ColorCache[PrLevel]=NewColor        #Updates the Cache with the new value
+        ExecuteCommand("UPDATE prcolors SET clrvalue=? WHERE level=?;",(NewColor,PrLevel)) #Updates the database with the new values
