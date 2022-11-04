@@ -2,7 +2,7 @@ import sqlite3
 from Codebase.Variables import DataBasePath         #Get the location of the Database
 ConnectionObject=sqlite3.connect(DataBasePath)      #Creates the connection to the databse
 
-def UDF():                                          #Function to call the UserDefinedFunctions
+def UDF() -> None:                                          #Function to call the UserDefinedFunctions
     global ConnectionObject
     ConnectionObject.create_function(name="HexFormat",narg=1,func=HexFormat,deterministic=True)
 
@@ -30,7 +30,7 @@ def ExecuteCommand(cmd: str,iterable=None) -> list:     #Takes a cmd string and 
     ConnectionObject.commit()                       #Commits the database
     return result                                   #Returns the list
     
-def ExecuteManyCommands(cmd,iterable=None):         #Takes a cmd string and an optional iterable for placeholders
+def ExecuteManyCommands(cmd: str,iterable=None) -> list:          #Takes a cmd string and an optional iterable for placeholders
     global ConnectionObject                             
     cursor=ConnectionObject.cursor()                #Creates cursor object
     if iterable==None:
@@ -41,7 +41,7 @@ def ExecuteManyCommands(cmd,iterable=None):         #Takes a cmd string and an o
     ConnectionObject.commit()                       #Commits the database
     return result                                   #Returns the list
 
-def ExecuteScript(cmd):
+def ExecuteScript(cmd: str) -> list:
     global ConnectionObject
     cursor=ConnectionObject.cursor()                #Creates cursor
     result=cursor.executescript(cmd)                #Executes the script
@@ -49,7 +49,7 @@ def ExecuteScript(cmd):
     ConnectionObject.commit()                       #Commits changes
     return result                                   #Returns the list
 
-def CloseConnection():
+def CloseConnection() -> None:
     global ConnectionObject     
     ConnectionObject.close()                        #Closes the connection
     ConnectionObject=None                           #Sets the conn
