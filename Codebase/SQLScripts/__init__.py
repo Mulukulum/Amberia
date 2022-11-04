@@ -17,6 +17,6 @@ BEGIN;
 DELETE FROM prcolors;
 
 -- Now Insert the Values into the table 
-INSERT INTO prcolors (level,clrvalue) VALUES {f'{list(zip(DefaultPriorityColors.keys(),DefaultPriorityColors.values()))}'.strip('[]')} ;
+INSERT INTO prcolors (level,clrvalue) VALUES {f'{list(DefaultPriorityColors.items())}'.strip('[]')} ;
 END;
 """
