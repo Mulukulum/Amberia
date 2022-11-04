@@ -43,7 +43,7 @@ sectiontemplate INTEGER
 prcolors
 Attributes:-
 level INTEGER PRIMARY KEY
-hexcode TEXT NOT NULL
+clrvalue INTEGER NOT NULL
 
 
 

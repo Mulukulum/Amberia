@@ -53,7 +53,7 @@ sectiontemplate INTEGER
 prcolors
 Attributes:-
 level INTEGER PRIMARY KEY
-hexcode TEXT NOT NULL
+clrvalue INTEGER NOT NULL
 
 '''
 #Check if the Following Tables exist
@@ -68,7 +68,7 @@ AttribDict={
     'labels':'title TEXT PRIMARY KEY, color TEXT NOT NULL,taskcount INTEGER NOT NULL',
     'tasks':'taskid INTEGER PRIMARY KEY, title TEXT NOT NULL, parentid INTEGER NOT NULL, sectionid INTEGER, priority INTEGER NOT NULL, color INTEGER NOT NULL, tasktemplate INTEGER',
     'sections':'sectionid INTEGER PRIMARY KEY, title TEXT NOT NULL, taskcount INTEGER NOT NULL, parentprojectid INTEGER NOT NULL, sectiontemplate INTEGER',
-    'prcolors':'level INTEGER PRIMARY KEY, hexcode TEXT NOT NULL',
+    'prcolors':'level INTEGER PRIMARY KEY, clrvalue INTEGER NOT NULL',
     }
 CriticalError=False
 for table in CheckList:                                 #For the tables that have to be checked
