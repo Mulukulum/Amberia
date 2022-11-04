@@ -1,10 +1,10 @@
-from Codebase.ErrorLogs.logging import ErrorLog,Log
+from Codebase.ErrorLogs.logging import ErrorLog
 #This Class defines a Priority Object
 #Each task contains one of these, each object has a prioritylevel and a color associated with it
 #There can be a maximum of 10 priority levels, where 10 is the lowest and 1 in the highest
 class Priority: 
     @classmethod
-    def IsValidPriority(cls,PrLevel) -> bool :     #Class method that ensures priority level call is valid
+    def IsValidPriority(cls,PrLevel: int) -> bool :     #Class method that ensures priority level call is valid
         ValidPriorites=(1,2,3,4,5,6,7,8,9,10)      #Sets a tuple containing whole numbers from 1 to 10
         if PrLevel in ValidPriorites:
             return True
@@ -59,10 +59,20 @@ class Priority:
 
     @classmethod
     def GetColor(cls,PrLevel) -> str :
+        from Codebase.Functions.Database import ExecuteCommand,ExecuteScript
+        from Codebase.SQLScripts import ScriptSetDefaultColors
         if cls.IsValidPriority(PrLevel)==False:          #If Priority is invalid, return None
             ErrorLog(f"Unable to get Priority Color due to Invalid Priority Level input {PrLevel}")
             return None
-        
+        else:
+            L=ExecuteCommand("""SELECT clrvalue FROM prcolors where level=?;""",(PrLevel,))
+            try:
+                return L[0][0]
+            except IndexError:
+                ErrorLog("GetColor Method called without initialisation of prcolors")
+                ExecuteScript(ScriptSetDefaultColors)
+                return ExecuteCommand("""SELECT clrvalue FROM prcolors where level=?;""",(PrLevel,))[0][0]
+
 
     #Method to update priority level of priority object
     def UpdatePriorityLevel(self,NewLevel):
@@ -72,3 +82,4 @@ class Priority:
         else:
             return False
         return True
+print(Priority.GetColor(1))
