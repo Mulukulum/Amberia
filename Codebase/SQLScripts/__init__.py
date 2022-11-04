@@ -20,6 +20,3 @@ DELETE FROM prcolors;
 INSERT INTO prcolors (level,clrvalue) VALUES {f'{list(zip(DefaultPriorityColors.keys(),DefaultPriorityColors.values()))}'.strip('[]')} ;
 END;
 """
-print()
-print()
-print(ScriptSetDefaultColors)
