@@ -1,15 +1,3 @@
-ERROR : at 15:15:54 15-10-2022 from H:\4. Computer Science\ProjectClass12\Mike-Romeo\Codebase\ErrorLogs\logging.py 
-Unable to get Priority Color due to Invalid Priority Level input
-ERROR : at 15:16:28 15-10-2022 from H:\4. Computer Science\ProjectClass12\Mike-Romeo\Codebase\ErrorLogs\logging.py 
-Unable to get Priority Color due to Invalid Priority Level input
-ERROR : at 15:25:32 15-10-2022 from H:\4. Computer Science\ProjectClass12\Mike-Romeo\Codebase\ErrorLogs\logging.py 
-Unable to get Priority Color due to Invalid Priority Level input
-LOG : at 15:33:55 15-10-2022 from H:\4. Computer Science\ProjectClass12\Mike-Romeo\Codebase\ErrorLogs\logging.py 
-Class initialised
-ERROR : at 07:00:14 01-11-2022 from H:\4. Computer Science\ProjectClass12\Mike-Romeo\Codebase\ErrorLogs\logging.py 
-CRITICAL: Database could not be initialised. Check Start Logs for more information
-ERROR : at 07:00:36 01-11-2022 from H:\4. Computer Science\ProjectClass12\Mike-Romeo\Codebase\ErrorLogs\logging.py 
-CRITICAL: Database could not be initialised. Check Start Logs for more information
 STARTUP : at 07:00:58 01-11-2022 from H:\4. Computer Science\ProjectClass12\Mike-Romeo\Codebase\ErrorLogs\logging.py 
 TABLE projects exists with Attributes id INTEGER PRIMARY KEY, parentid INTEGER, title TEXT NOT NULL, color TEXT NOT NULL, sectioncount INTEGER NOT NULL, projectcount INTEGER NOT NULL, projecttemplate INTEGER
 STARTUP : at 07:00:58 01-11-2022 from H:\4. Computer Science\ProjectClass12\Mike-Romeo\Codebase\ErrorLogs\logging.py 
