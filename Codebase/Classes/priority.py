@@ -1,8 +1,18 @@
 from Codebase.ErrorLogs.logging import ErrorLog
+from Codebase.Functions.Database import ExecuteCommand,ExecuteScript            
+from Codebase.SQLScripts import ScriptSetDefaultColors,DefaultPriorityColors
 #This Class defines a Priority Object
 #Each task contains one of these, each object has a prioritylevel and a color associated with it
 #There can be a maximum of 10 priority levels, where 10 is the lowest and 1 in the highest
 class Priority: 
+    ColorCache=dict()                                           #Creates the Dictionary used for Cacheing
+    Resultant=ExecuteCommand("""SELECT * FROM prcolors;""")     #Gets the current values from the Database
+    if Resultant==[]:                                           #If the database is empty
+        ExecuteScript(ScriptSetDefaultColors)           #Runs the script to set the default colors
+        ColorCache=DefaultPriorityColors.copy()         #Updates the Cache
+    ColorCache.update(Resultant)
+    del Resultant                                       #Deletes the resultant list because its not needed
+
     @classmethod
     def IsValidPriority(cls,PrLevel: int) -> bool :     #Class method that ensures priority level call is valid
         ValidPriorites=(1,2,3,4,5,6,7,8,9,10)      #Sets a tuple containing whole numbers from 1 to 10
@@ -19,28 +29,6 @@ class Priority:
     def __repr__(self) -> str:
         return f'Priority Level {self.PriorityLevel}'
     
-    #This classmethod returns the color of a priority level as an integer
-    '''     This particular implementation is no longer needed.
-    @classmethod
-    def GetColor(cls,PrLevel) -> int :
-        if cls.IsValidPriority(PrLevel)==False:          #If Priority is invalid, return None
-            ErrorLog(f"Unable to get Priority Color due to Invalid Priority Level input {PrLevel}")
-            return None
-        from csv import reader,QUOTE_NONE
-        QUOTE_NONE                                          #Instructing the reader to Quote Nothing
-        from os.path import dirname                                 #To Get the Path of the directory where code is stored
-        FilePath=dirname(__file__) + '\\Priority.csv'  #This gets the path of the csv file
-        with open(FilePath,'r+') as CSVFile:                
-            Reader=reader(CSVFile                           #Opens the CSV File
-            ,delimiter=','
-            ,skipinitialspace=True)
-            try:
-                Color= list(Reader)[PrLevel]                #This gets the color that is stored as an integer
-            except IndexError:
-                ErrorLog(f"WARNING : THIS ERROR SHOULD BE IMPOSSIBLE. Unable to retrieve color due to out of range priority level {PrLevel}")
-                return None
-        return Color
-    '''
     '''
     Default Colors as integers
     Colors={
@@ -59,27 +47,31 @@ class Priority:
 
     @classmethod
     def GetColor(cls,PrLevel) -> str :
-        from Codebase.Functions.Database import ExecuteCommand,ExecuteScript
-        from Codebase.SQLScripts import ScriptSetDefaultColors
         if cls.IsValidPriority(PrLevel)==False:          #If Priority is invalid, return None
             ErrorLog(f"Unable to get Priority Color due to Invalid Priority Level input {PrLevel}")
             return None
-        else:
-            L=ExecuteCommand("""SELECT clrvalue FROM prcolors where level=?;""",(PrLevel,))
-            try:
-                return L[0][0]
-            except IndexError:
-                ErrorLog("GetColor Method called without initialisation of prcolors")
-                ExecuteScript(ScriptSetDefaultColors)
-                return ExecuteCommand("""SELECT clrvalue FROM prcolors where level=?;""",(PrLevel,))[0][0]
-
+        if PrLevel in cls.ColorCache:                       #If the ""cache"" already has this,
+            return cls.ColorCache[PrLevel]                  #then return the cached value
+        try:
+            ErrorLog(f"TRIVIAL WARNING: NoValueInCache for Priority Level {PrLevel}")
+            ResultantList=ExecuteCommand("""SELECT clrvalue FROM prcolors where level=?;""",(PrLevel,))
+            return ResultantList[0][0]  #The [0][0] part escapes the list and the tuple to give only the integer
+        except IndexError:  #This Happens when the database is empty, and an empty list is returned
+            ErrorLog("GetColor Method called without initialisation of prcolors")
+            ExecuteScript(ScriptSetDefaultColors)           #Runs the script to set the default colors
+            cls.ColorCache=DefaultPriorityColors.copy()     #Updates the Cache
+            return cls.ColorCache[PrLevel]                  #Returns the default color
 
     #Method to update priority level of priority object
     def UpdatePriorityLevel(self,NewLevel):
         if self.IsValidPriority(NewLevel) :
-            self.PriorityLevel=NewLevel 
-            ...                                   #This updates the color as well (this i'm not doing rn because we haven't setup sql)
+            self.PriorityLevel=NewLevel           #We may directly get the color from ""Cache"" because during __init__ GetColor is called  
+            self.Color=self.ColorCache[NewLevel]  #GetColor ensures that cache is populated, so 
         else:
             return False
         return True
-print(Priority.GetColor(1))
+    
+    @classmethod
+    def FlushToCache(cls) -> None:      #Forcibly updates the current color values into cache
+        Resultant=ExecuteCommand("""SELECT * FROM prcolors;""")
+        cls.ColorCache.update(Resultant)
