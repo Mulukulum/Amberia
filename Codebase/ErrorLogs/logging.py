@@ -2,20 +2,54 @@
 from datetime import datetime
 from os.path import dirname
 LogPath=((dirname(__file__).partition("Codebase")[0]))+("LogFiles\\")         #Gets the path of the logs Folder
+from inspect import stack
+FileConstant=6
 
-def ErrorLog(text=None,FileName=__file__):
+
+def ErrorLog(text=None,FileName=stack()[FileConstant].filename):
     if text==None or type(text) != str :
         return None
     else:
         _WriteToMaster(text,FileName,type='ERROR')
         _WriteToErrors(text,FileName)
 
-def Log(text=None,FileName=__file__):
+def Log(text=None,FileName=stack()[FileConstant].filename):
     if text==None or type(text) != str :
         return None
     else:
         _WriteToMaster(text,FileName,type='LOG')
         _WriteToLogs(text,FileName)
+
+def StartLog(text=None,FileName=stack()[FileConstant].filename):
+    if text==None or type(text) != str :
+        return None
+    else:
+        _WriteToMaster(text,FileName,type='STARTUP')
+        _WriteToStartLogs(text,FileName)
+
+def DBLog(text=None,FileName=stack()[FileConstant].filename):
+    if text==None or type(text) != str :
+        return None
+    else:
+        _WriteToMaster(text,FileName,type='DATABASE')
+        _WriteToDBLogs(text,FileName)
+
+def DBOnlyLog(text=None,FileName=stack()[FileConstant].filename):
+    if text==None or type(text) != str :
+        return None
+    else:
+        _WriteToDBLogs(text,FileName)
+
+#This function is for testing purposes only
+def _Test(text=None,FileName=stack()):
+    if text==None or type(text) != str :
+        return None
+    for i in range(len(FileName)):
+        print(i,FileName[i].filename)
+    else:
+        _WriteToMaster(text,FileName,type='LOG')
+        _WriteToLogs(text,FileName)
+
 
 '''
 B7^:::~7Y55J?5GGGPB#B#####B#BBBB&&#&@&&&&@@@@@@&#GB#&@@&&&&#&&&&&@@@@@@@@@@&&&&&@@@@@@@&&@@@&@@@@&@@
@@ -70,16 +104,26 @@ BJJYY5#B&&GG&@@&&&##BBBPB###B##&&@&#&&&@@@@@@@@@@@@@@@@@@&@@@@@@@@@@@@@@@@@@@@@@
 #Don't worry about any of these functions they're all perfectly tested
 def _WriteToMaster(text,file,type):
     with open(LogPath+'Master.log','a') as Master: #Opens the file in an appropriate filepath in append mode
-        Master.write(f"{type} : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} "+"\n") 
+        Master.write(f"{type} : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} \n") 
         #This code is just formatting stuff don't even worry about it
         Master.write(text+'\n')
 
 def _WriteToErrors(text,file):
     with open(LogPath+'Errors.log','a') as Errors:
-        Errors.write(f"ERROR : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} "+"\n")
+        Errors.write(f"ERROR : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} \n")
         Errors.write(text+'\n')
 
 def _WriteToLogs(text,file):
     with open(LogPath+'Logs.log','a') as Logs:
-        Logs.write(f"LOG : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} "+"\n")
+        Logs.write(f"LOG : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} \n")
         Logs.write(text+'\n')
+
+def _WriteToStartLogs(text,file):
+    with open(LogPath+'Start.log','a') as Startup:
+        Startup.write(f"STARTUP : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} \n")
+        Startup.write(text+'\n')
+    
+def _WriteToDBLogs(text,file):
+    with open(LogPath+'DB.log','a') as Startup:
+        Startup.write(f"DATABASE : at {datetime.now().strftime('%H:%M:%S %d-%m-%Y')} from {file} \n")
+        Startup.write(text+'\n')
