@@ -7,20 +7,18 @@ from Codebase.Functions.Database import ExecuteCommand,ExecuteScript
 
 
 
-
-
-
 class Label:
     #Class initialisation
     def __init__(self,Title='',Color=None) -> None:
         self.Title=Title                    #Set the Title of the Label
         self.Color=Color
-    #Label Representation
+    #Label repr 
     def __repr__(self) -> str:
         return f'Label({self.Title},{self.Color})'
-    
+    #String Representation
     def __str__(self) -> str:
         return f'Label {self.Title} Color {self.Color}'
+
 
 #This Class defines a Priority Object
 #Each task contains one of these, each object has a prioritylevel and a color associated with it
@@ -54,30 +52,18 @@ class Priority:
     
     def __str__(self) -> str:
         return f'Priority Level {self.PriorityLevel}\nColor {self.Color}'
-    
-    '''
-    Default Colors as integers
-    Colors={
-    1:16399941,
-    2:16070549,
-    3:8069048,
-    4:9201120,
-    5:2287801,
-    6:5177211,
-    7:432432,
-    8:13419293,
-    9:16729344,
-    10:16249827,
-}
-    '''
 
     @classmethod
     def GetColor(cls,PrLevel: int) -> str :
-        if cls.IsValidPriority(PrLevel)==False:          #If Priority is invalid, return None
+        #If Priority is invalid, return None
+        if cls.IsValidPriority(PrLevel)==False:          
             ErrorLog(f"Unable to get Priority Color due to Invalid Priority Level input {PrLevel}")
             return None
-        if PrLevel in cls.ColorCache:                       #If the ""cache"" already has this,
-            return cls.ColorCache[PrLevel]                  #then return the cached value
+
+        #If the ""cache"" already has this,
+        if PrLevel in cls.ColorCache:
+            return cls.ColorCache[PrLevel]      #then return the cached value
+
         try:
             ErrorLog(f"TRIVIAL WARNING: NoValueInCache for Priority Level {PrLevel}")
             ResultantList=ExecuteCommand("""SELECT clrvalue FROM prcolors where level=?;""",(PrLevel,))
