@@ -1,4 +1,29 @@
-#DO NOT TOUCH ANYTHING IN THIS DATABASE FOLDER
+**This doc contains a list of all tables and their attributes**
+
+**Adding or modifying table structure:**
+
+If an attribute should exist, then **explicitly** declare a *NOT NULL*
+
+Give all Attributes and TableNames in lowercase and always declare types
+
+Only add attributes if you absolutely need to, more instrucutions are at the end of this 
+
+If you need to store something that would require multiple attributes,
+then use the #func-requests channel on discord because,
+
+It might be a better idea to write [an adapter](https://docs.python.org/3/library/sqlite3.html#default-adapters-and-converters)
+Check if what you're trying to store has an adapter already
+According to the python docs:
+*The default converters are registered under the name “date” for datetime.date and under the name “timestamp” for datetime.datetime*
+I've attached sample code [here](./Data/CODESAMPLE.py)
+
+Otherwise it might even be a better idea to just make a new table altogether.
+If you do, remember to update [Initialize.py](./Initialize.py)
+
+Add the *tablename* to the tuple called checklist
+and add the *tablename*:*attributelist* entry to the 'AttribDict' Variable
+
+For just adding attributes, modify the dictionary value for the corresponding table
 
 The following is a list of all tables and their attributes that should be present in the Database
 
@@ -43,7 +68,7 @@ Attributes:-
 level INTEGER PRIMARY KEY
 clrvalue INTEGER NOT NULL
 
-REMEMBER TO ALSO CHANGE THE CORRESPONDING VALUES IN INITIALIZE.PY BOTH IN THE DICTIONARY AND IN THE TUPLE
+REMEMBER TO ALSO CHANGE THE CORRESPONDING VALUES IN [INITIALIZE.PY](./Initialize.py) BOTH IN THE DICTIONARY AND IN THE TUPLE
 
 
 
