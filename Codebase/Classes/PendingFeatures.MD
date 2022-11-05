@@ -24,7 +24,7 @@ They're copies, and not interlinked at all
 
 Ideally, templates will have their own tables
 
-**LinkerTasks: (More on this stuff at the end of [THIS](./PendingFeatures.MD)**
+**LinkerTasks: (More on this stuff at the end of [THIS](./PendingFeatures.MD))**
 
 A subclass of tasks that hyperlinks to another set of projects/tasks
 
