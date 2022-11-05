@@ -5,8 +5,6 @@ from Codebase.ErrorLogs.logging import ErrorLog,Log,DBLog,DBOnlyLog
 #Importing functions to interface with the database
 from Codebase.Functions.Database import ExecuteCommand,ExecuteScript            
 
-
-
 class Label:
     #Class initialisation
     def __init__(self,Title='',Color=None) -> None:
