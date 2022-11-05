@@ -1,5 +1,7 @@
 This folder is for code that handles the [back-end](https://techterms.com/definition/backend) of the program
 
+[Classes](./Classes/) is explained [HERE](./Classes/HELP.MD)
+
 [Database](./Database/__init__.py) ensures the database and all the tables in it exist 
 
 If you have to add a new table/attributes refer to [this](./Database/READTHIS.MD) file
