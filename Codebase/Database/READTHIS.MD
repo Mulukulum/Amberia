@@ -16,14 +16,20 @@ Check if what you're trying to store has an adapter already
 According to the python docs:
 *The default converters are registered under the name “date” for datetime.date and under the name “timestamp” for datetime.datetime*
 I've attached sample code [here](./Data/CODESAMPLE.py)
+      **IMPORTANT: Avoid using [sqlite3.PARSE_DECLTYPES](https://docs.python.org/3/library/sqlite3.html#sqlite3.PARSE_DECLTYPES)**
+      **Declare it explicitly with [sqlite3.PARSE_COLNAMES](https://docs.python.org/3/library/sqlite3.html#sqlite3.PARSE_COLNAMES)**
 
 Otherwise it might even be a better idea to just make a new table altogether.
 If you do, remember to update [Initialize.py](./Initialize.py)
+
+**ADDING ATTRIBUTES AND TABLES:**
 
 Add the *tablename* to the tuple called checklist
 and add the *tablename*:*attributelist* entry to the 'AttribDict' Variable
 
 For just adding attributes, modify the dictionary value for the corresponding table
+
+**TABLE INDEX:**
 
 The following is a list of all tables and their attributes that should be present in the Database
 
