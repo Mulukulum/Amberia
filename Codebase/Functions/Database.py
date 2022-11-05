@@ -1,6 +1,6 @@
 import sqlite3                                      
 from Codebase.Variables import DataBasePath         #Get the location of the Database
-ConnectionObject=sqlite3.connect(DataBasePath)      #Creates the connection to the databse
+ConnectionObject=sqlite3.connect(DataBasePath,detect_types=sqlite3.PARSE_COLNAMES)      #Creates the connection to the databse
 
 def UDF() -> None:                                          #Function to call the UserDefinedFunctions
     global ConnectionObject

@@ -10,12 +10,17 @@ Con=sqlite3.connect(DataBasePath)       #Creates the database file if it doesn't
 Cursor=Con.cursor()                     #Creates a cursor object from the connection that we can do operations with
 
 #Check if the Following Tables exist
+#   DO NOT FORGET TO MODIFY THE READTHIS.MD FILE
+#   DO NOT FORGET TO MODIFY THE READTHIS.MD FILE
+#   DO NOT FORGET TO MODIFY THE READTHIS.MD FILE
 CheckList=('projects',
             'labels',
             'tasks',
             'sections',
             'prcolors')
-
+#   MODIFY README.MD WHEN MAKING ANY CHANGES TO ANY OF THIS
+#   MODIFY README.MD WHEN MAKING ANY CHANGES TO ANY OF THIS
+#   MODIFY README.MD WHEN MAKING ANY CHANGES TO ANY OF THIS
 AttribDict={
     'projects':'id INTEGER PRIMARY KEY, parentid INTEGER, title TEXT NOT NULL, color TEXT NOT NULL, sectioncount INTEGER NOT NULL, projectcount INTEGER NOT NULL, projecttemplate INTEGER',
     'labels':'title TEXT PRIMARY KEY, color TEXT NOT NULL,taskcount INTEGER NOT NULL',
@@ -23,6 +28,9 @@ AttribDict={
     'sections':'sectionid INTEGER PRIMARY KEY, title TEXT NOT NULL, taskcount INTEGER NOT NULL, parentprojectid INTEGER NOT NULL, sectiontemplate INTEGER',
     'prcolors':'level INTEGER PRIMARY KEY, clrvalue INTEGER NOT NULL',
     }
+#   DO NOT FORGET TO MODIFY THE READTHIS.MD FILE
+#   DO NOT FORGET TO MODIFY THE READTHIS.MD FILE
+#   DO NOT FORGET TO MODIFY THE READTHIS.MD FILE
 CriticalError=False
 for table in CheckList:                                 #For the tables that have to be checked
     if CheckAndCreate(Cursor,table,AttribDict[table]):  #iterate through each one and ensure the tables exist
