@@ -34,9 +34,10 @@ class Priority:
     ColorCache.update(Resultant)
     del Resultant                                       #Deletes the resultant list because its not needed
 
+    #Class method that ensures priority level call is valid
     @classmethod
-    def IsValidPriority(cls,PrLevel: int) -> bool :     #Class method that ensures priority level call is valid
-        ValidPriorites=(1,2,3,4,5,6,7,8,9,10)      #Sets a tuple containing whole numbers from 1 to 10
+    def IsValidPriority(cls,PrLevel: int) -> bool :     
+        ValidPriorites=(1,2,3,4,5,6,7,8,9,10)     #Sets a tuple containing whole numbers from 1 to 10
         if PrLevel in ValidPriorites:
             return True
         else: return False
@@ -53,6 +54,7 @@ class Priority:
     def __str__(self) -> str:
         return f'Priority Level {self.PriorityLevel}\nColor {self.Color}'
 
+    #Method to get the Color of a Priority Level
     @classmethod
     def GetColor(cls,PrLevel: int) -> str :
         #If Priority is invalid, return None
@@ -63,10 +65,10 @@ class Priority:
         #If the ""cache"" already has this,
         if PrLevel in cls.ColorCache:
             return cls.ColorCache[PrLevel]      #then return the cached value
-
+        #If its not in the cache then something has gone wrong somewhere,hence the TRIVIAL WARNING
+        ErrorLog(f"TRIVIAL WARNING: NoValueInCache for Priority Level {PrLevel}")
+        ResultantList=ExecuteCommand("""SELECT clrvalue FROM prcolors where level=?;""",(PrLevel,))
         try:
-            ErrorLog(f"TRIVIAL WARNING: NoValueInCache for Priority Level {PrLevel}")
-            ResultantList=ExecuteCommand("""SELECT clrvalue FROM prcolors where level=?;""",(PrLevel,))
             return ResultantList[0][0]  #The [0][0] part escapes the list and the tuple to give only the integer
         except IndexError:  #This Happens when the database is empty, and an empty list is returned
             from Codebase.SQLScripts import ScriptSetDefaultColors,DefaultPriorityColors
@@ -84,6 +86,7 @@ class Priority:
             return False
         return True
     
+    #Forcibly updates the current color values into cache
     @classmethod
     def FlushToCache(cls) -> None:      #Forcibly updates the current color values into cache
         Resultant=ExecuteCommand("""SELECT * FROM prcolors;""")
@@ -99,7 +102,8 @@ class Priority:
         return True
     
     #Fast methods
-    #Don't use these methods unless you know the input is perfectly correct
+    # Don't use these methods unless you know the input is 
+    # going to be a perfectly correct one
 
     @classmethod
     def GetColorFast(cls,PrLevel: int) -> str :
@@ -195,8 +199,6 @@ class Project:
     def __repr__(self):
         return f"Project({self.name},{self.color},{self.sections},{self.subprojects},{self.parentprojects})"
 
-from Codebase.Classes.priority import Priority
-from Codebase.ErrorLogs.logging import Log,ErrorLog
 class task:
     def __init__(self, TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=None): #Initializes the class
         self.TaskTitle=TaskTitle
