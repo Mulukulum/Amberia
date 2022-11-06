@@ -1,6 +1,25 @@
 from os.path import dirname                     
 import sqlite3  
-from Codebase.Database.StartUp import CheckAndCreate        
+
+#The following function checks if a table exists in a database
+def CheckAndCreate(cur,name: str,attributes: str) -> bool:
+    cur.execute(f"""SELECT name FROM sqlite_master WHERE type='table' AND name='{name}';""")  #Checks if the table exists
+    if cur.fetchall()==[]:              #If No matches were found, (i.e table doesn't exist)
+        if _CreateTable(cur,name,attributes)==True:
+            return True
+        else:
+            return False
+    else:
+        return True                     #return True if the table exists
+
+#Function to create a table
+def _CreateTable(cur,name: str,attributes: str) -> bool:
+    try:
+        cur.execute(f"""CREATE TABLE {name}({attributes});""")
+        return True
+    except:
+        return False
+
 from Codebase.ErrorLogs.logging import StartLog,ErrorLog
 StartLog("Initialisation Requested")
 
@@ -45,3 +64,4 @@ if CriticalError:
 StartLog("Initialisation of Database Completed")
 #Now that all tables have been created, database can have values put into it.
 #Initialization of Database is done at this point.
+
