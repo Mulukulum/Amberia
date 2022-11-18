@@ -3,7 +3,9 @@
 from Codebase.ErrorLogs.logging import ErrorLog,Log,DBLog,DBOnlyLog
 
 #Importing functions to interface with the database
-from Codebase.Functions.Database import ExecuteCommand,ExecuteScript            
+from Codebase.Functions.Database import ExecuteCommand,ExecuteScript     
+
+import datetime
 
 class Label:
     #Class initialisation
@@ -202,6 +204,8 @@ class task:
         self.TaskTitle=TaskTitle
         self.TaskDesc=TaskDesc
         self.DueDate=DueDate
+        self.Completed=0                                #sets completed to False, sql doesn't have bool so I'm using 0 and 1
+        self.CompletedDate=None                         #makes the object for completed date
         if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
             self.priority=Priority(priority)            #If so, then give the task its priority
         else:
@@ -230,6 +234,11 @@ class task:
             self.priority=Priority(priority)            #If so, then give the task its new priority
         if Labels!=None:
             self.set_label(Labels)
+
+    def force_complete(self):
+        self.Completed=1                                #completes the task
+        self.CompletedDate=datetime.datetime.now()      #records the completed time
+    
 
     def __repr__(self):                         
         return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.priority},{self.DueDate},{self.Labels})" 
