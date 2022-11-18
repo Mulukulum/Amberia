@@ -219,6 +219,18 @@ class task:
         else: 
             self.Labels.append(NewLabel)                #Adds the label if it isnt selected
 
+    def reconfigure(self,TaskTitle=None, TaskDesc=None, priority=None, DueDate=None, Labels=None):
+        if TaskTitle!=None:
+            self.TaskTitle=TaskTitle                    #Changes the title to a newly provided title
+        if TaskDesc!=None:
+            self.TaskDesc=TaskDesc                      #Changes the desc to a newly provided desc
+        if DueDate!=None:
+            self.DueDate=DueDate                        #Changes the due date to a newly provided due date
+        if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
+            self.priority=Priority(priority)            #If so, then give the task its new priority
+        if Labels!=None:
+            self.set_label(Labels)
+
     def __repr__(self):                         
         return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.priority},{self.DueDate},{self.Labels})" 
         #Repr returns how to create the task
