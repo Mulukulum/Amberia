@@ -200,7 +200,7 @@ class Project:
         return f"Project({self.name},{self.color},{self.sections},{self.subprojects},{self.parentprojects})"
 ID=0
 class task:
-    def __init__(self, TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=None): #Initializes the class
+    def __init__(self, TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=list()): #Initializes the class
         self.TaskTitle=TaskTitle
         self.TaskDesc=TaskDesc
         self.DueDate=DueDate
@@ -211,12 +211,9 @@ class task:
         else:
             self.priority=Priority(10)                  #If not, then set it to a default value of 10
             Log(f"Task {self.TaskTitle} given no priority. Default Value Assigned")
+        self.Labels=Labels
 
-        if Labels==None:                                #Checks if any labels are selected
-            self.Labels=[]                              #Makes it an empty list instead of None
-        else: 
-            self.Labels=Labels                          #Makes a list of the selected labels
-        ExecuteCommand(f"insert into tasks(title, task_desc, priority, due_date, completed) values ({self.TaskTitle},{self.TaskDesc},{self.priority},{ self.DueDate},{self.Completed})")
+        self.id=ExecuteCommand(f"INSERT INTO tasks(title, task_desc, priority, due_date, completed) values ({self.TaskTitle},{self.TaskDesc},{self.priority},{self.DueDate},{self.Completed}) RETURNING taskid;")[0][0]
 
     def set_label(self,NewLabel, TaskID):
         if NewLabel in self.Labels:                     #Checks if the label is already selected
@@ -236,7 +233,7 @@ class task:
             self.priority=Priority(priority)            #If so, then give the task its new priority
         if Labels!=None:
             self.set_label(Labels)
-        ExecuteCommand(f"update tasks set title={self.TaskTitle},task_desc={self.TaskDesc}, due_date={self,DueDate}, priority={self.priority}, labels={self.Labels} where taskid={TaskID}")
+        ExecuteCommand(f"update tasks set title={self.TaskTitle},task_desc={self.TaskDesc}, due_date={self,DueDate}, priority={self.priority.PriorityLevel}, labels={self.Labels} where taskid={TaskID}")
 
     def complete(self, TaskID):
         self.Completed=1                                #completes the task
