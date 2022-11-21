@@ -233,7 +233,7 @@ class task:
             self.priority=Priority(priority)            #If so, then give the task its new priority
         if Labels!=None:
             self.set_label(Labels)
-        ExecuteCommand(f"update tasks set title={self.TaskTitle},task_desc={self.TaskDesc}, due_date={self,DueDate}, priority={self.priority.PriorityLevel}, labels={self.Labels} where taskid={TaskID}")
+        ExecuteCommand(f"update tasks set title={self.TaskTitle},task_desc={self.TaskDesc}, due_date={self.DueDate}, priority={self.priority.PriorityLevel}, labels={self.Labels} where taskid={TaskID}")
 
     def complete(self, TaskID):
         self.Completed=1                                #completes the task
