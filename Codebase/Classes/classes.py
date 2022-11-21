@@ -221,21 +221,19 @@ class Project:
         self.parentprojects.remove(delparent)
 
     def display_sections(self):
-        for s in self.sections:
-            print(s)
+        print(*self.sections,sep='\n')
 
     def display_projects(self):
-        for p in self.subprojects:
-            print(p)
+        print(*self.subprojects,sep='\n')
 
     def display_parentprojects(self):
-        for p in self.parentprojects:
-            print(p)
+        print(*self.parentprojects,sep='\n')
+          
 
     def __str__(self):
-        return 'Project name: ' + self.name + \
-               'Display color: ' + self.color + \
-               'Sections: ' + str([str(s) for s in self.sections])
+        return  f'Project name: {self.name} \
+                \nDisplay color: {self.color} \
+                \nSections: {[str(s) for s in self.sections]}'
 
     def __repr__(self):
         return f"Project({self.name},{self.color},{self.sections},{self.subprojects},{self.parentprojects})"
