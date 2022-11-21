@@ -238,16 +238,20 @@ class task:
             self.set_label(Labels)
         ExecuteCommand(f"update tasks set title={self.TaskTitle},task_desc={self.TaskDesc}, due_date={self,DueDate}, priority={self.priority}, labels={self.Labels} where taskid={TaskID}")
 
-    def force_complete(self, TaskID):
+    def complete(self, TaskID):
         self.Completed=1                                #completes the task
         self.CompletedDate=datetime.datetime.now()      #records the completed time
         ExecuteCommand(f"update tasks set completed={self.Completed}, completed_date={self.CompletedDate} where taskid={TaskID}")
 
     def change_due_date(self, NewDueDate, TaskID):
-        self.DueDate=NewDueDate
+        self.DueDate=NewDueDate                         #accepts a new due date
         ExecuteCommand(f"update tasks set due_date={self.DueDate} where taskid={TaskID}")
     
-    
+    def update_priority(self, priority, TaskID):
+        if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
+            self.priority=Priority(priority)            #If so, then give the task its new priority
+        ExecuteCommand(f"update tasks set priority={self.priority} where taskid={TaskID}")
+
 
     def __repr__(self):                         
         return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.priority},{self.DueDate},{self.Labels})" 
