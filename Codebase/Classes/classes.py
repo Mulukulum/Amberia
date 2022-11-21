@@ -198,7 +198,7 @@ class Project:
 
     def __repr__(self):
         return f"Project({self.name},{self.color},{self.sections},{self.subprojects},{self.parentprojects})"
-
+ID=0
 class task:
     def __init__(self, TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=None): #Initializes the class
         self.TaskTitle=TaskTitle
@@ -216,14 +216,16 @@ class task:
             self.Labels=[]                              #Makes it an empty list instead of None
         else: 
             self.Labels=Labels                          #Makes a list of the selected labels
+        ExecuteCommand(f"insert into tasks(title, task_desc, priority, due_date, completed) values ({self.TaskTitle},{self.TaskDesc},{self.priority},{ self.DueDate},{self.Completed})")
 
-    def set_label(self,NewLabel):
+    def set_label(self,NewLabel, TaskID):
         if NewLabel in self.Labels:                     #Checks if the label is already selected
             self.Labels.remove(NewLabel)                #Removes the label if it is already selected
         else: 
             self.Labels.append(NewLabel)                #Adds the label if it isnt selected
+        ExecuteCommand(f"update tasks set labels={self.Labels} where taskid={TaskID}")
 
-    def reconfigure(self,TaskTitle=None, TaskDesc=None, priority=None, DueDate=None, Labels=None):
+    def reconfigure(self, TaskID, TaskTitle=None, TaskDesc=None, priority=None, DueDate=None, Labels=None):
         if TaskTitle!=None:
             self.TaskTitle=TaskTitle                    #Changes the title to a newly provided title
         if TaskDesc!=None:
@@ -234,10 +236,17 @@ class task:
             self.priority=Priority(priority)            #If so, then give the task its new priority
         if Labels!=None:
             self.set_label(Labels)
+        ExecuteCommand(f"update tasks set title={self.TaskTitle},task_desc={self.TaskDesc}, due_date={self,DueDate}, priority={self.priority}, labels={self.Labels} where taskid={TaskID}")
 
-    def force_complete(self):
+    def force_complete(self, TaskID):
         self.Completed=1                                #completes the task
         self.CompletedDate=datetime.datetime.now()      #records the completed time
+        ExecuteCommand(f"update tasks set completed={self.Completed}, completed_date={self.CompletedDate} where taskid={TaskID}")
+
+    def change_due_date(self, NewDueDate, TaskID):
+        self.DueDate=NewDueDate
+        ExecuteCommand(f"update tasks set due_date={self.DueDate} where taskid={TaskID}")
+    
     
 
     def __repr__(self):                         
