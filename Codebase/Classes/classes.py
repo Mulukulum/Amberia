@@ -144,34 +144,119 @@ class Section:
         #fstring returns the string representation
 
 
+class Task:
+    def _init_(self, prio, date, time=None, labels=None, tasks=None, notes=None):
+        self.priority = prio
+        self.duedate = date
+        self.duetime = time
+        self.labels = labels
+        self.notes = notes
+        self.tasks = tasks
+
+    def _str_(self):
+        return 'Task with priority ' + str(self.priority) + '\n'\
+                'Due on ' + self.duedate
+
+
+
+class Section:
+    cur_section_id = 1
+
+    def _init_(self, name, project=None, tasks=[]):
+        self.id = Section.cur_section_id
+        Section.cur_section_id += 1
+
+        self.name = name                 #Initialize name of section
+        self.project = project
+        self.tasks = tasks               #Initialize a list of tasks
+        
+        # Add new section to sections table
+        ExecuteCommand("INSERT INTO sections (sectionid, title, taskcount, parentprojectid) VALUES (?, ?, ?, ?);",
+                       (self.id, self.name, len(self.tasks), project.id if project != None else 0))
+
+    def set_project(self, newproject):   #Set the project to which the section belongs
+        self.project = newproject
+        
+        # Update parent project of section in sections table
+        ExecuteCommand("UPDATE sections set parentprojectid = ? where sectionid = ?;", (newproject.id, self.id))
+        
+    def add_task(self, newtask):         #Add a new task to the section
+        self.tasks.append(newtask)
+
+        # Update taskcount of section in sections table
+        ExecuteCommand("UPDATE sections set taskcount = ? where sectionid = ?;", (len(self.tasks), self.id))
+        
+    def remove_task(self, deltask):      #Remove a task from the list of tasks
+        self.tasks.remove(deltask)
+
+        # Update taskcount of section in sections table
+        ExecuteCommand("UPDATE sections set taskcount = ? where sectionid = ?;", (len(self.tasks), self.id))
+
+    def display_tasks(self):             #Display the list of tasks
+        for t in self.tasks:
+            print(t)
+
+    def _repr_(self):
+        return f"Section({self.name},{self.project},{self.tasks})"
+
+    def _str_(self):
+        return 'Section name: ' + self.name + '\nProject name: ' + self.project.name + \
+               '\nTasks: ' + str([str(t) for t in self.tasks])
+
+
 class Project:
-    def __init__(self, name, color=None, projects = list(), parentprojects = list()):
+    cur_proj_id = 1
+    
+    def _init_(self, name, color, projects = [], parentprojects = []):
+        self.id = Project.cur_proj_id
+        Project.cur_proj_id += 1
         self.name = name                 #Initialize name of project
         self.color = color               #Initialize display color
-        self.sections = list()               #Initialize list of sections
-        defaultsection = Section(f"_{self.name}")
-        defaultsection.set_project(self)
+        self.sections = []               #Initialize list of sections
+        defaultsection = Section(f"_{self.name}", self)
         self.sections.append(defaultsection)
         self.subprojects = projects           #Initialize list of sub projects 
-        self.parentprojects = parentprojects  #Initialize list of parent projects 
+        self.parentprojects = parentprojects  #Initialize list of parent projects
+        
+        # Add new project to projects table
+        ExecuteCommand("INSERT INTO projects (id, title, color, sectioncount, projectcount) VALUES (?, ?, ?, ?, ?);",
+                       (self.id, self.name, self.color, len(self.sections), len(self.subprojects)))
 
     def set_name(self, name):                 #Set name of project
         self.name = name
 
+        # Update name of project in projects table
+        ExecuteCommand("UPDATE projects set title = ? where id = ?", (name, self.id));
+        
     def set_color(self, color):
         self.color = color
 
+        # Update color of project in projects table
+        ExecuteCommand("UPDATE projects set color = ? where id = ?", (color, self.id));
+        
     def add_section(self, newsection):
         self.sections.append(newsection)
 
+        # Update sectioncount in projects table
+        ExecuteCommand("UPDATE projects set sectioncount = ? where id = ?", (len(self.sections), self.id));
+        
     def remove_section(self, delsection):
         self.sections.remove(delsection)
+
+        # Update sectioncount in projects table
+        ExecuteCommand("UPDATE projects set sectioncount = ? where id = ?", (len(self.sections), self.id));
 
     def add_project(self, newproject):
         self.subprojects.append(newproject)
 
+        # Update projectcount in projects table
+        ExecuteCommand("UPDATE projects set projectcount = ? where id = ?", (len(self.subprojects), self.id));
+
     def remove_project(self, delproject):
         self.subprojects.remove(delproject)
+        
+        # Update projectcount in projects table
+        ExecuteCommand("UPDATE projects set projectcount = ? where id = ?", (len(self.subprojects), self.id));
 
     def add_parentproject(self, newparent):
         self.parentprojects.append(newparent)
@@ -180,21 +265,23 @@ class Project:
         self.parentprojects.remove(delparent)
 
     def display_sections(self):
-        print(*self.sections,sep='\n')
+        for s in self.sections:
+            print(s)
 
     def display_projects(self):
-        print(*self.subprojects,sep='\n')
+        for p in self.subprojects:
+            print(p)
 
     def display_parentprojects(self):
-        print(*self.parentprojects,sep='\n')
-          
+        for p in self.parentprojects:
+            print(p)
 
-    def __str__(self):
-        return  f'Project name: {self.name} \
-                \nDisplay color: {self.color} \
-                \nSections: {[str(s) for s in self.sections]}'
+    def _str_(self):
+        return 'Project name: ' + self.name + \
+               'Display color: ' + self.color + \
+               'Sections: ' + str([str(s) for s in self.sections])
 
-    def __repr__(self):
+    def _repr_(self):
         return f"Project({self.name},{self.color},{self.sections},{self.subprojects},{self.parentprojects})"
 
 class task:
