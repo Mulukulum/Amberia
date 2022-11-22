@@ -200,7 +200,8 @@ class Project:
         return f"Project({self.name},{self.color},{self.sections},{self.subprojects},{self.parentprojects})"
 
 class task:
-    def __init__(self, TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=None): #Initializes the class
+    def __init__(self, SectionID, TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=None): #Initializes the class
+        self.SectionID=SectionID
         self.TaskTitle=TaskTitle
         self.TaskDesc=TaskDesc
         self.DueDate=DueDate
@@ -216,7 +217,7 @@ class task:
             self.Labels=[]                              #Makes it an empty list instead of None
         else: 
             self.Labels=Labels                          #Makes a list of the selected labels
-        ExecuteCommand(f"insert into tasks(title, task_desc, priority, due_date, completed) values ({self.TaskTitle},{self.TaskDesc},{self.priority.PriorityLevel},{ self.DueDate},{self.Completed})")
+        ExecuteCommand(f"insert into tasks(title, sectionid, task_desc, priority, due_date, completed) values ({self.TaskTitle},{self.SectionID},{self.TaskDesc},{self.priority.PriorityLevel},{ self.DueDate},{self.Completed})")
 
     def set_label(self,NewLabel, TaskID):
         if NewLabel in self.Labels:                     #Checks if the label is already selected
