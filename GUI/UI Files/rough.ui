@@ -63,7 +63,7 @@ border-radius: 15px ;
 background : #e2e530 ;</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="AddButton">
    <property name="geometry">
     <rect>
      <x>120</x>

@@ -8,12 +8,14 @@ class Window(QtWidgets.QWidget):
         uic.loadUi('GUI//UI Files//rough.ui',self)
         for task in Tasks:
             self.AddTask(task)
-    
+        self.AddButton.clicked.connect(lambda: self.AddTask(str(self.lineEdit.text())))
+
     def AddTask(self,item:str) -> None:
         task=QtWidgets.QListWidgetItem(item)
         task.setFlags(task.flags()|QtCore.Qt.ItemIsUserCheckable)
         task.setCheckState(QtCore.Qt.Unchecked)
         self.tasklistwidget.addItem(task)
+    
 
 
 app=QtWidgets.QApplication(sys.argv)
