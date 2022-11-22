@@ -21,7 +21,7 @@ def _CreateTable(cur,name: str,attributes: str) -> bool:
         return False
 
 from Codebase.ErrorLogs.logging import StartLog,ErrorLog
-StartLog("Initialisation Requested")
+StartLog("\nInitialisation Requested\n")
 
 DataBasePath=dirname(__file__)+r"\Data\Amber.db"
 
@@ -61,7 +61,7 @@ Con.commit()                #Commits Changes
 Con.close()                 #Closes Connection
 if CriticalError:
     ErrorLog("CRITICAL: Database could not be initialised. Check Start Logs for more information")
-StartLog("Initialisation of Database Completed")
+StartLog("\nInitialisation of Database Completed\n")
 #Now that all tables have been created, database can have values put into it.
 #Initialization of Database is done at this point.
 
