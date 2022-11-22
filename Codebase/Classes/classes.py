@@ -198,8 +198,9 @@ class Project:
 
     def __repr__(self):
         return f"Project({self.name},{self.color},{self.sections},{self.subprojects},{self.parentprojects})"
-ID=0
+
 class task:
+
     def __init__(self, TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=list()): #Initializes the class
         self.TaskTitle=TaskTitle
         self.TaskDesc=TaskDesc
@@ -212,8 +213,8 @@ class task:
             self.priority=Priority(10)                  #If not, then set it to a default value of 10
             Log(f"Task {self.TaskTitle} given no priority. Default Value Assigned")
         self.Labels=Labels
-
         self.id=ExecuteCommand(f"INSERT INTO tasks(title, task_desc, priority, due_date, completed) values ({self.TaskTitle},{self.TaskDesc},{self.priority},{self.DueDate},{self.Completed}) RETURNING taskid;")[0][0]
+
 
     def set_label(self,NewLabel, TaskID):
         if NewLabel in self.Labels:                     #Checks if the label is already selected
@@ -224,17 +225,20 @@ class task:
 
     def reconfigure(self, TaskID, TaskTitle=None, TaskDesc=None, priority=None, DueDate=None, Labels=None):
         if TaskTitle!=None:
-            self.TaskTitle=TaskTitle                    #Changes the title to a newly provided title
+            self.TaskTitle=TaskTitle                    #Changes the title to a newly provided title, if not provided stays the same
         if TaskDesc!=None:
             self.TaskDesc=TaskDesc                      #Changes the desc to a newly provided desc
+        else:
+            self.TaskDesc=None                          #makes task desc null if not provided
         if DueDate!=None:
             self.DueDate=DueDate                        #Changes the due date to a newly provided due date
+        else:
+            self.DueDate=None                           #makes due date null if none provided
         if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
             self.priority=Priority(priority)            #If so, then give the task its new priority
         if Labels!=None:
             self.set_label(Labels)
         ExecuteCommand(f"update tasks set title={self.TaskTitle},task_desc={self.TaskDesc}, due_date={self.DueDate}, priority={self.priority.PriorityLevel}, labels={self.Labels} where taskid={TaskID}")
-
     def complete(self, TaskID):
         self.Completed=1                                #completes the task
         self.CompletedDate=datetime.datetime.now()      #records the completed time
@@ -247,9 +251,9 @@ class task:
     def update_priority(self, priority, TaskID):
         if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
             self.priority=Priority(priority)            #If so, then give the task its new priority
-        ExecuteCommand(f"update tasks set priority={self.priority} where taskid={TaskID}")
+        ExecuteCommand(f"update tasks set priority={self.priority.PriorityLevel} where taskid={TaskID}")
 
 
     def __repr__(self):                         
-        return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.priority},{self.DueDate},{self.Labels})" 
+        return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.priority.PriorityLevel},{self.DueDate},{self.Labels})" 
         #Repr returns how to create the task
