@@ -49,6 +49,62 @@ border-radius: 15px ;
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
+  <widget class="QListWidget" name="tasklistwidget">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>160</y>
+     <width>421</width>
+     <height>281</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 16pt &quot;Times New Roman&quot;;
+background : #e2e530 ;</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>160</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-radius : 10px ;
+background : rgb(1, 176, 254)</string>
+   </property>
+   <property name="text">
+    <string>Add Task</string>
+   </property>
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>110</y>
+     <width>761</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-radius: 12px ; 
+background: rgb(255, 85, 0) ;
+color :rgb(29, 63, 255) ; 
+font: 75 14pt &quot;Times New Roman&quot;;</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="placeholderText">
+    <string>Your Task Here</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
