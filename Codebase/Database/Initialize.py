@@ -43,7 +43,7 @@ CheckList=('projects',
 AttribDict={
     'projects':'id INTEGER PRIMARY KEY, parentid INTEGER, title TEXT NOT NULL, color TEXT NOT NULL, sectioncount INTEGER NOT NULL, projectcount INTEGER NOT NULL, projecttemplate INTEGER',
     'labels':'title TEXT PRIMARY KEY, color TEXT NOT NULL,taskcount INTEGER NOT NULL',
-    'tasks':'taskid INTEGER PRIMARY KEY, title TEXT NOT NULL, parentid INTEGER NOT NULL, sectionid INTEGER, priority INTEGER NOT NULL, color INTEGER NOT NULL, tasktemplate INTEGER',
+    'tasks':'taskid INTEGER PRIMARY KEY AUTO_INCREMENT, sectionid INTEGER, title TEXT NOT NULL, priority INTEGER NOT NULL, completed INTEGER, completed_date DATE, task_desc TEXT, due_date DATE, labels TEXT',
     'sections':'sectionid INTEGER PRIMARY KEY, title TEXT NOT NULL, taskcount INTEGER NOT NULL, parentprojectid INTEGER NOT NULL, sectiontemplate INTEGER',
     'prcolors':'level INTEGER PRIMARY KEY, clrvalue INTEGER NOT NULL',
     }

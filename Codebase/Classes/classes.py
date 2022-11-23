@@ -3,7 +3,9 @@
 from Codebase.ErrorLogs.logging import ErrorLog,Log,DBLog,DBOnlyLog
 
 #Importing functions to interface with the database
-from Codebase.Functions.Database import ExecuteCommand,ExecuteScript            
+from Codebase.Functions.Database import ExecuteCommand,ExecuteScript     
+
+import datetime
 
 class Label:
     #Class initialisation
@@ -239,30 +241,63 @@ class Project:
         return f"Project({self.name},{self.color},{self.sections},{self.subprojects},{self.parentprojects})"
 
 class task:
-    def __init__(self, TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=None): #Initializes the class
+
+    def __init__(self, TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=list()): #Initializes the class
         self.TaskTitle=TaskTitle
         self.TaskDesc=TaskDesc
         self.DueDate=DueDate
+        self.Completed=0                                #sets completed to False, sql doesn't have bool so I'm using 0 and 1
+        self.CompletedDate=None                         #makes the object for completed date
         if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
             self.priority=Priority(priority)            #If so, then give the task its priority
         else:
             self.priority=Priority(10)                  #If not, then set it to a default value of 10
             Log(f"Task {self.TaskTitle} given no priority. Default Value Assigned")
+        self.Labels=Labels
+        self.id=ExecuteCommand(f"INSERT INTO tasks(title, task_desc, priority, due_date, completed) values ({self.TaskTitle},{self.TaskDesc},{self.priority},{self.DueDate},{self.Completed}) RETURNING taskid;")[0][0]
 
-        if Labels==None:                                #Checks if any labels are selected
-            self.Labels=[]                              #Makes it an empty list instead of None
-        else: 
-            self.Labels=Labels                          #Makes a list of the selected labels
 
-    def set_label(self,NewLabel):
+    def set_label(self,NewLabel, TaskID):
         if NewLabel in self.Labels:                     #Checks if the label is already selected
             self.Labels.remove(NewLabel)                #Removes the label if it is already selected
         else: 
             self.Labels.append(NewLabel)                #Adds the label if it isnt selected
+        ExecuteCommand(f"update tasks set labels={self.Labels} where taskid={TaskID}")
+
+    def reconfigure(self, TaskID, TaskTitle=None, TaskDesc=None, priority=None, DueDate=None, Labels=None):
+        if TaskTitle!=None:
+            self.TaskTitle=TaskTitle                    #Changes the title to a newly provided title, if not provided stays the same
+        if TaskDesc!=None:
+            self.TaskDesc=TaskDesc                      #Changes the desc to a newly provided desc
+        else:
+            self.TaskDesc=None                          #makes task desc null if not provided
+        if DueDate!=None:
+            self.DueDate=DueDate                        #Changes the due date to a newly provided due date
+        else:
+            self.DueDate=None                           #makes due date null if none provided
+        if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
+            self.priority=Priority(priority)            #If so, then give the task its new priority
+        if Labels!=None:
+            self.set_label(Labels)
+        ExecuteCommand(f"update tasks set title={self.TaskTitle},task_desc={self.TaskDesc}, due_date={self.DueDate}, priority={self.priority.PriorityLevel}, labels={self.Labels} where taskid={TaskID}")
+    def complete(self, TaskID):
+        self.Completed=1                                #completes the task
+        self.CompletedDate=datetime.datetime.now()      #records the completed time
+        ExecuteCommand(f"update tasks set completed={self.Completed}, completed_date={self.CompletedDate} where taskid={TaskID}")
+
+    def change_due_date(self, NewDueDate, TaskID):
+        self.DueDate=NewDueDate                         #accepts a new due date
+        ExecuteCommand(f"update tasks set due_date={self.DueDate} where taskid={TaskID}")
+    
+    def update_priority(self, priority, TaskID):
+        if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
+            self.priority=Priority(priority)            #If so, then give the task its new priority
+        ExecuteCommand(f"update tasks set priority={self.priority.PriorityLevel} where taskid={TaskID}")
+
 
     def __str__(self):
         return f"""Task with priority {str(self.priority)} \n Due on {self.DueDate}"""
 
     def __repr__(self):                         
-        return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.priority},{self.DueDate},{self.Labels})" 
+        return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.priority.PriorityLevel},{self.DueDate},{self.Labels})" 
         #Repr returns how to create the task
