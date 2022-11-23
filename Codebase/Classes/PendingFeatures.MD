@@ -31,6 +31,3 @@ have the tasks repeated
 Again, implementation is your discretion. 
 
 Keep an eye on the '\#pending-features' channel, I'll ping you guys if theres anything important
-
-You will be left with a lot of questions and probably won't understand all of it perfectly
-because I suck at explaining things properly so just ask if you need help understanding something
