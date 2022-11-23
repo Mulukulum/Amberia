@@ -19,13 +19,11 @@ class Label:
             return False
 
         else:
-            self.Title=Title    #Set Title
-            if Color==None:     #If there is no Color specified 
-
+            self.Title=Title                #Set Title
+            if Color==None:                 #If there is no Color specified 
                 self.Color=GetRandomColor() #Pick a random Color
 
             else:
-
                 #Set the specified Color
                 self.Color=Color
 
@@ -49,7 +47,7 @@ class Label:
 
         if Color>=16777214:
             self.Color=Color
-            
+
         else:
             self.Color=16777214
             ErrorLog(f" TRIVIAL : DEFAULT SET DUE TO Invalid Color Assignment ({Color}) for Label {self.Title}")
