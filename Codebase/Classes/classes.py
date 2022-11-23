@@ -5,24 +5,28 @@ from Codebase.ErrorLogs.logging import ErrorLog,Log,DBLog,DBOnlyLog
 #Importing functions to interface with the database
 from Codebase.Functions.Database import ExecuteCommand,ExecuteScript            
 
+#Importing The Required Colors
+from Codebase.Functions.Colors import GetRandomColor
+
 class Label:
-    #Class initialisation
-    def __init__(self,Title: str,Color=None) -> bool:
-        
+
+    #Class initialisation | Method returns True if Creation was successful
+    def __init__(self, Title : str ,Color : int=None) -> bool:
+        #If the Label already exists, then Log an Error
         if Label.LabelExists(Title):
-            ErrorLog(f"NON TRIVIAL : Attempt to create label {Title} which already exists")
+            ErrorLog(f" TRIVIAL : Attempt to create label {Title} which already exists")
             return False
         else:
-            self.Title=Title #Set Title
-            if Color==None:
+            self.Title=Title    #Set Title
+            if Color==None:     #If there is no Color specified  
                 #Pick a random Color
-                ...
+                self.Color=GetRandomColor()
             else:
                 #Set the specified Color
                 self.Color=Color
-            ExecuteCommand("""INSERT INTO labels(title,color,taskcount) VALUES(?,?,0)""",(self.Title,))
-
-
+            ExecuteCommand("""INSERT INTO labels(title,color,taskcount) VALUES(?,?,0) ;""",(self.Title,self.Color))
+            return True
+        
     #Method to check whether a label currently exists
     @staticmethod
     def LabelExists(LabelTitle) -> bool:
@@ -32,6 +36,17 @@ class Label:
             return False
         else:
             return True
+
+    #Method to change the color of a label
+    def SetColor(self,Color: int) -> None :
+        if Color>=16777214:
+            self.Color=Color
+        else:
+            self.Color=16777214
+            ErrorLog(f" TRIVIAL : DEFAULT SET DUE TO Invalid Color Assignment ({Color}) for Label {self.Title}")
+
+    def RandomizeColor(self) -> None:
+        self.Color=GetRandomColor()
 
     #Label repr 
     def __repr__(self) -> str:
