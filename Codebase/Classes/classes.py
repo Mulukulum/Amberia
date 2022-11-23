@@ -117,24 +117,39 @@ class Priority:
         self.PriorityLevel=NewLevel           #Enforcing an official unofficial rule that:
         self.Color=self.ColorCache[NewLevel]  #ColorCache must always be populated
 
-
 class Section:
+    
     def __init__(self, name, project=None, tasks=list()):
+
         self.name = name                 #Initialize name of section
         self.project = project
         self.tasks = tasks               #Initialize a list of tasks
+        # Add new section to sections table
+        self.id=ExecuteCommand("""INSERT INTO sections 
+                (title, taskcount, parentprojectid) VALUES (?, ?, ?) RETURNING sectionid""",
+                (self.name, len(self.tasks), self.project.id if project != None else 0))[0][0]
+        
 
     def set_project(self, newproject):   #Set the project to which the section belongs
-        self.project = newproject         
-
+        self.project = newproject
+        
+        # Update parent project of section in sections table
+        ExecuteCommand("UPDATE sections set parentprojectid = ? where sectionid = ?;", (newproject.id, self.id))
+        
     def add_task(self, newtask):         #Add a new task to the section
         self.tasks.append(newtask)
 
+        # Update taskcount of section in sections table
+        ExecuteCommand("UPDATE sections set taskcount = ? where sectionid = ?;", (len(self.tasks), self.id))
+        
     def remove_task(self, deltask):      #Remove a task from the list of tasks
         self.tasks.remove(deltask)
 
+        # Update taskcount of section in sections table
+        ExecuteCommand("UPDATE sections set taskcount = ? where sectionid = ?;", (len(self.tasks), self.id))
+
     def display_tasks(self):             #Display the list of tasks
-        print(*self.tasks,sep='\n')      #Displays tasks without a for loop         
+        print(*self.tasks,sep='\n')      #Displays tasks without a for loop
 
     def __repr__(self):
         return f"Section({self.name},{self.project},{self.tasks})"              
@@ -143,35 +158,61 @@ class Section:
         return f'Section name: {self.name} \nProject name: {self.project.name} \nTasks: {[str(t) for t in self.tasks]}'        
         #fstring returns the string representation
 
-
 class Project:
-    def __init__(self, name, color=None, projects = list(), parentprojects = list()):
+
+    def __init__(self, name, color, projects = list(), parentprojects = list(),sections=list()):
         self.name = name                 #Initialize name of project
         self.color = color               #Initialize display color
-        self.sections = list()               #Initialize list of sections
-        defaultsection = Section(f"_{self.name}")
-        defaultsection.set_project(self)
-        self.sections.append(defaultsection)
+        self.sections = sections              #Initialize list of sections
         self.subprojects = projects           #Initialize list of sub projects 
-        self.parentprojects = parentprojects  #Initialize list of parent projects 
+        self.parentprojects = parentprojects  #Initialize list of parent projects
+        
+        # Add new project to projects table
+        self.id=ExecuteCommand("INSERT INTO projects (title, color, sectioncount, projectcount) VALUES (?, ?, ?, ?) RETURNING id;",
+                       (self.name, 
+                       self.color, 
+                       len(sections)+1, #Here, the +1 is for the default section thats yet to be appended
+                       len(self.subprojects)))[0][0]
+
+        #This was moved down because creating sections requires a project id
+        defaultsection = Section(f"_{self.name}", self)
+        self.sections.append(defaultsection)
 
     def set_name(self, name):                 #Set name of project
         self.name = name
 
+        # Update name of project in projects table
+        ExecuteCommand("UPDATE projects set title = ? where id = ?", (name, self.id))
+        
     def set_color(self, color):
         self.color = color
 
+        # Update color of project in projects table
+        ExecuteCommand("UPDATE projects set color = ? where id = ?", (color, self.id))
+        
     def add_section(self, newsection):
         self.sections.append(newsection)
 
+        # Update sectioncount in projects table
+        ExecuteCommand("UPDATE projects set sectioncount = ? where id = ?", (len(self.sections), self.id))
+        
     def remove_section(self, delsection):
         self.sections.remove(delsection)
+
+        # Update sectioncount in projects table
+        ExecuteCommand("UPDATE projects set sectioncount = ? where id = ?", (len(self.sections), self.id))
 
     def add_project(self, newproject):
         self.subprojects.append(newproject)
 
+        # Update projectcount in projects table
+        ExecuteCommand("UPDATE projects set projectcount = ? where id = ?", (len(self.subprojects), self.id))
+
     def remove_project(self, delproject):
         self.subprojects.remove(delproject)
+        
+        # Update projectcount in projects table
+        ExecuteCommand("UPDATE projects set projectcount = ? where id = ?", (len(self.subprojects), self.id))
 
     def add_parentproject(self, newparent):
         self.parentprojects.append(newparent)
@@ -218,6 +259,9 @@ class task:
             self.Labels.remove(NewLabel)                #Removes the label if it is already selected
         else: 
             self.Labels.append(NewLabel)                #Adds the label if it isnt selected
+
+    def __str__(self):
+        return f"""Task with priority {str(self.priority)} \n Due on {self.DueDate}"""
 
     def __repr__(self):                         
         return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.priority},{self.DueDate},{self.Labels})" 
