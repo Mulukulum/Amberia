@@ -24,7 +24,7 @@ class Label:
             else:
                 #Set the specified Color
                 self.Color=Color
-            ExecuteCommand("""INSERT INTO labels(title,color,taskcount) VALUES(?,?,0) ;""",(self.Title,self.Color))
+            ExecuteCommand("INSERT INTO labels(title,color,taskcount) VALUES(?,?,0) ;",(self.Title,self.Color))
             return True
         
     #Method to check whether a label currently exists
