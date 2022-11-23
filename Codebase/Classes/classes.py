@@ -74,10 +74,14 @@ class Priority:
     Resultant=ExecuteCommand("""SELECT * FROM prcolors;""")     #Gets the current values from the Database
 
     if Resultant==[]:                                           #If the database is empty
+
         #Imports the necessary script and Priority colors
-        from Codebase.SQLScripts import ScriptSetDefaultColors,DefaultPriorityColors
+        from Codebase.SQLScripts import ScriptSetDefaultColors
+        from Codebase.SQLScripts import DefaultPriorityColors
+        
         ExecuteScript(ScriptSetDefaultColors)           #Runs the script to set the default colors
         ColorCache=DefaultPriorityColors.copy()         #Updates the Cache
+    
     ColorCache.update(Resultant)
     del Resultant                                       #Deletes the resultant list because its not needed
 
@@ -104,6 +108,7 @@ class Priority:
     #Method to get the Color of a Priority Level
     @classmethod
     def GetColor(cls,PrLevel: int) -> str :
+
         #If Priority is invalid, return None
         if cls.IsValidPriority(PrLevel)==False:          
             ErrorLog(f"Unable to get Priority Color due to Invalid Priority Level input {PrLevel}")
@@ -112,20 +117,28 @@ class Priority:
         #If the ""cache"" already has this,
         if PrLevel in cls.ColorCache:
             return cls.ColorCache[PrLevel]      #then return the cached value
+        
         #If its not in the cache then something has gone wrong somewhere,hence the TRIVIAL WARNING
         ErrorLog(f"TRIVIAL WARNING: NoValueInCache for Priority Level {PrLevel}")
         ResultantList=ExecuteCommand("""SELECT clrvalue FROM prcolors where level=?;""",(PrLevel,))
+
         try:
             return ResultantList[0][0]  #The [0][0] part escapes the list and the tuple to give only the integer
-        except IndexError:  #This Happens when the database is empty, and an empty list is returned
+
+        except IndexError:  
+            
+            #This Happens when the database is empty, and an empty list is returned
             from Codebase.SQLScripts import ScriptSetDefaultColors,DefaultPriorityColors
             ErrorLog("GetColor Method called without initialisation of prcolors")
+
             ExecuteScript(ScriptSetDefaultColors)           #Runs the script to set the default colors
             cls.ColorCache=DefaultPriorityColors.copy()     #Updates the Cache
+
             return cls.ColorCache[PrLevel]                  #Returns the default color
 
     #Method to update priority level of priority object
     def UpdatePriorityLevel(self,NewLevel: int) -> bool :
+
         if self.IsValidPriority(NewLevel) :
             self.PriorityLevel=NewLevel           #Enforcing an official unofficial rule that:
             self.Color=self.ColorCache[NewLevel]  #ColorCache must always be populated
@@ -141,10 +154,13 @@ class Priority:
 
     @classmethod
     def UpdateColor(cls,PrLevel: int,NewColor: int) -> bool:
+        
         if cls.IsValidPriority(PrLevel)==False:
             return False
+
         NewColor=abs(NewColor)          #Optional Line to ensure negatives don't mess stuff up
         cls.ColorCache[PrLevel]=NewColor        #Updates the Cache with the new value
+        
         ExecuteCommand("UPDATE prcolors SET clrvalue=? WHERE level=?;",(NewColor,PrLevel)) #Updates the database with the new values
         return True
     

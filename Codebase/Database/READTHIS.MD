@@ -38,7 +38,7 @@ Attributes :-
 id INTEGER PRIMARY KEY
 parentid INTEGER
 title TEXT NOT NULL
-color TEXT NOT NULL
+color INTEGER NOT NULL
 sectioncount INTEGER NOT NULL
 projectcount INTEGER NOT NULL
 projecttemplate INTEGER
