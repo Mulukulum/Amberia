@@ -7,15 +7,40 @@ from Codebase.Functions.Database import ExecuteCommand,ExecuteScript
 
 class Label:
     #Class initialisation
-    def __init__(self,Title='',Color=None) -> None:
-        self.Title=Title                    #Set the Title of the Label
-        self.Color=Color
+    def __init__(self,Title: str,Color=None) -> bool:
+        
+        if Label.LabelExists(Title):
+            ErrorLog(f"NON TRIVIAL : Attempt to create label {Title} which already exists")
+            return False
+        else:
+            self.Title=Title #Set Title
+            if Color==None:
+                #Pick a random Color
+                ...
+            else:
+                #Set the specified Color
+                self.Color=Color
+            ExecuteCommand("""INSERT INTO labels(title,color,taskcount) VALUES(?,?,0)""",(self.Title,))
+
+
+    #Method to check whether a label currently exists
+    @staticmethod
+    def LabelExists(LabelTitle) -> bool:
+        #Find the label
+        #If it doesn't exist, return False
+        if ExecuteCommand("SELECT title FROM labels WHERE title=?",(LabelTitle,))==[]:
+            return False
+        else:
+            return True
+
     #Label repr 
     def __repr__(self) -> str:
         return f'Label({self.Title},{self.Color})'
+    
     #String Representation
     def __str__(self) -> str:
         return f'Label {self.Title} Color {self.Color}'
+
 
 
 #This Class defines a Priority Object
