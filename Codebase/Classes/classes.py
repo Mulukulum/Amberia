@@ -5,7 +5,7 @@ from Codebase.ErrorLogs.logging import ErrorLog,Log,DBLog,DBOnlyLog
 #Importing functions to interface with the database
 from Codebase.Functions.Database import ExecuteCommand,ExecuteScript            
 
-#Importing The Required Colors
+#Importing The Required Colors for Labels
 from Codebase.Functions.Colors import GetRandomColor
 
 class Label:
