@@ -62,8 +62,10 @@ class Label:
 #Each task contains one of these, each object has a prioritylevel and a color associated with it
 #There can be a maximum of 10 priority levels, where 10 is the lowest and 1 in the highest
 class Priority: 
+
     ColorCache=dict()                                           #Creates the Dictionary used for Cacheing
     Resultant=ExecuteCommand("""SELECT * FROM prcolors;""")     #Gets the current values from the Database
+
     if Resultant==[]:                                           #If the database is empty
         #Imports the necessary script and Priority colors
         from Codebase.SQLScripts import ScriptSetDefaultColors,DefaultPriorityColors
@@ -127,7 +129,7 @@ class Priority:
     #Forcibly updates the current color values into cache
     @classmethod
     def FlushToCache(cls) -> None:      #Forcibly updates the current color values into cache
-        Resultant=ExecuteCommand("""SELECT * FROM prcolors;""")
+        Resultant=ExecuteCommand("SELECT * FROM prcolors;")
         cls.ColorCache.update(Resultant)
 
     @classmethod
