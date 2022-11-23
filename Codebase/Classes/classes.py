@@ -7,25 +7,67 @@ from Codebase.Functions.Database import ExecuteCommand,ExecuteScript
 
 import datetime
 
+#Importing The Required Colors for Labels
+from Codebase.Functions.Colors import GetRandomColor
+
 class Label:
-    #Class initialisation
-    def __init__(self,Title='',Color=None) -> None:
-        self.Title=Title                    #Set the Title of the Label
-        self.Color=Color
+
+    #Class initialisation | Method returns True if Creation was successful
+    def __init__(self, Title : str ,Color : int=None) -> bool:
+        #If the Label already exists, then Log an Error
+        if Label.LabelExists(Title):
+            ErrorLog(f" TRIVIAL : Attempt to create label {Title} which already exists")
+            return False
+        else:
+            self.Title=Title    #Set Title
+            if Color==None:     #If there is no Color specified  
+                #Pick a random Color
+                self.Color=GetRandomColor()
+            else:
+                #Set the specified Color
+                self.Color=Color
+            ExecuteCommand("INSERT INTO labels(title,color,taskcount) VALUES(?,?,0) ;",(self.Title,self.Color))
+            return True
+        
+    #Method to check whether a label currently exists
+    @staticmethod
+    def LabelExists(LabelTitle) -> bool:
+        #Find the label
+        #If it doesn't exist, return False
+        if ExecuteCommand("SELECT title FROM labels WHERE title=?",(LabelTitle,))==[]:
+            return False
+        else:
+            return True
+
+    #Method to change the color of a label
+    def SetColor(self,Color: int) -> None :
+        if Color>=16777214:
+            self.Color=Color
+        else:
+            self.Color=16777214
+            ErrorLog(f" TRIVIAL : DEFAULT SET DUE TO Invalid Color Assignment ({Color}) for Label {self.Title}")
+
+    def RandomizeColor(self) -> None:
+        self.Color=GetRandomColor()
+
     #Label repr 
     def __repr__(self) -> str:
         return f'Label({self.Title},{self.Color})'
+    
     #String Representation
     def __str__(self) -> str:
         return f'Label {self.Title} Color {self.Color}'
+
 
 
 #This Class defines a Priority Object
 #Each task contains one of these, each object has a prioritylevel and a color associated with it
 #There can be a maximum of 10 priority levels, where 10 is the lowest and 1 in the highest
 class Priority: 
+
     ColorCache=dict()                                           #Creates the Dictionary used for Cacheing
     Resultant=ExecuteCommand("""SELECT * FROM prcolors;""")     #Gets the current values from the Database
+
     if Resultant==[]:                                           #If the database is empty
         #Imports the necessary script and Priority colors
         from Codebase.SQLScripts import ScriptSetDefaultColors,DefaultPriorityColors
@@ -89,7 +131,7 @@ class Priority:
     #Forcibly updates the current color values into cache
     @classmethod
     def FlushToCache(cls) -> None:      #Forcibly updates the current color values into cache
-        Resultant=ExecuteCommand("""SELECT * FROM prcolors;""")
+        Resultant=ExecuteCommand("SELECT * FROM prcolors;")
         cls.ColorCache.update(Resultant)
 
     @classmethod
