@@ -276,7 +276,7 @@ class Task:
         else: 
             self.Labels=Labels                          #Makes a list of the selected labels
 
-    def set_label(self,NewLabel):
+    def ToggleLabel(self,NewLabel):
         if NewLabel in self.Labels:                     #Checks if the label is already selected
             self.Labels.remove(NewLabel)                #Removes the label if it is already selected
         else: 
