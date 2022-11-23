@@ -12,26 +12,33 @@ class Label:
 
     #Class initialisation | Method returns True if Creation was successful
     def __init__(self, Title : str ,Color : int=None) -> bool:
-        #If the Label already exists, then Log an Error
+
         if Label.LabelExists(Title):
+            #If the Label already exists, then Log an Error
             ErrorLog(f" TRIVIAL : Attempt to create label {Title} which already exists")
             return False
+
         else:
             self.Title=Title    #Set Title
-            if Color==None:     #If there is no Color specified  
-                #Pick a random Color
-                self.Color=GetRandomColor()
+            if Color==None:     #If there is no Color specified 
+
+                self.Color=GetRandomColor() #Pick a random Color
+
             else:
+
                 #Set the specified Color
                 self.Color=Color
+
             ExecuteCommand("INSERT INTO labels(title,color,taskcount) VALUES(?,?,0) ;",(self.Title,self.Color))
             return True
         
     #Method to check whether a label currently exists
     @staticmethod
     def LabelExists(LabelTitle) -> bool:
+
         #Find the label
         #If it doesn't exist, return False
+        
         if ExecuteCommand("SELECT title FROM labels WHERE title=?",(LabelTitle,))==[]:
             return False
         else:
@@ -39,8 +46,10 @@ class Label:
 
     #Method to change the color of a label
     def SetColor(self,Color: int) -> None :
+
         if Color>=16777214:
             self.Color=Color
+            
         else:
             self.Color=16777214
             ErrorLog(f" TRIVIAL : DEFAULT SET DUE TO Invalid Color Assignment ({Color}) for Label {self.Title}")
