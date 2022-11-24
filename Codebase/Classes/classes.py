@@ -223,9 +223,10 @@ class Label:
     
     #Use this method only when rename availability is known
     def RenameLabel(self,NewName: str):
-        self.Title=NewName
-        ExecuteCommand("UPDATE labels SET label_ ")
 
+        ExecuteCommand("UPDATE labels SET label_title=? WHERE label_title=?",(NewName,self.Title))
+        ExecuteCommand("UPDATE labelsfortasks SET label=? WHERE label=?",(NewName,self.Title))
+        self.Title=NewName
 
     def RandomizeColor(self) -> None:
         self.Color=GetRandomColor()
