@@ -229,6 +229,11 @@ class Label:
 #There can be a maximum of 10 priority levels, where 10 is the lowest and 1 in the highest
 class Priority: 
 
+    UpperBound=10
+    ValidPriorites=tuple(range(1,UpperBound+1))     
+    #Sets a tuple containing the valid priority Levels
+    #Tuple contains integers from 1 to Upperbound (1 to 10)
+
     ColorCache=dict()                                           #Creates the Dictionary used for Cacheing
     Resultant=ExecuteCommand("""SELECT * FROM prcolors;""")     #Gets the current values from the Database
 
@@ -244,66 +249,38 @@ class Priority:
     ColorCache.update(Resultant)
     del Resultant                                       #Deletes the resultant list because its not needed
 
-    #Class method that ensures priority level call is valid
-    @classmethod
-    def IsValidPriority(cls,PrLevel: int) -> bool :     
-        ValidPriorites=(1,2,3,4,5,6,7,8,9,10)     #Sets a tuple containing whole numbers from 1 to 10
-        if PrLevel in ValidPriorites:
-            return True
-        else: return False
     
-    #Initialising class
-    def __init__(self,PriorityLevel=10) -> None:
-        self.PriorityLevel=PriorityLevel
-        self.Color=self.GetColorForLevel(PriorityLevel)
+    #Class method that ensures priority level call is valid
+    
+    @classmethod
+    def IsValid(cls,PrLevel: int) -> bool :      
 
-    #Class Representation    
-    def __repr__(self) -> str:
-        return f'Priority({self.PriorityLevel})'
+        if PrLevel in cls.ValidPriorites:    return True
+        else:                            return False
     
     def __str__(self) -> str:
         return f'Priority Level {self.PriorityLevel}\nColor {self.Color}'
 
+
     #Method to get the Color of a Priority Level
     @classmethod
-    def GetColorForLevel(cls,PrLevel: int) -> str :
+    def ColorOfLevel(cls,PrLevel: int) -> str :
 
         #If Priority is invalid, return None
-        if cls.IsValidPriority(PrLevel)==False:          
+        if cls.IsValid(PrLevel)==False:          
             ErrorLog(f"Unable to get Priority Color due to Invalid Priority Level input {PrLevel}")
             return None
 
         #If the ""cache"" already has this,
         if PrLevel in cls.ColorCache:
-            return cls.ColorCache[PrLevel]      #then return the cached value
+
+            #then return the cached value
+            return cls.ColorCache[PrLevel]      
         
         #If its not in the cache then something has gone wrong somewhere,hence the TRIVIAL WARNING
         ErrorLog(f"TRIVIAL WARNING: NoValueInCache for Priority Level {PrLevel}")
         ResultantList=ExecuteCommand("""SELECT clrvalue FROM prcolors where level=?;""",(PrLevel,))
-
-        try:
-            return ResultantList[0][0]  #The [0][0] part escapes the list and the tuple to give only the integer
-
-        except IndexError:  
-            
-            #This Happens when the database is empty, and an empty list is returned
-            from Codebase.SQLScripts import ScriptSetDefaultColors,DefaultPriorityColors
-            ErrorLog("GetColor Method called without initialisation of prcolors")
-
-            ExecuteScript(ScriptSetDefaultColors)           #Runs the script to set the default colors
-            cls.ColorCache=DefaultPriorityColors.copy()     #Updates the Cache
-
-            return cls.ColorCache[PrLevel]                  #Returns the default color
-
-    #Method to update priority level of priority object
-    def UpdatePriorityLevel(self,NewLevel: int) -> bool :
-
-        if self.IsValidPriority(NewLevel) :
-            self.PriorityLevel=NewLevel           #Enforcing an official unofficial rule that:
-            self.Color=self.ColorCache[NewLevel]  #ColorCache must always be populated
-        else:
-            return False
-        return True
+        return ResultantList[0][0]  #The [0][0] part escapes the list and the tuple to give only the integer
     
     #Forcibly updates the current color values into cache
     @classmethod
@@ -314,7 +291,7 @@ class Priority:
     @classmethod
     def UpdateColor(cls,PrLevel: int,NewColor: int) -> bool:
         
-        if cls.IsValidPriority(PrLevel)==False:
+        if cls.IsValid(PrLevel)==False:
             return False
 
         NewColor=abs(NewColor)          #Optional Line to ensure negatives don't mess stuff up
@@ -330,6 +307,8 @@ class Priority:
 
 class Task:
 
+    Instances=dict()
+
     def __init__(self, TaskTitle: str, TaskDesc: str='', PriorityLevel: int=10, DueDate: datetime.datetime=None, Labels: list=list()): #Initializes the class
 
         self.TaskTitle=TaskTitle
@@ -339,15 +318,24 @@ class Task:
         self.Completed=0                                #sets completed to False, sql doesn't have bool so I'm using 0 and 1
         self.CompletedDate=None                         #makes the object for completed date
 
-        if Priority.IsValidPriority(PriorityLevel):          #Checks if the incoming argument is a valid priority level
-            self.PriorityLevel=Priority(PriorityLevel)       #If so, then give the task its priority
-        else:
+        #Priority Level of Task
 
-            self.PriorityLevel=PriorityLevel(10)             #If not, then set it to a default value of 10
+        if Priority.IsValid(PriorityLevel):          #Checks if the incoming argument is a valid priority level
+            self.PriorityLevel=PriorityLevel         #If so, then give the task its priority level
+        else:
+            self.PriorityLevel=Priority.UpperBound                    #If not, then set it to a default value of 10
             Log(f"Task {self.TaskTitle} given no priority. Default Value Assigned")
+    
+        self.Color=Priority.ColorOfLevel(PriorityLevel)     #And assign the color as well
         
         self.Labels=Labels
-        self.id=ExecuteCommand(f"INSERT INTO tasks(title, task_desc, priority, due_date, completed) values ({self.TaskTitle},{self.TaskDesc},{self.PriorityLevel},{self.DueDate},{self.Completed}) RETURNING taskid;")[0][0]
+        self.ID=ExecuteCommand(f"INSERT INTO tasks(title, task_desc, priority, due_date, completed) values ({self.TaskTitle},{self.TaskDesc},{self.PriorityLevel},{self.DueDate},{self.Completed}) RETURNING taskid;")[0][0]
+
+        #Add the task to the dictionary of instances
+        Task.Instances[self.ID]=self
+
+
+
 
     def set_label(self,NewLabel, TaskID):
         if NewLabel in self.Labels:                     #Checks if the label is already selected
@@ -367,7 +355,7 @@ class Task:
             self.DueDate=DueDate                        #Changes the due date to a newly provided due date
         else:
             self.DueDate=None                           #makes due date null if none provided
-        if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
+        if Priority.IsValid(priority):          #Checks if the incoming argument is a valid priority level
             self.PriorityLevel=Priority(priority)            #If so, then give the task its new priority
         if Labels!=None:
             self.set_label(Labels)
@@ -382,10 +370,10 @@ class Task:
         ExecuteCommand(f"update tasks set due_date={self.DueDate} where taskid={TaskID}")
     
     def update_priority(self, priority, TaskID):
-        if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
+        if Priority.IsValid(priority):          #Checks if the incoming argument is a valid priority level
             self.PriorityLevel=Priority(priority)            #If so, then give the task its new priority
-        ExecuteCommand(f"update tasks set priority={self.PriorityLevel.PriorityLevel} where taskid={TaskID}")
+        ExecuteCommand(f"update tasks set priority={self.PriorityLevel} where taskid={TaskID}")
 
     def __repr__(self):                         
-        return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.PriorityLevel.PriorityLevel},{self.DueDate},{self.Labels})" 
+        return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.PriorityLevel},{self.DueDate},{self.Labels})" 
         #Repr returns how to create the task
