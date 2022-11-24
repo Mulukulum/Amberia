@@ -1,4 +1,4 @@
-#############################         PROGRESS        ####################################
+####################################     PROGRESS     ####################################
 
 # The backend is now nearly done, with only tasks left to clean up
 # As for the UI, Widgets for pretty much everything are almost done, only thing left is 
