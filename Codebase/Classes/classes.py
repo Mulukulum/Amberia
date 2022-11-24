@@ -15,12 +15,12 @@ class Project:
     #Empty dictionary to store the instances of all the projects
     Instances=dict()
 
-    def __init__(self, ProjectTitle, ProjectColor: int=None):
+    def __init__(self, ProjectTitle, ProjectColor: int=678452056):
 
         self.Title = ProjectTitle                 #Initialize name of project
         
         #Set a random color if No Color was specified or the Color is Invalid
-        if ProjectColor==None or ProjectColor<=16777215:
+        if ProjectColor==678452056 or ProjectColor>=16777215:
             self.Color=GetRandomColor()
         else:
             self.Color=ProjectColor
@@ -84,6 +84,8 @@ class Project:
         ExecuteCommand("UPDATE projects SET project_sectioncount=project_sectioncount+1 WHERE project_id=?",(self.ID,))
 
     def RemoveSection(self, SectionID: int):
+        
+        #Remove the Section from the Project
         ...
 
     def DisplaySections(self):
@@ -111,7 +113,7 @@ class Section:
     Instances=dict()
 
     def __init__(self,SectionProject: Project, SectionTitle: str, DefaultSection=False):
-        
+
         #Check Validity of The section Title
         #Ensuring that SectionTitle's can't start with a single underscore followed by characters
         if SectionTitle[0]=="_" and DefaultSection==False :
@@ -159,7 +161,7 @@ class Section:
         return f"Section({self.Title},{self.Project},{self.Tasks})"              
 
     def __str__(self):
-        return f'Section name: {self.Title} \nProject name: {self.Project.name} \nTasks: {[str(t) for t in self.Tasks]}'        
+        return f'Section name: {self.Title} \nProject name: {self.Project.Title} \nTasks: {[str(t) for t in self.Tasks]}'        
         #fstring returns the string representation
 
 class Label:
@@ -199,12 +201,11 @@ class Label:
     #Method to change the color of a label
     def SetColor(self,Color: int) -> None :
 
-        if Color>=16777215:
+        if Color<=16777215:
             self.Color=Color
 
         else:
-            self.Color=16777215
-            ErrorLog(f" TRIVIAL : DEFAULT SET DUE TO Invalid Color Assignment ({Color}) for Label {self.Title}")
+            ErrorLog(f" TRIVIAL : NO-OP DUE TO Invalid Color Assignment ({Color}) for Label {self.Title}")
 
     def RandomizeColor(self) -> None:
         self.Color=GetRandomColor()
