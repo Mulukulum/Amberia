@@ -41,11 +41,12 @@ CheckList=('projects',
 #   MODIFY README.MD WHEN MAKING ANY CHANGES TO ANY OF THIS
 #   MODIFY README.MD WHEN MAKING ANY CHANGES TO ANY OF THIS
 AttribDict={
-    'projects':'id INTEGER PRIMARY KEY, parentid INTEGER, title TEXT NOT NULL, color TEXT NOT NULL, sectioncount INTEGER NOT NULL, projectcount INTEGER NOT NULL, projecttemplate INTEGER',
-    'labels':'title TEXT PRIMARY KEY, color INTEGER NOT NULL,taskcount INTEGER NOT NULL',
-    'tasks':'taskid INTEGER PRIMARY KEY, title TEXT NOT NULL, parentid INTEGER NOT NULL, sectionid INTEGER, priority INTEGER NOT NULL, color INTEGER NOT NULL, tasktemplate INTEGER',
-    'sections':'sectionid INTEGER PRIMARY KEY, title TEXT NOT NULL, taskcount INTEGER NOT NULL, parentprojectid INTEGER NOT NULL, sectiontemplate INTEGER',
+    'projects':'project_id INTEGER PRIMARY KEY, project_title TEXT NOT NULL, project_color INTEGER NOT NULL, project_sectioncount INTEGER NOT NULL',
+    'labels':'label_title TEXT PRIMARY KEY, label_color INTEGER NOT NULL,label_taskcount INTEGER NOT NULL',
+    'tasks':'task_id INTEGER PRIMARY KEY, task_description TEXT, task_title TEXT NOT NULL, task_projectid INTEGER NOT NULL, task_sectionid INTEGER NOT NULL, task_priority INTEGER NOT NULL, task_completed INTEGER NOT NULL,task_duedate DATE, task_completed_date DATE',
+    'sections':'section_id INTEGER PRIMARY KEY, section_parentprojectid INTEGER NOT NULL, section_title TEXT NOT NULL, section_taskcount INTEGER NOT NULL',
     'prcolors':'level INTEGER PRIMARY KEY, clrvalue INTEGER NOT NULL',
+    'labelsfortasks':'task INTEGER NOT NULL, label TEXT NOT NULL'
     }
 #   DO NOT FORGET TO MODIFY THE READTHIS.MD FILE
 #   DO NOT FORGET TO MODIFY THE READTHIS.MD FILE
