@@ -47,11 +47,13 @@ class Project:
         Project.Instances[self.ID]=self
 
         #Setting up the Default Section of the Project: 
+
         #Create and Set the DefaultSection
         self.DefaultSection = Section(SectionProject=self , SectionTitle=f"_{self.Title}",DefaultSection=True)
+        self.DefaultSectionID=self.DefaultSection.ID
 
-        #Create the List of Sections
-        self.Sections=[self.DefaultSection,]
+        #Create the Dictionary of Sections
+        self.Sections={self.DefaultSectionID : self.DefaultSection}
 
     #Method to set a New name for the Project
     def SetName(self, NewName: str):                 
@@ -77,15 +79,28 @@ class Project:
     def AddSection(self,SectionTitle: str): #Takes the Name of the Section as input
         
         #Create and append the Section to the list of sections
-        self.Sections.append(
-            Section(SectionProject=self,SectionTitle=SectionTitle)
-            )
+        SectionObject=Section(SectionProject=self,SectionTitle=SectionTitle)
+        self.Sections[SectionObject.ID]=SectionObject
+        
         #Update the sectioncount attribute
         ExecuteCommand("UPDATE projects SET project_sectioncount=project_sectioncount+1 WHERE project_id=?",(self.ID,))
 
     def RemoveSection(self, SectionID: int):
         
+        if SectionID not in self.Sections:
+            if SectionID not in Section.Instances:
+                ErrorLog("WARNING: Section Delete Request Issued for Non-Existent Section")
+                return
+            return ErrorLog("WARNING: Section Delete Request Issued for Invalid Section")
+        
+        #Delete all the Tasks in the section
+        Section.Instances[SectionID].DeleteAllTasks()
+
         #Remove the Section from the Project
+        self.Sections.pop(SectionID)
+
+
+        ExecuteCommand("")
         ...
 
     def DisplaySections(self):
@@ -153,6 +168,15 @@ class Section:
     def RemoveTask(self, DelTask):      #Remove a task from the list of tasks
         self.Tasks.remove(DelTask)
         ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount-1 WHERE section_id=?",(self.ID))
+
+    def DeleteAllTasks(self):
+        
+        #While the section still has tasks
+        while self.Tasks!=[]:
+            self.Tasks[0].DeleteTask(WipeDataBase=False)
+        
+        #Delete the tasks from the Database
+        ExecuteCommand("DELETE FROM tasks WHERE task_sectionid=?",(self.ID))
 
     def DisplayTasks(self):             #Display the list of tasks
         print(*self.Tasks,sep='\n')      #Displays tasks without a for loop         
@@ -223,9 +247,12 @@ class Label:
     
     #Use this method only when rename availability is known
     def RenameLabel(self,NewName: str):
-
+        
+        #Change the Database
         ExecuteCommand("UPDATE labels SET label_title=? WHERE label_title=?",(NewName,self.Title))
         ExecuteCommand("UPDATE labelsfortasks SET label=? WHERE label=?",(NewName,self.Title))
+        
+        #Update the object in python
         self.Title=NewName
 
     def RandomizeColor(self) -> None:
@@ -457,7 +484,7 @@ class Task:
         self.CompletedDate=datetime.datetime.now()      #records the completed time
         ExecuteCommand(f"UPDATE tasks SET task_completed={self.Completed}, completed_date={self.CompletedDate} WHERE task_id={self.ID}")
 
-    def DeleteTask(self):
+    def DeleteTask(self,WipeDataBase=True):
 
         #Pops the item from the dictionary of instances
         Task.Instances.pop(self.ID)
@@ -465,8 +492,8 @@ class Task:
         #Remove all the labels
         self.RemoveAllLabels()
 
-        #Deletes Everything from the Database
-        ExecuteCommand(f"DELETE FROM tasks WHERE task_id={self.ID};")
+        #Deletes Everything from the Database if Needed
+        if WipeDataBase: ExecuteCommand(f"DELETE FROM tasks WHERE task_id={self.ID};")
         
         #And Finally, deletes the object in python
         del self
