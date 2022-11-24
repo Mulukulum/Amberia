@@ -8,6 +8,8 @@ from Codebase.Functions.Database import ExecuteCommand,ExecuteScript
 #Importing The Required Colors for Labels
 from Codebase.Functions.Colors import GetRandomColor
 
+import datetime
+
 class Project:
     def __init__(self, Name, Color=None, Projects = list(), ParentProjects = list()):
         self.Name = Name                 #Initialize name of project
@@ -261,10 +263,12 @@ class Priority:
         self.Color=self.ColorCache[NewLevel]  #ColorCache must always be populated
 
 class Task:
-    def __init__(self, TaskTitle, TaskDesc=None, PriorityLevel=10, DueDate=None, Labels=None): #Initializes the class
+    def __init__(self, TaskTitle: str, TaskDesc: str='', PriorityLevel: int=10, DueDate: datetime.datetime=None, Labels: list=None): #Initializes the class
+        
         self.TaskTitle=TaskTitle
         self.TaskDesc=TaskDesc
         self.DueDate=DueDate
+        
         if Priority.IsValidPriority(PriorityLevel):          #Checks if the incoming argument is a valid priority level
             self.priority=Priority(PriorityLevel)            #If so, then give the task its priority
         else:
