@@ -166,6 +166,8 @@ class Section:
 
 class Label:
 
+    LabelInstances={}
+
     #Class initialisation | Method returns True if Creation was successful
     def __init__(self, Title : str ,Color : int=None) -> bool:
 
@@ -184,7 +186,12 @@ class Label:
                 self.Color=Color
 
             ExecuteCommand("INSERT INTO labels(label_title,label_color,label_taskcount) VALUES(?,?,0) ;",(self.Title,self.Color))
+            
+            Label.LabelInstances[self.Title]=self
+            
             return True
+
+
         
     #Method to check whether a label currently exists
     @staticmethod
@@ -206,6 +213,19 @@ class Label:
 
         else:
             ErrorLog(f" TRIVIAL : NO-OP DUE TO Invalid Color Assignment ({Color}) for Label {self.Title}")
+
+    @classmethod
+    def CheckRenameAvailability(cls,Name: str):
+        if Name in Label.LabelInstances:
+            return False
+        else:
+            return True
+    
+    #Use this method only when rename availability is known
+    def RenameLabel(self,NewName: str):
+        self.Title=NewName
+        ExecuteCommand("UPDATE labels SET label_ ")
+
 
     def RandomizeColor(self) -> None:
         self.Color=GetRandomColor()
