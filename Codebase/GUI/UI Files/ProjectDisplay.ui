@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>849</width>
-    <height>532</height>
+    <width>700</width>
+    <height>380</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,10 +19,10 @@
   <widget class="QLabel" name="ProjectName">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>-10</y>
-     <width>851</width>
-     <height>91</height>
+     <x>156</x>
+     <y>0</y>
+     <width>385</width>
+     <height>61</height>
     </rect>
    </property>
    <property name="font">
@@ -39,7 +39,7 @@
 size:36px;</string>
    </property>
    <property name="text">
-    <string>ProjName</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:24pt;&quot;&gt;ProjName&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -48,10 +48,10 @@ size:36px;</string>
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>20</y>
-     <width>131</width>
-     <height>41</height>
+     <x>0</x>
+     <y>0</y>
+     <width>157</width>
+     <height>61</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -63,41 +63,152 @@ border-radius:20px ;</string>
     <string>Back to Main</string>
    </property>
   </widget>
-  <widget class="QScrollArea" name="scrollArea">
+  <widget class="QPushButton" name="ProjectDeleteButton">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>80</y>
-     <width>851</width>
-     <height>451</height>
+     <x>540</x>
+     <y>0</y>
+     <width>157</width>
+     <height>49</height>
     </rect>
    </property>
-   <property name="focusPolicy">
-    <enum>Qt::WheelFocus</enum>
+   <property name="styleSheet">
+    <string notr="true">background: rgb(255, 0, 0)</string>
+   </property>
+   <property name="text">
+    <string>Delete Project</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ProjectEditButton">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>60</y>
+     <width>157</width>
+     <height>49</height>
+    </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background : rgb(85, 170, 255)</string>
+    <string notr="true">background: rgb(255, 170, 0)</string>
    </property>
-   <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOn</enum>
+   <property name="text">
+    <string>Edit Project</string>
    </property>
-   <property name="horizontalScrollBarPolicy">
-    <enum>Qt::ScrollBarAsNeeded</enum>
+  </widget>
+  <widget class="QPushButton" name="SectionAddButton">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>120</y>
+     <width>157</width>
+     <height>49</height>
+    </rect>
    </property>
-   <property name="widgetResizable">
-    <bool>true</bool>
+   <property name="styleSheet">
+    <string notr="true">background: rgb(0, 255, 0)
+</string>
    </property>
-   <widget class="QWidget" name="scrollAreaWidgetContents">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>832</width>
-      <height>449</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout"/>
+   <property name="text">
+    <string>Add Section</string>
+   </property>
+  </widget>
+  <widget class="QStackedWidget" name="stackedWidget">
+   <property name="geometry">
+    <rect>
+     <x>12</x>
+     <y>72</y>
+     <width>517</width>
+     <height>301</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: rgb(255, 170, 255)</string>
+   </property>
+   <widget class="QWidget" name="page">
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="geometry">
+      <rect>
+       <x>12</x>
+       <y>60</y>
+       <width>493</width>
+       <height>229</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::WheelFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background : rgb(85, 170, 255)</string>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOn</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAsNeeded</enum>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>478</width>
+        <height>227</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout"/>
+     </widget>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>12</x>
+       <y>12</y>
+       <width>301</width>
+       <height>37</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:24pt;&quot;&gt;Section Name&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="TaskAddButton">
+     <property name="geometry">
+      <rect>
+       <x>324</x>
+       <y>12</y>
+       <width>157</width>
+       <height>49</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background: rgb(170, 255, 255)</string>
+     </property>
+     <property name="text">
+      <string>Add Task</string>
+     </property>
+    </widget>
    </widget>
+   <widget class="QWidget" name="page_2"/>
+  </widget>
+  <widget class="QPushButton" name="BackButton">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>324</y>
+     <width>157</width>
+     <height>49</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: rgb(255, 0, 255)
+</string>
+   </property>
+   <property name="text">
+    <string>Back</string>
+   </property>
   </widget>
  </widget>
  <resources/>
