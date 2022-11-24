@@ -51,11 +51,14 @@ tasks
 Attributes:-
 task_id INTEGER PRIMARY KEY
 task_title TEXT NOT NULL
+task_description TEXT
 task_projectid INTEGER NOT NULL
 task_sectionid INTEGER NOT NULL
 task_priority INTEGER NOT NULL
 task_completed INTEGER NOT NULL
-task_completed_date INTEGER NOT NULL
+task_duedate DATE
+task_completed_date DATE
+
 
 sections
 Attributes:-

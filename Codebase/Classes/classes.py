@@ -86,18 +86,6 @@ class Project:
     def RemoveSection(self, SectionID: int):
         ...
 
-    def AddProject(self, newproject):
-        self.SubProjects.append(newproject)
-
-    def RemoveProject(self, delproject):
-        self.SubProjects.remove(delproject)
-
-    def AddParentProject(self, newparent):
-        self.parentprojects.append(newparent)
-
-    def RemoveParentProject(self, delparent):
-        self.parentprojects.remove(delparent)
-
     def DisplaySections(self):
         print(*self.Sections,sep='\n')
 
@@ -113,7 +101,7 @@ class Project:
                 \nSections: {[str(s) for s in self.Sections]}'
 
     def __repr__(self):
-        return f"Project({self.Title},{self.Color},{self.Sections},{self.SubProjects},{self.parentprojects})"
+        return f"Project({self.Title},{self.Color},{self.Sections})"
 
 
 
@@ -128,7 +116,9 @@ class Section:
         #Ensuring that SectionTitle's can't start with a single underscore followed by characters
         if SectionTitle[0]=="_" and DefaultSection==False :
             self.Title=(f"__{SectionTitle.strip('_')}__")   #Sets Title to __sectionname__
+        
         self.Project = SectionProject    #Get the Parent Project
+        self.Tasks=[]                    #Set the list of Tasks
 
         #Add the Section to the Database
         self.ID=ExecuteCommand(
@@ -147,10 +137,15 @@ class Section:
         )
         )[0][0]             
         
-        #Add the section to the List of instances
+        #Add the section to the dictionary of instances
         Section.Instances[self.ID]=self
 
-    def AddTask(self, NewTask):         #Add a new task to the section
+    def AddTask(self, Title: str, Description: str, Priority: int, DueDate:datetime.datetime=None,Labels: list=None):         #Add a new task to the section
+        
+        #Creation of Task Object and appending into the list of tasks
+        self.Tasks.append(
+            Task(ParentSection=self, TaskTitle=Title, TaskDesc=Description, PriorityLevel=Priority, DueDate=DueDate, Labels=Labels)
+            )
         ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount+1 WHERE section_id=?",(self.ID))
 
     def RemoveTask(self, DelTask):      #Remove a task from the list of tasks
@@ -326,11 +321,12 @@ class Task:
 
     Instances=dict()
 
-    def __init__(self, TaskTitle: str, TaskDesc: str='', PriorityLevel: int=10, DueDate: datetime.datetime=None): #Initializes the class
+    def __init__(self, ParentSection: Section, TaskTitle: str, TaskDesc: str=None, PriorityLevel: int=10, DueDate: datetime.datetime=None,Labels: list=None): #Initializes the class
 
         #Sets the Title and Description for the task
         self.TaskTitle=TaskTitle
         self.TaskDesc=TaskDesc
+        self.ParentSection=ParentSection
 
         self.DueDate=DueDate
         self.Completed=0                                #sets completed to False, sql doesn't have bool so I'm using 0 and 1
@@ -347,38 +343,76 @@ class Task:
         self.Color=Priority.ColorOfLevel(PriorityLevel)     #And assign the color as well
         
         #ID of Task
-        self.ID=ExecuteCommand(f"""INSERT INTO  RETURNING taskid;""")[0][0]
+        self.ID=ExecuteCommand(f"""
+        INSERT INTO tasks(
+        task_title,
+        task_description,
+        task_projectid,
+        task_sectionid,
+        task_priority,
+        task_completed,
+        task_duedate
+        ) VALUES(?,?,?,?,?,?)
+        RETURNING task_id;
+        """,
+        (self.TaskTitle,
+        self,TaskDesc,
+        ParentSection.Project.ID,
+        ParentSection.ID,
+        self.PriorityLevel,
+        self.Completed,
+        self.DueDate
+        )
+        )[0][0]
         
         #Makes the List of labels assigned to the task
-        self.Labels=[]
+        if Labels==None:
+            self.Labels=[]
+        else:
+            for Label in Labels:
+                self.AddLabel(Label)
 
+        ParentSection.AddTask()
         #Add the task to the dictionary of instances
         Task.Instances[self.ID]=self
 
     def ToggleLabel(self,Label):
+
         if Label in self.Labels:
-            ...
+
             #Remove the label from the task
+            self.RemoveLabel(Label=Label)
+        
         else:
+
+            #Add the Label to the task
             self.AddLabel(Label)
 
     def AddLabel(self,NewLabel: Label):
         
-        ScriptToAddLabelToTask=f"""
-        --This Script adds A Label to the Task
-        BEGIN;
-        
-        --Adding an Entry in the labelsfortasks table
-        INSERT INTO labelsfortasks(task,label) VALUES({self.ID},{NewLabel.Title});
-        
-        --Incrementing the taskcount for the label
-        UPDATE labels SET label_taskcount=label_taskcount+1 WHERE label_title={NewLabel.Title};
+        #Insert into the Labels for tasks table
+        ExecuteCommand("INSERT INTO labelsfortasks(task,label) VALUES(?,?);",(self.ID,NewLabel.Title))
 
-        --End of Script
-        END;
-        """
+        #Increment the TaskCount
+        ExecuteCommand("UPDATE labels SET label_taskcount=label_taskcount+1 WHERE label_title=?;",(NewLabel.Title,))
+        self.Labels.append(NewLabel)
 
-    def reconfigure(self, TaskID, TaskTitle=None, TaskDesc=None, priority=None, DueDate=None, Labels=None):
+    def RemoveAllLabels(self):
+        while self.Labels!=[]:
+            self.RemoveLabel(self.Labels[0])
+
+    def RemoveLabel(self,Label: Label):
+        
+        #Delete from the Labels for tasks table
+        ExecuteCommand("DELETE FROM labelsfortasks WHERE label=? AND task=?;",(Label.Title,self.ID))
+
+        #Decrement the TaskCount
+        ExecuteCommand("UPDATE labels SET label_taskcount=label_taskcount-1 WHERE label_title=?;",(Label.Title,))
+
+        self.Labels.remove(Label)
+
+
+    def ReConfigureTask(self, TaskID, TaskTitle=None, TaskDesc=None, priority=None, DueDate=None, Labels=None):
         if TaskTitle!=None:
             self.TaskTitle=TaskTitle                    #Changes the title to a newly provided title, if not provided stays the same
         if TaskDesc!=None:
@@ -390,18 +424,35 @@ class Task:
         else:
             self.DueDate=None                           #makes due date null if none provided
         if Priority.IsValid(priority):          #Checks if the incoming argument is a valid priority level
-            self.PriorityLevel=Priority(priority)            #If so, then give the task its new priority
+            self.PriorityLevel=priority            #If so, then give the task its new priority
         if Labels!=None:
             self.AddLabel(Labels)
-        ExecuteCommand(f"update tasks set title={self.TaskTitle},task_desc={self.TaskDesc}, due_date={self.DueDate}, priority={self.PriorityLevel.PriorityLevel}, labels={self.Labels} where taskid={TaskID}")
-    def complete(self, TaskID):
+        ExecuteCommand(f"UPDATE tasks SET task_title={self.TaskTitle},task_desc={self.TaskDesc}, duedate={self.DueDate}, priority={self.PriorityLevel.PriorityLevel}, labels={self.Labels} where taskid={TaskID}")
+
+
+    def CompleteTask(self):
         self.Completed=1                                #completes the task
         self.CompletedDate=datetime.datetime.now()      #records the completed time
-        ExecuteCommand(f"update tasks set completed={self.Completed}, completed_date={self.CompletedDate} where taskid={TaskID}")
+        ExecuteCommand(f"UPDATE tasks SET task_completed={self.Completed}, completed_date={self.CompletedDate} WHERE task_id={self.ID}")
 
-    def change_due_date(self, NewDueDate, TaskID):
-        self.DueDate=NewDueDate                         #accepts a new due date
-        ExecuteCommand(f"update tasks set due_date={self.DueDate} where taskid={TaskID}")
+    def DeleteTask(self):
+
+        #Pops the item from the dictionary of instances
+        Task.Instances.pop(self.ID)
+        
+        #Remove all the labels
+        self.RemoveAllLabels()
+
+        #Deletes Everything from the Database
+        ExecuteCommand(f"DELETE FROM tasks WHERE task_id={self.ID};")
+        
+        #And Finally, deletes the object in python
+        del self
+
+    def ChangeDueDate(self, NewDueDate):
+        self.DueDate=NewDueDate                         #Accepts a new due date
+        ExecuteCommand(f"UPDATE tasks SET task_duedate={self.DueDate} WHERE task_id={self.ID}")
+    
     
     #Update the PriorityLevel of the Task
 
@@ -411,7 +462,10 @@ class Task:
             self.Color=Priority.ColorOfLevel(priority)      #Give the task its new color
             ExecuteCommand(f"UPDATE tasks SET task_priority=? WHERE task_id=?",(self.PriorityLevel,self.ID))
             
-
-    def __repr__(self):                         
-        return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.PriorityLevel},{self.DueDate},{self.Labels})" 
+    def __repr__(self) -> str:                         
+        return f"Task('{self.TaskTitle=}','{self.TaskDesc=}',{self.PriorityLevel=},{self.DueDate=},{self.Labels=})" 
         #Repr returns how to create the task
+
+    def __str__(self) -> str:
+        return self.__repr__()
+    
