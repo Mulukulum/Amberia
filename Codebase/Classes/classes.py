@@ -255,7 +255,7 @@ class Priority:
     #Initialising class
     def __init__(self,PriorityLevel=10) -> None:
         self.PriorityLevel=PriorityLevel
-        self.Color=self.GetColor(PriorityLevel)
+        self.Color=self.GetColorForLevel(PriorityLevel)
 
     #Class Representation    
     def __repr__(self) -> str:
@@ -266,7 +266,7 @@ class Priority:
 
     #Method to get the Color of a Priority Level
     @classmethod
-    def GetColor(cls,PrLevel: int) -> str :
+    def GetColorForLevel(cls,PrLevel: int) -> str :
 
         #If Priority is invalid, return None
         if cls.IsValidPriority(PrLevel)==False:          
@@ -322,40 +322,32 @@ class Priority:
         
         ExecuteCommand("UPDATE prcolors SET clrvalue=? WHERE level=?;",(NewColor,PrLevel)) #Updates the database with the new values
         return True
-    
-    #Fast methods
-    # Don't use these methods unless you know the input is 
-    # going to be a perfectly correct one
 
-    @classmethod
-    def GetColorFast(cls,PrLevel: int) -> str :
-        return cls.ColorCache[PrLevel]                  #Returns the default color
-    
-    @classmethod
-    def UpdateColorFast(cls,PrLevel: int,NewColor: int) -> None:
-        cls.ColorCache[PrLevel]=NewColor        #Updates the Cache with the new value
-        ExecuteCommand("UPDATE prcolors SET clrvalue=? WHERE level=?;",(NewColor,PrLevel)) #Updates the database with the new values
-        return True
-    
-    def UpdatePriorityLevelFast(self,NewLevel: int) -> None :
-        self.PriorityLevel=NewLevel           #Enforcing an official unofficial rule that:
-        self.Color=self.ColorCache[NewLevel]  #ColorCache must always be populated
+
+
+
+
 
 class Task:
 
-    def __init__(self, TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=list()): #Initializes the class
+    def __init__(self, TaskTitle: str, TaskDesc: str='', PriorityLevel: int=10, DueDate: datetime.datetime=None, Labels: list=list()): #Initializes the class
+
         self.TaskTitle=TaskTitle
         self.TaskDesc=TaskDesc
+
         self.DueDate=DueDate
         self.Completed=0                                #sets completed to False, sql doesn't have bool so I'm using 0 and 1
         self.CompletedDate=None                         #makes the object for completed date
-        if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
-            self.priority=Priority(priority)            #If so, then give the task its priority
+
+        if Priority.IsValidPriority(PriorityLevel):          #Checks if the incoming argument is a valid priority level
+            self.PriorityLevel=Priority(PriorityLevel)       #If so, then give the task its priority
         else:
-            self.priority=Priority(10)                  #If not, then set it to a default value of 10
+
+            self.PriorityLevel=PriorityLevel(10)             #If not, then set it to a default value of 10
             Log(f"Task {self.TaskTitle} given no priority. Default Value Assigned")
+        
         self.Labels=Labels
-        self.id=ExecuteCommand(f"INSERT INTO tasks(title, task_desc, priority, due_date, completed) values ({self.TaskTitle},{self.TaskDesc},{self.priority},{self.DueDate},{self.Completed}) RETURNING taskid;")[0][0]
+        self.id=ExecuteCommand(f"INSERT INTO tasks(title, task_desc, priority, due_date, completed) values ({self.TaskTitle},{self.TaskDesc},{self.PriorityLevel},{self.DueDate},{self.Completed}) RETURNING taskid;")[0][0]
 
     def set_label(self,NewLabel, TaskID):
         if NewLabel in self.Labels:                     #Checks if the label is already selected
@@ -376,10 +368,10 @@ class Task:
         else:
             self.DueDate=None                           #makes due date null if none provided
         if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
-            self.priority=Priority(priority)            #If so, then give the task its new priority
+            self.PriorityLevel=Priority(priority)            #If so, then give the task its new priority
         if Labels!=None:
             self.set_label(Labels)
-        ExecuteCommand(f"update tasks set title={self.TaskTitle},task_desc={self.TaskDesc}, due_date={self.DueDate}, priority={self.priority.PriorityLevel}, labels={self.Labels} where taskid={TaskID}")
+        ExecuteCommand(f"update tasks set title={self.TaskTitle},task_desc={self.TaskDesc}, due_date={self.DueDate}, priority={self.PriorityLevel.PriorityLevel}, labels={self.Labels} where taskid={TaskID}")
     def complete(self, TaskID):
         self.Completed=1                                #completes the task
         self.CompletedDate=datetime.datetime.now()      #records the completed time
@@ -391,10 +383,9 @@ class Task:
     
     def update_priority(self, priority, TaskID):
         if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
-            self.priority=Priority(priority)            #If so, then give the task its new priority
-        ExecuteCommand(f"update tasks set priority={self.priority.PriorityLevel} where taskid={TaskID}")
-
+            self.PriorityLevel=Priority(priority)            #If so, then give the task its new priority
+        ExecuteCommand(f"update tasks set priority={self.PriorityLevel.PriorityLevel} where taskid={TaskID}")
 
     def __repr__(self):                         
-        return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.priority.PriorityLevel},{self.DueDate},{self.Labels})" 
+        return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.PriorityLevel.PriorityLevel},{self.DueDate},{self.Labels})" 
         #Repr returns how to create the task
