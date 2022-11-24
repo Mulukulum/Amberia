@@ -263,9 +263,6 @@ class Priority:
     if Resultant==[]:                                           #If the database is empty
 
         #Imports the necessary script and Priority colors
-        from Codebase.SQLScripts import ScriptSetDefaultColors
-        from Codebase.SQLScripts import DefaultPriorityColors
-        
         ExecuteScript(ScriptSetDefaultColors)           #Runs the script to set the default colors
         ColorCache=DefaultPriorityColors.copy()         #Updates the Cache
     
@@ -365,12 +362,20 @@ class Task:
         else:
             self.AddLabel(Label)
 
-    def AddLabel(self,NewLabel):
+    def AddLabel(self,NewLabel: Label):
         
         ScriptToAddLabelToTask=f"""
         --This Script adds A Label to the Task
         BEGIN;
-        --
+        
+        --Adding an Entry in the labelsfortasks table
+        INSERT INTO labelsfortasks(task,label) VALUES({self.ID},{NewLabel.Title});
+        
+        --Incrementing the taskcount for the label
+        UPDATE labels SET label_taskcount=label_taskcount+1 WHERE label_title={NewLabel.Title};
+
+        --End of Script
+        END;
         """
 
     def reconfigure(self, TaskID, TaskTitle=None, TaskDesc=None, priority=None, DueDate=None, Labels=None):

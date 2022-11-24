@@ -46,7 +46,7 @@ AttribDict={
     'tasks':'task_id INTEGER PRIMARY KEY, task_title TEXT NOT NULL, task_projectid INTEGER NOT NULL, task_sectionid INTEGER NOT NULL, task_priority INTEGER NOT NULL, task_completed INTEGER NOT NULL, task_completed_date DATE',
     'sections':'section_id INTEGER PRIMARY KEY, section_parentprojectid INTEGER NOT NULL, section_title TEXT NOT NULL, section_taskcount INTEGER NOT NULL',
     'prcolors':'level INTEGER PRIMARY KEY, clrvalue INTEGER NOT NULL',
-    'labelsfortasks':'task INTEGER NOT NULL, label INTEGER NOT NULL'
+    'labelsfortasks':'task INTEGER NOT NULL, label TEXT NOT NULL'
     }
 #   DO NOT FORGET TO MODIFY THE READTHIS.MD FILE
 #   DO NOT FORGET TO MODIFY THE READTHIS.MD FILE
