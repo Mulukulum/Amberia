@@ -1,5 +1,6 @@
 from os.path import dirname                     
 import sqlite3  
+from Codebase.ErrorLogs.logging import StartLog,ErrorLog
 
 #The following function checks if a table exists in a database
 def CheckAndCreate(cur,name: str,attributes: str) -> bool:
@@ -20,7 +21,6 @@ def _CreateTable(cur,name: str,attributes: str) -> bool:
     except:
         return False
 
-from Codebase.ErrorLogs.logging import StartLog,ErrorLog
 StartLog("\nInitialisation Requested\n")
 
 DataBasePath=dirname(__file__)+r"\Data\Amber.db"
@@ -41,10 +41,10 @@ CheckList=('projects',
 #   MODIFY README.MD WHEN MAKING ANY CHANGES TO ANY OF THIS
 #   MODIFY README.MD WHEN MAKING ANY CHANGES TO ANY OF THIS
 AttribDict={
-    'projects':'id INTEGER PRIMARY KEY, parentid INTEGER, title TEXT NOT NULL, color INTEGER NOT NULL, sectioncount INTEGER NOT NULL, projectcount INTEGER NOT NULL, projecttemplate INTEGER',
-    'labels':'title TEXT PRIMARY KEY, color INTEGER NOT NULL,taskcount INTEGER NOT NULL',
-    'tasks':'taskid INTEGER PRIMARY KEY, title TEXT NOT NULL, parentid INTEGER NOT NULL, sectionid INTEGER, priority INTEGER NOT NULL, color INTEGER NOT NULL, tasktemplate INTEGER',
-    'sections':'sectionid INTEGER PRIMARY KEY, title TEXT NOT NULL, taskcount INTEGER NOT NULL, parentprojectid INTEGER NOT NULL, sectiontemplate INTEGER',
+    'projects':'project_id INTEGER PRIMARY KEY, project_title TEXT NOT NULL, project_color INTEGER NOT NULL, project_sectioncount INTEGER NOT NULL',
+    'labels':'label_title TEXT PRIMARY KEY, label_color INTEGER NOT NULL,label_taskcount INTEGER NOT NULL',
+    'tasks':'taskid INTEGER PRIMARY KEY, title TEXT NOT NULL, parentid INTEGER NOT NULL, sectionid INTEGER NOT NULL, priority INTEGER NOT NULL, color INTEGER NOT NULL, tasktemplate INTEGER',
+    'sections':'section_id INTEGER PRIMARY KEY, section_parentprojectid INTEGER NOT NULL, section_title TEXT NOT NULL, section_taskcount INTEGER NOT NULL',
     'prcolors':'level INTEGER PRIMARY KEY, clrvalue INTEGER NOT NULL',
     }
 #   DO NOT FORGET TO MODIFY THE READTHIS.MD FILE

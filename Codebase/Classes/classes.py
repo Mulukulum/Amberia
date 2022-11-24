@@ -11,24 +11,68 @@ from Codebase.Functions.Colors import GetRandomColor
 import datetime
 
 class Project:
-    def __init__(self, Name, Color=None, Projects = list(), ParentProjects = list()):
-        self.Name = Name                 #Initialize name of project
-        self.Color = Color               #Initialize display color
-        self.Sections = list()               #Initialize list of sections
-        DefaultSection = Section(f"_{self.Name}")
-        DefaultSection.SetProject(self)
-        self.Sections.append(DefaultSection)
-        self.SubProjects = Projects           #Initialize list of sub projects 
-        self.parentprojects = ParentProjects  #Initialize list of parent projects 
+    
+    #Empty dictionary to store the instances of all the projects
+    Instances=dict()
 
-    def SetName(self, name):                 #Set name of project
-        self.Name = name
+    def __init__(self, ProjectTitle, ProjectColor: int=None):
 
-    def SetColor(self, color):
-        self.Color = color
+        self.Title = ProjectTitle                 #Initialize name of project
+        
+        #Set a random color if No Color was specified or the Color is Invalid
+        if ProjectColor==None or ProjectColor<=16777215:
+            self.Color=GetRandomColor()
+        else:
+            self.Color=ProjectColor
 
-    def AddSection(self, newsection):
-        self.Sections.append(newsection)
+        #Add the Project to the Database
+        self.ID=ExecuteCommand(
+        """
+        INSERT INTO 
+        projects(
+        project_title, 
+        project_color,
+        project_sectioncount
+        ) 
+        VALUES(?,?,?)
+        RETURNING project_id
+        """,
+        (self.Title, #Project Title
+        self.Color,  #Section Count
+        0
+        )
+        )[0][0]         #The [0][0] part escapes the list giving us the id alone
+        
+        #Add the project to the dictionary of instances
+        Project.Instances[self.ID]=self
+
+        #Default Section of the Project
+
+        self.Sections = list()                  #Initialize list of sections
+        
+        #Set the DefaultSection and add it to the list of sections
+        self.DefaultSection = Section(SectionProject=self , SectionTitle=f"_{self.Title}")
+        self.AddSection(NewSection=self.DefaultSection)
+
+
+    def SetName(self, NewName: str):                 
+        self.Title = NewName            #Set name of project
+        ExecuteCommand("UPDATE projects SET project_title=? WHERE project_id=?",
+                        (NewName,self.ID))
+
+    def SetColor(self, Color: int):
+        if Color<=16777215:
+            self.Color = Color
+            ExecuteCommand("UPDATE projects SET project_color=? WHERE project_id=?",
+                            (self.Color,self.ID))
+    
+    def RandomizeColor(self):
+        self.Color=GetRandomColor()
+        ExecuteCommand("UPDATE projects SET project_color=? WHERE project_id=?",
+                        (self.Color,self.ID))
+
+    def AddSection(self, NewSection):
+        self.Sections.append(NewSection)
 
     def RemoveSection(self, delsection):
         self.Sections.remove(delsection)
@@ -56,36 +100,61 @@ class Project:
           
 
     def __str__(self):
-        return  f'Project name: {self.Name} \
+        return  f'Project name: {self.Title} \
                 \nDisplay color: {self.Color} \
                 \nSections: {[str(s) for s in self.Sections]}'
 
     def __repr__(self):
-        return f"Project({self.Name},{self.Color},{self.Sections},{self.SubProjects},{self.parentprojects})"
+        return f"Project({self.Title},{self.Color},{self.Sections},{self.SubProjects},{self.parentprojects})"
 
 class Section:
-    def __init__(self, Name, Project: Project, Tasks: list=list()):
-        self.Name = Name                 #Initialize name of section
-        self.Project = Project
-        self.Tasks = Tasks               #Initialize a list of tasks
+    
+    #Dictionary to store the instances of all available Section objects
+    Instances=dict()
 
-    def SetProject(self, NewProject):   #Set the project to which the section belongs
-        self.Project = NewProject         
+    def __init__(self,SectionProject: Project, SectionTitle: str):
+        
+        #Check Validity of The section Title
+        #Ensuring that SectionTitle's can't start with a single underscore followed by characters
+        if SectionTitle[0]=="_":
+            self.Title=(f"__{SectionTitle.strip('_')}__")   #Sets Title to __sectionname__
+        self.Project = SectionProject    #Get the Parent Project
+
+        #Add the Section to the Database
+        self.ID=ExecuteCommand(
+        """
+        INSERT INTO sections
+        (section_parentprojectid,
+        section_title,
+        section_taskcount
+        )
+        VALUES (?,?,?)
+        RETURNING section_id
+        """,
+        (self.Project.ID, #ID of the parentProject
+        self.Title,       #Title of the Section
+        0                 #New section so no tasks added
+        )
+        )[0][0]             
+        
+        #Add the section to the List of instances
+        Section.Instances[self.ID]=self
 
     def AddTask(self, NewTask):         #Add a new task to the section
-        self.Tasks.append(NewTask)
+        ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount+1 WHERE section_id=?",(self.ID))
 
     def RemoveTask(self, DelTask):      #Remove a task from the list of tasks
         self.Tasks.remove(DelTask)
+        ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount-1 WHERE section_id=?",(self.ID))
 
     def DisplayTasks(self):             #Display the list of tasks
         print(*self.Tasks,sep='\n')      #Displays tasks without a for loop         
 
     def __repr__(self):
-        return f"Section({self.Name},{self.Project},{self.Tasks})"              
+        return f"Section({self.Title},{self.Project},{self.Tasks})"              
 
     def __str__(self):
-        return f'Section name: {self.Name} \nProject name: {self.Project.name} \nTasks: {[str(t) for t in self.Tasks]}'        
+        return f'Section name: {self.Title} \nProject name: {self.Project.name} \nTasks: {[str(t) for t in self.Tasks]}'        
         #fstring returns the string representation
 
 class Label:
@@ -107,7 +176,7 @@ class Label:
                 #Set the specified Color
                 self.Color=Color
 
-            ExecuteCommand("INSERT INTO labels(title,color,taskcount) VALUES(?,?,0) ;",(self.Title,self.Color))
+            ExecuteCommand("INSERT INTO labels(label_title,label_color,label_taskcount) VALUES(?,?,0) ;",(self.Title,self.Color))
             return True
         
     #Method to check whether a label currently exists
@@ -125,11 +194,11 @@ class Label:
     #Method to change the color of a label
     def SetColor(self,Color: int) -> None :
 
-        if Color>=16777214:
+        if Color>=16777215:
             self.Color=Color
 
         else:
-            self.Color=16777214
+            self.Color=16777215
             ErrorLog(f" TRIVIAL : DEFAULT SET DUE TO Invalid Color Assignment ({Color}) for Label {self.Title}")
 
     def RandomizeColor(self) -> None:

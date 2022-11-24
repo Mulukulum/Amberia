@@ -35,20 +35,17 @@ The following is a list of all tables and their attributes that should be presen
 
 projects
 Attributes :-
-id INTEGER PRIMARY KEY
-parentid INTEGER
-title TEXT NOT NULL
-color INTEGER NOT NULL
-sectioncount INTEGER NOT NULL
-projectcount INTEGER NOT NULL
-projecttemplate INTEGER
+project_id INTEGER PRIMARY KEY
+project_title TEXT NOT NULL
+project_color INTEGER NOT NULL
+project_sectioncount INTEGER NOT NULL
 
 labels 
 There is no ID here because having Labels with the same titles is a bad idea
 Attributes:-
-title TEXT PRIMARY KEY
-color INTEGER NOT NULL
-taskcount INTEGER NOT NULL                          
+label_title TEXT PRIMARY KEY
+label_color INTEGER NOT NULL
+label_taskcount INTEGER NOT NULL                          
 
 tasks
 (parentid is same as sectionid for a regular task, sectionid can be null for a subtask)
@@ -56,18 +53,17 @@ Attributes:-
 taskid INTEGER PRIMARY KEY
 title TEXT NOT NULL
 parentid INTEGER NOT NULL 
-sectionid INTEGER
+sectionid INTEGER NOT NULL
 priority INTEGER NOT NULL
 color INTEGER NOT NULL
 tasktemplate INTEGER
 
 sections
 Attributes:-
-sectionid INTEGER PRIMARY KEY
-title TEXT NOT NULL
-taskcount INTEGER NOT NULL
-parentprojectid INTEGER NOT NULL
-sectiontemplate INTEGER
+section_id INTEGER PRIMARY KEY
+section_parentprojectid INTEGER NOT NULL
+section_title TEXT NOT NULL
+section_taskcount INTEGER NOT NULL
 
 prcolors
 Attributes:-
