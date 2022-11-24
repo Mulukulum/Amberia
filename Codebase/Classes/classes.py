@@ -257,3 +257,35 @@ class task:
     def __repr__(self):                         
         return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.priority.PriorityLevel},{self.DueDate},{self.Labels})" 
         #Repr returns how to create the task
+class text_task:
+    def __init__(self, TaskTitle, priority=None, DueDate=None):
+        self.TaskTitle=TaskTitle
+        if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
+            self.priority=Priority(priority)            #If so, then give the task its priority
+        else:
+            self.priority=Priority(10)                  #If not, then set it to a default value of 10
+            Log(f"Task {self.TaskTitle} given no priority. Default Value Assigned")
+        self.DueDate=DueDate
+
+class task_builer:
+
+    def __init__(self, TaskTitle, TaskType, TaskDesc=None, priority=None, DueDate=None, Labels=list()):
+        self.TaskTitle=TaskTitle
+        self.TaskType=TaskType
+        self.TaskDesc=TaskDesc
+        self.priority=priority
+        self.DueDate=DueDate
+        self.Labels=Labels
+    
+    def build(self):
+        if self.TaskType=='text':
+            TaskTitle=text_task(self.TaskTitle, self.priority)
+            return TaskTitle
+        if self.TaskType=='normal':
+            TaskTitle=task(self.TaskTitle, self.TaskType, self.TaskDesc, self.priority, self.DueDate, self.Labels)
+            return TaskTitle
+        ErrorLog(f"Unable to get task type due to invalid task type input {self.TaskType}")
+        return None
+
+
+        
