@@ -48,15 +48,14 @@ label_color INTEGER NOT NULL
 label_taskcount INTEGER NOT NULL                          
 
 tasks
-(parentid is same as sectionid for a regular task, sectionid can be null for a subtask)
 Attributes:-
-taskid INTEGER PRIMARY KEY
-title TEXT NOT NULL
-parentid INTEGER NOT NULL 
-sectionid INTEGER NOT NULL
-priority INTEGER NOT NULL
-color INTEGER NOT NULL
-tasktemplate INTEGER
+task_id INTEGER PRIMARY KEY
+task_title TEXT NOT NULL
+task_projectid INTEGER NOT NULL
+task_sectionid INTEGER NOT NULL
+task_priority INTEGER NOT NULL
+task_completed INTEGER NOT NULL
+task_completed_date INTEGER NOT NULL
 
 sections
 Attributes:-
@@ -69,6 +68,11 @@ prcolors
 Attributes:-
 level INTEGER PRIMARY KEY
 clrvalue INTEGER NOT NULL
+
+labelsfortasks
+Attributes:-
+task INTEGER NOT NULL
+label INTEGER NOT NULL
 
 REMEMBER TO ALSO CHANGE THE CORRESPONDING VALUES IN [INITIALIZE.PY](./Initialize.py) BOTH IN THE DICTIONARY AND IN THE TUPLE
 

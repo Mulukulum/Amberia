@@ -257,10 +257,6 @@ class Priority:
 
         if PrLevel in cls.ValidPriorites:    return True
         else:                            return False
-    
-    def __str__(self) -> str:
-        return f'Priority Level {self.PriorityLevel}\nColor {self.Color}'
-
 
     #Method to get the Color of a Priority Level
     @classmethod
@@ -282,6 +278,7 @@ class Priority:
         ResultantList=ExecuteCommand("""SELECT clrvalue FROM prcolors where level=?;""",(PrLevel,))
         return ResultantList[0][0]  #The [0][0] part escapes the list and the tuple to give only the integer
     
+
     #Forcibly updates the current color values into cache
     @classmethod
     def FlushToCache(cls) -> None:      #Forcibly updates the current color values into cache
@@ -309,7 +306,7 @@ class Task:
 
     Instances=dict()
 
-    def __init__(self, TaskTitle: str, TaskDesc: str='', PriorityLevel: int=10, DueDate: datetime.datetime=None, Labels: list=list()): #Initializes the class
+    def __init__(self, TaskTitle: str, TaskDesc: str='', PriorityLevel: int=10, DueDate: datetime.datetime=None): #Initializes the class
 
         self.TaskTitle=TaskTitle
         self.TaskDesc=TaskDesc
@@ -323,26 +320,19 @@ class Task:
         if Priority.IsValid(PriorityLevel):          #Checks if the incoming argument is a valid priority level
             self.PriorityLevel=PriorityLevel         #If so, then give the task its priority level
         else:
-            self.PriorityLevel=Priority.UpperBound                    #If not, then set it to a default value of 10
-            Log(f"Task {self.TaskTitle} given no priority. Default Value Assigned")
+            self.PriorityLevel=Priority.UpperBound   #If not, then set it to a default upperbound value
+            Log(f"Task {self.TaskTitle} given no priority. Default Value {self.PriorityLevel} Assigned")
     
         self.Color=Priority.ColorOfLevel(PriorityLevel)     #And assign the color as well
-        
-        self.Labels=Labels
         self.ID=ExecuteCommand(f"INSERT INTO tasks(title, task_desc, priority, due_date, completed) values ({self.TaskTitle},{self.TaskDesc},{self.PriorityLevel},{self.DueDate},{self.Completed}) RETURNING taskid;")[0][0]
 
         #Add the task to the dictionary of instances
         Task.Instances[self.ID]=self
 
 
-
-
-    def set_label(self,NewLabel, TaskID):
-        if NewLabel in self.Labels:                     #Checks if the label is already selected
-            self.Labels.remove(NewLabel)                #Removes the label if it is already selected
-        else: 
-            self.Labels.append(NewLabel)                #Adds the label if it isnt selected
-        ExecuteCommand(f"update tasks set labels={self.Labels} where taskid={TaskID}")
+    def AddLabel(self,NewLabel):
+        self.Labels.append(NewLabel)                #Adds the label if it isnt selected
+        ExecuteCommand(f"UPDATE tasks SET")
 
     def reconfigure(self, TaskID, TaskTitle=None, TaskDesc=None, priority=None, DueDate=None, Labels=None):
         if TaskTitle!=None:
@@ -358,7 +348,7 @@ class Task:
         if Priority.IsValid(priority):          #Checks if the incoming argument is a valid priority level
             self.PriorityLevel=Priority(priority)            #If so, then give the task its new priority
         if Labels!=None:
-            self.set_label(Labels)
+            self.AddLabel(Labels)
         ExecuteCommand(f"update tasks set title={self.TaskTitle},task_desc={self.TaskDesc}, due_date={self.DueDate}, priority={self.PriorityLevel.PriorityLevel}, labels={self.Labels} where taskid={TaskID}")
     def complete(self, TaskID):
         self.Completed=1                                #completes the task
@@ -369,10 +359,14 @@ class Task:
         self.DueDate=NewDueDate                         #accepts a new due date
         ExecuteCommand(f"update tasks set due_date={self.DueDate} where taskid={TaskID}")
     
-    def update_priority(self, priority, TaskID):
-        if Priority.IsValid(priority):          #Checks if the incoming argument is a valid priority level
-            self.PriorityLevel=Priority(priority)            #If so, then give the task its new priority
-        ExecuteCommand(f"update tasks set priority={self.PriorityLevel} where taskid={TaskID}")
+    #Update the PriorityLevel of the Task
+
+    def UpdatePriority(self, priority: int):
+        if Priority.IsValid(priority):                      #Checks if the incoming argument is a valid priority level
+            self.PriorityLevel=Priority(priority)           #If so, then give the task its new priority
+            self.Color=Priority.ColorOfLevel(priority)      #Give the task its new color
+            ExecuteCommand(f"UPDATE tasks SET task_priority=? WHERE task_id=?",(self.PriorityLevel,self.ID))
+            
 
     def __repr__(self):                         
         return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.PriorityLevel},{self.DueDate},{self.Labels})" 
