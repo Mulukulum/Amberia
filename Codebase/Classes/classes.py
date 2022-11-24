@@ -3,27 +3,71 @@
 from Codebase.ErrorLogs.logging import ErrorLog,Log,DBLog,DBOnlyLog
 
 #Importing functions to interface with the database
-from Codebase.Functions.Database import ExecuteCommand,ExecuteScript            
+from Codebase.Functions.Database import ExecuteCommand,ExecuteScript     
+
+import datetime
+
+#Importing The Required Colors for Labels
+from Codebase.Functions.Colors import GetRandomColor
 
 class Label:
-    #Class initialisation
-    def __init__(self,Title='',Color=None) -> None:
-        self.Title=Title                    #Set the Title of the Label
-        self.Color=Color
+
+    #Class initialisation | Method returns True if Creation was successful
+    def __init__(self, Title : str ,Color : int=None) -> bool:
+        #If the Label already exists, then Log an Error
+        if Label.LabelExists(Title):
+            ErrorLog(f" TRIVIAL : Attempt to create label {Title} which already exists")
+            return False
+        else:
+            self.Title=Title    #Set Title
+            if Color==None:     #If there is no Color specified  
+                #Pick a random Color
+                self.Color=GetRandomColor()
+            else:
+                #Set the specified Color
+                self.Color=Color
+            ExecuteCommand("INSERT INTO labels(title,color,taskcount) VALUES(?,?,0) ;",(self.Title,self.Color))
+            return True
+        
+    #Method to check whether a label currently exists
+    @staticmethod
+    def LabelExists(LabelTitle) -> bool:
+        #Find the label
+        #If it doesn't exist, return False
+        if ExecuteCommand("SELECT title FROM labels WHERE title=?",(LabelTitle,))==[]:
+            return False
+        else:
+            return True
+
+    #Method to change the color of a label
+    def SetColor(self,Color: int) -> None :
+        if Color>=16777214:
+            self.Color=Color
+        else:
+            self.Color=16777214
+            ErrorLog(f" TRIVIAL : DEFAULT SET DUE TO Invalid Color Assignment ({Color}) for Label {self.Title}")
+
+    def RandomizeColor(self) -> None:
+        self.Color=GetRandomColor()
+
     #Label repr 
     def __repr__(self) -> str:
         return f'Label({self.Title},{self.Color})'
+    
     #String Representation
     def __str__(self) -> str:
         return f'Label {self.Title} Color {self.Color}'
+
 
 
 #This Class defines a Priority Object
 #Each task contains one of these, each object has a prioritylevel and a color associated with it
 #There can be a maximum of 10 priority levels, where 10 is the lowest and 1 in the highest
 class Priority: 
+
     ColorCache=dict()                                           #Creates the Dictionary used for Cacheing
     Resultant=ExecuteCommand("""SELECT * FROM prcolors;""")     #Gets the current values from the Database
+
     if Resultant==[]:                                           #If the database is empty
         #Imports the necessary script and Priority colors
         from Codebase.SQLScripts import ScriptSetDefaultColors,DefaultPriorityColors
@@ -87,7 +131,7 @@ class Priority:
     #Forcibly updates the current color values into cache
     @classmethod
     def FlushToCache(cls) -> None:      #Forcibly updates the current color values into cache
-        Resultant=ExecuteCommand("""SELECT * FROM prcolors;""")
+        Resultant=ExecuteCommand("SELECT * FROM prcolors;")
         cls.ColorCache.update(Resultant)
 
     @classmethod
@@ -117,24 +161,39 @@ class Priority:
         self.PriorityLevel=NewLevel           #Enforcing an official unofficial rule that:
         self.Color=self.ColorCache[NewLevel]  #ColorCache must always be populated
 
-
 class Section:
+    
     def __init__(self, name, project=None, tasks=list()):
+
         self.name = name                 #Initialize name of section
         self.project = project
         self.tasks = tasks               #Initialize a list of tasks
+        # Add new section to sections table
+        self.id=ExecuteCommand("""INSERT INTO sections 
+                (title, taskcount, parentprojectid) VALUES (?, ?, ?) RETURNING sectionid""",
+                (self.name, len(self.tasks), self.project.id if project != None else 0))[0][0]
+        
 
     def set_project(self, newproject):   #Set the project to which the section belongs
-        self.project = newproject         
-
+        self.project = newproject
+        
+        # Update parent project of section in sections table
+        ExecuteCommand("UPDATE sections set parentprojectid = ? where sectionid = ?;", (newproject.id, self.id))
+        
     def add_task(self, newtask):         #Add a new task to the section
         self.tasks.append(newtask)
 
+        # Update taskcount of section in sections table
+        ExecuteCommand("UPDATE sections set taskcount = ? where sectionid = ?;", (len(self.tasks), self.id))
+        
     def remove_task(self, deltask):      #Remove a task from the list of tasks
         self.tasks.remove(deltask)
 
+        # Update taskcount of section in sections table
+        ExecuteCommand("UPDATE sections set taskcount = ? where sectionid = ?;", (len(self.tasks), self.id))
+
     def display_tasks(self):             #Display the list of tasks
-        print(*self.tasks,sep='\n')      #Displays tasks without a for loop         
+        print(*self.tasks,sep='\n')      #Displays tasks without a for loop
 
     def __repr__(self):
         return f"Section({self.name},{self.project},{self.tasks})"              
@@ -143,35 +202,61 @@ class Section:
         return f'Section name: {self.name} \nProject name: {self.project.name} \nTasks: {[str(t) for t in self.tasks]}'        
         #fstring returns the string representation
 
-
 class Project:
-    def __init__(self, name, color=None, projects = list(), parentprojects = list()):
+
+    def __init__(self, name, color, projects = list(), parentprojects = list(),sections=list()):
         self.name = name                 #Initialize name of project
         self.color = color               #Initialize display color
-        self.sections = list()               #Initialize list of sections
-        defaultsection = Section(f"_{self.name}")
-        defaultsection.set_project(self)
-        self.sections.append(defaultsection)
+        self.sections = sections              #Initialize list of sections
         self.subprojects = projects           #Initialize list of sub projects 
-        self.parentprojects = parentprojects  #Initialize list of parent projects 
+        self.parentprojects = parentprojects  #Initialize list of parent projects
+        
+        # Add new project to projects table
+        self.id=ExecuteCommand("INSERT INTO projects (title, color, sectioncount, projectcount) VALUES (?, ?, ?, ?) RETURNING id;",
+                       (self.name, 
+                       self.color, 
+                       len(sections)+1, #Here, the +1 is for the default section thats yet to be appended
+                       len(self.subprojects)))[0][0]
+
+        #This was moved down because creating sections requires a project id
+        defaultsection = Section(f"_{self.name}", self)
+        self.sections.append(defaultsection)
 
     def set_name(self, name):                 #Set name of project
         self.name = name
 
+        # Update name of project in projects table
+        ExecuteCommand("UPDATE projects set title = ? where id = ?", (name, self.id))
+        
     def set_color(self, color):
         self.color = color
 
+        # Update color of project in projects table
+        ExecuteCommand("UPDATE projects set color = ? where id = ?", (color, self.id))
+        
     def add_section(self, newsection):
         self.sections.append(newsection)
 
+        # Update sectioncount in projects table
+        ExecuteCommand("UPDATE projects set sectioncount = ? where id = ?", (len(self.sections), self.id))
+        
     def remove_section(self, delsection):
         self.sections.remove(delsection)
+
+        # Update sectioncount in projects table
+        ExecuteCommand("UPDATE projects set sectioncount = ? where id = ?", (len(self.sections), self.id))
 
     def add_project(self, newproject):
         self.subprojects.append(newproject)
 
+        # Update projectcount in projects table
+        ExecuteCommand("UPDATE projects set projectcount = ? where id = ?", (len(self.subprojects), self.id))
+
     def remove_project(self, delproject):
         self.subprojects.remove(delproject)
+        
+        # Update projectcount in projects table
+        ExecuteCommand("UPDATE projects set projectcount = ? where id = ?", (len(self.subprojects), self.id))
 
     def add_parentproject(self, newparent):
         self.parentprojects.append(newparent)
@@ -198,27 +283,63 @@ class Project:
         return f"Project({self.name},{self.color},{self.sections},{self.subprojects},{self.parentprojects})"
 
 class task:
-    def __init__(self, TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=None): #Initializes the class
+
+    def __init__(self, TaskTitle, TaskDesc=None, priority=None, DueDate=None, Labels=list()): #Initializes the class
         self.TaskTitle=TaskTitle
         self.TaskDesc=TaskDesc
         self.DueDate=DueDate
+        self.Completed=0                                #sets completed to False, sql doesn't have bool so I'm using 0 and 1
+        self.CompletedDate=None                         #makes the object for completed date
         if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
             self.priority=Priority(priority)            #If so, then give the task its priority
         else:
             self.priority=Priority(10)                  #If not, then set it to a default value of 10
             Log(f"Task {self.TaskTitle} given no priority. Default Value Assigned")
+        self.Labels=Labels
+        self.id=ExecuteCommand(f"INSERT INTO tasks(title, task_desc, priority, due_date, completed) values ({self.TaskTitle},{self.TaskDesc},{self.priority},{self.DueDate},{self.Completed}) RETURNING taskid;")[0][0]
 
-        if Labels==None:                                #Checks if any labels are selected
-            self.Labels=[]                              #Makes it an empty list instead of None
-        else: 
-            self.Labels=Labels                          #Makes a list of the selected labels
 
-    def set_label(self,NewLabel):
+    def set_label(self,NewLabel, TaskID):
         if NewLabel in self.Labels:                     #Checks if the label is already selected
             self.Labels.remove(NewLabel)                #Removes the label if it is already selected
         else: 
             self.Labels.append(NewLabel)                #Adds the label if it isnt selected
+        ExecuteCommand(f"update tasks set labels={self.Labels} where taskid={TaskID}")
+
+    def reconfigure(self, TaskID, TaskTitle=None, TaskDesc=None, priority=None, DueDate=None, Labels=None):
+        if TaskTitle!=None:
+            self.TaskTitle=TaskTitle                    #Changes the title to a newly provided title, if not provided stays the same
+        if TaskDesc!=None:
+            self.TaskDesc=TaskDesc                      #Changes the desc to a newly provided desc
+        else:
+            self.TaskDesc=None                          #makes task desc null if not provided
+        if DueDate!=None:
+            self.DueDate=DueDate                        #Changes the due date to a newly provided due date
+        else:
+            self.DueDate=None                           #makes due date null if none provided
+        if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
+            self.priority=Priority(priority)            #If so, then give the task its new priority
+        if Labels!=None:
+            self.set_label(Labels)
+        ExecuteCommand(f"update tasks set title={self.TaskTitle},task_desc={self.TaskDesc}, due_date={self.DueDate}, priority={self.priority.PriorityLevel}, labels={self.Labels} where taskid={TaskID}")
+    def complete(self, TaskID):
+        self.Completed=1                                #completes the task
+        self.CompletedDate=datetime.datetime.now()      #records the completed time
+        ExecuteCommand(f"update tasks set completed={self.Completed}, completed_date={self.CompletedDate} where taskid={TaskID}")
+
+    def change_due_date(self, NewDueDate, TaskID):
+        self.DueDate=NewDueDate                         #accepts a new due date
+        ExecuteCommand(f"update tasks set due_date={self.DueDate} where taskid={TaskID}")
+    
+    def update_priority(self, priority, TaskID):
+        if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
+            self.priority=Priority(priority)            #If so, then give the task its new priority
+        ExecuteCommand(f"update tasks set priority={self.priority.PriorityLevel} where taskid={TaskID}")
+
+
+    def __str__(self):
+        return f"""Task with priority {str(self.priority)} \n Due on {self.DueDate}"""
 
     def __repr__(self):                         
-        return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.priority},{self.DueDate},{self.Labels})" 
+        return f"task('{self.TaskTitle}','{self.TaskDesc}',{self.priority.PriorityLevel},{self.DueDate},{self.Labels})" 
         #Repr returns how to create the task

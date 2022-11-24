@@ -47,7 +47,7 @@ labels
 There is no ID here because having Labels with the same titles is a bad idea
 Attributes:-
 title TEXT PRIMARY KEY
-color TEXT NOT NULL
+color INTEGER NOT NULL
 taskcount INTEGER NOT NULL                          
 
 tasks
