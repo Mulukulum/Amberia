@@ -46,36 +46,45 @@ class Project:
         #Add the project to the dictionary of instances
         Project.Instances[self.ID]=self
 
-        #Default Section of the Project
+        #Setting up the Default Section of the Project: 
+        #Create and Set the DefaultSection
+        self.DefaultSection = Section(SectionProject=self , SectionTitle=f"_{self.Title}",DefaultSection=True)
 
-        self.Sections = list()                  #Initialize list of sections
-        
-        #Set the DefaultSection and add it to the list of sections
-        self.DefaultSection = Section(SectionProject=self , SectionTitle=f"_{self.Title}")
-        self.AddSection(NewSection=self.DefaultSection)
+        #Create the List of Sections
+        self.Sections=[self.DefaultSection,]
 
-
+    #Method to set a New name for the Project
     def SetName(self, NewName: str):                 
         self.Title = NewName            #Set name of project
         ExecuteCommand("UPDATE projects SET project_title=? WHERE project_id=?",
                         (NewName,self.ID))
-
+    
+    #Method to set a new color for the project
     def SetColor(self, Color: int):
         if Color<=16777215:
             self.Color = Color
             ExecuteCommand("UPDATE projects SET project_color=? WHERE project_id=?",
                             (self.Color,self.ID))
     
+    #Use this if you're feeling lucky
     def RandomizeColor(self):
         self.Color=GetRandomColor()
         ExecuteCommand("UPDATE projects SET project_color=? WHERE project_id=?",
                         (self.Color,self.ID))
 
-    def AddSection(self, NewSection):
-        self.Sections.append(NewSection)
 
-    def RemoveSection(self, delsection):
-        self.Sections.remove(delsection)
+    #Method to add a new section to a project
+    def AddSection(self,SectionTitle: str): #Takes the Name of the Section as input
+        
+        #Create and append the Section to the list of sections
+        self.Sections.append(
+            Section(SectionProject=self,SectionTitle=SectionTitle)
+            )
+        #Update the sectioncount attribute
+        ExecuteCommand("UPDATE projects SET project_sectioncount=project_sectioncount+1 WHERE project_id=?",(self.ID,))
+
+    def RemoveSection(self, SectionID: int):
+        ...
 
     def AddProject(self, newproject):
         self.SubProjects.append(newproject)
@@ -97,7 +106,6 @@ class Project:
 
     def DisplayParentProjects(self):
         print(*self.parentprojects,sep='\n')
-          
 
     def __str__(self):
         return  f'Project name: {self.Title} \
@@ -107,16 +115,18 @@ class Project:
     def __repr__(self):
         return f"Project({self.Title},{self.Color},{self.Sections},{self.SubProjects},{self.parentprojects})"
 
+
+
 class Section:
     
     #Dictionary to store the instances of all available Section objects
     Instances=dict()
 
-    def __init__(self,SectionProject: Project, SectionTitle: str):
+    def __init__(self,SectionProject: Project, SectionTitle: str, DefaultSection=False):
         
         #Check Validity of The section Title
         #Ensuring that SectionTitle's can't start with a single underscore followed by characters
-        if SectionTitle[0]=="_":
+        if SectionTitle[0]=="_" and DefaultSection==False :
             self.Title=(f"__{SectionTitle.strip('_')}__")   #Sets Title to __sectionname__
         self.Project = SectionProject    #Get the Parent Project
 
@@ -332,6 +342,7 @@ class Priority:
         self.Color=self.ColorCache[NewLevel]  #ColorCache must always be populated
 
 class Task:
+    
     def __init__(self, TaskTitle: str, TaskDesc: str='', PriorityLevel: int=10, DueDate: datetime.datetime=None, Labels: list=None): #Initializes the class
         
         self.TaskTitle=TaskTitle
