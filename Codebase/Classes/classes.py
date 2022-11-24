@@ -229,10 +229,33 @@ class Label:
 #There can be a maximum of 10 priority levels, where 10 is the lowest and 1 in the highest
 class Priority: 
 
+    #Necessary Variable Declarations
     UpperBound=10
     ValidPriorites=tuple(range(1,UpperBound+1))     
     #Sets a tuple containing the valid priority Levels
     #Tuple contains integers from 1 to Upperbound (1 to 10)
+    DefaultPriorityColors={
+        1:16399941,
+        2:16070549,
+        3:8069048,
+        4:9201120,
+        5:2287801,
+        6:5177211,
+        7:432432,
+        8:13419293,
+        9:16729344,
+        10:16249827,
+    }
+    ScriptSetDefaultColors=f"""
+    -- The Following Commands sets the Default Colors again
+    BEGIN;
+    -- DELETE ALL THE VALUES IN THE TABLE
+    DELETE FROM prcolors;
+
+    -- Now Insert the Values into the table 
+    INSERT INTO prcolors (level,clrvalue) VALUES {f'{list(DefaultPriorityColors.items())}'.strip('[]')} ;
+    END;
+    """
 
     ColorCache=dict()                                           #Creates the Dictionary used for Cacheing
     Resultant=ExecuteCommand("""SELECT * FROM prcolors;""")     #Gets the current values from the Database
@@ -308,6 +331,7 @@ class Task:
 
     def __init__(self, TaskTitle: str, TaskDesc: str='', PriorityLevel: int=10, DueDate: datetime.datetime=None): #Initializes the class
 
+        #Sets the Title and Description for the task
         self.TaskTitle=TaskTitle
         self.TaskDesc=TaskDesc
 
@@ -322,17 +346,32 @@ class Task:
         else:
             self.PriorityLevel=Priority.UpperBound   #If not, then set it to a default upperbound value
             Log(f"Task {self.TaskTitle} given no priority. Default Value {self.PriorityLevel} Assigned")
-    
+
         self.Color=Priority.ColorOfLevel(PriorityLevel)     #And assign the color as well
-        self.ID=ExecuteCommand(f"INSERT INTO tasks(title, task_desc, priority, due_date, completed) values ({self.TaskTitle},{self.TaskDesc},{self.PriorityLevel},{self.DueDate},{self.Completed}) RETURNING taskid;")[0][0]
+        
+        #ID of Task
+        self.ID=ExecuteCommand(f"""INSERT INTO  RETURNING taskid;""")[0][0]
+        
+        #Makes the List of labels assigned to the task
+        self.Labels=[]
 
         #Add the task to the dictionary of instances
         Task.Instances[self.ID]=self
 
+    def ToggleLabel(self,Label):
+        if Label in self.Labels:
+            ...
+            #Remove the label from the task
+        else:
+            self.AddLabel(Label)
 
     def AddLabel(self,NewLabel):
-        self.Labels.append(NewLabel)                #Adds the label if it isnt selected
-        ExecuteCommand(f"UPDATE tasks SET")
+        
+        ScriptToAddLabelToTask=f"""
+        --This Script adds A Label to the Task
+        BEGIN;
+        --
+        """
 
     def reconfigure(self, TaskID, TaskTitle=None, TaskDesc=None, priority=None, DueDate=None, Labels=None):
         if TaskTitle!=None:
