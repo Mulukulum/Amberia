@@ -148,7 +148,7 @@ class Section:
         #Remove reference from project
         self.ParentProject.Sections.pop(self.ID)
 
-        #Decrement sectioncount from database
+        #Decrement project_sectioncount from database
         ExecuteCommand("UPDATE projects SET project_sectioncount=project_sectioncount-1 WHERE project_id=?",(self.ParentProject.ID))
 
         #Remove section from the Database
@@ -164,17 +164,18 @@ class Section:
         #While the section still has tasks
         while self.Tasks!={}:
             #Pop and delete them one after another
-            self.Tasks.popitem().DeleteTask()
-
-    def DisplayTasks(self):              #Display the list of tasks
-        print(*self.Tasks,sep='\n')      #Displays tasks without a for loop         
-
-    def __repr__(self):
-        return f"Section({self.Title},{self.ParentProject},{self.Tasks})"              
+            self.Tasks.popitem().DeleteTask()            
 
     def __str__(self):
-        return f'Section name: {self.Title} \nProject name: {self.ParentProject.Title} \nTasks: {[str(t) for t in self.Tasks]}'        
         #fstring returns the string representation
+        return f"""
+        Title : {self.Title}
+        Project : {self.ParentProject.Title}
+        {self.ID=}
+        {self.ParentProject.ID=}
+        Task Count : {len(self.Tasks)}
+        """       
+        
 
 class Label:
 
