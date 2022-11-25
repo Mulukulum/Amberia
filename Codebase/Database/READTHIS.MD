@@ -41,9 +41,9 @@ project_color INTEGER NOT NULL
 project_sectioncount INTEGER NOT NULL
 
 labels 
-There is no ID here because having Labels with the same titles is a bad idea
 Attributes:-
-label_title TEXT PRIMARY KEY
+label_id INTEGER PRIMARY KEY
+label_title TEXT UNIQUE
 label_color INTEGER NOT NULL
 label_taskcount INTEGER NOT NULL                          
 

@@ -468,7 +468,7 @@ class Task:
                 self.Labels=[]
 
 
-    def ToggleLabel(self,Label):
+    def ToggleLabel(self,Label: str):
 
         if Label in self.Labels:
 
@@ -492,7 +492,7 @@ class Task:
         while self.Labels!=[]:
             self.RemoveLabel(self.Labels[0])
 
-    def RemoveLabel(self,Label: Label):
+    def RemoveLabel(self,Label: str):
         
         #Delete from the Labels for tasks table
         ExecuteCommand("DELETE FROM labelsfortasks WHERE label=? AND task=?;",(Label.Title,self.ID))
