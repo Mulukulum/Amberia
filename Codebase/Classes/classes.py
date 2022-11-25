@@ -127,14 +127,16 @@ class Section:
         INSERT INTO sections
         (section_parentprojectid,
         section_title,
-        section_taskcount
+        section_taskcount,
+        section_activetaskcount,
+        section_texttaskcount
         )
-        VALUES (?,?,?)
+        VALUES (?,?,?,?,?)
         RETURNING section_id
         """,
         (self.ParentProject.ID, #ID of the parentProject
         self.Title,       #Title of the Section
-        0                 #New section so no tasks added
+        0,0,0                 #New section so no tasks added
         )
         )[0][0]             
         
@@ -414,7 +416,8 @@ class Task:
         #Add a reference to this task in sections
         self.ParentSection.Tasks[self.ID]=self
         self.ParentSection.ActiveTasks[self.ID]=self
-        ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount+1 WHERE section_id=?",(self.ParentSection.ID))
+        ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount+1,section_activetaskcount=section_activetaskcount+1 WHERE section_id=?",(self.ParentSection.ID))
+
 
         #Makes the List of labels assigned to the task
             
@@ -468,8 +471,6 @@ class Task:
         
         if TaskDesc!=None:
             self.TaskDesc=TaskDesc                      #Changes the desc to a newly provided desc
-        else:
-            self.TaskDesc=''                             #makes task desc empty if not provided
         
         if DueDate!=None:
             self.DueDate=DueDate                        #Changes the due date to a newly provided due date
@@ -494,10 +495,13 @@ class Task:
 
 
     def CompleteTask(self):
+
         self.Completed=1                                #Completes the task
         self.CompletedDate=datetime.datetime.now()      #records the completed time
-        self.ParentSection.ActiveTasks.pop(self)
+        self.ParentSection.ActiveTasks.pop(self.ID)
         ExecuteCommand(f"UPDATE tasks SET task_completed={1}, task_completed_date={self.CompletedDate} WHERE task_id={self.ID}")
+        ExecuteCommand(f"UPDATE sections SET section_activetaskcount=section_activetaskcount-1 WHERE section_id={self.ParentSection.ID}")
+
 
     def DeleteTask(self):
         
@@ -543,7 +547,7 @@ class Task:
         return self.__repr__()
         
 
-class TextTask():
+class TextTask:
 
     Instances=dict()
     
@@ -565,32 +569,33 @@ class TextTask():
     
     def DeleteTextTask(self):
         
-        #Remove the TextTask from the Section
+        #Remove the TextTask from the Section and Instances dict
         self.ParentSection.TextTasks.pop(self.ID)
         TextTask.Instances.pop(self.ID)
 
         ExecuteCommand("UPDATE sections SET section_texttaskcount=section_texttaskcount-1 WHERE section_id=?",(self.ParentSection.ID,))
-        ExecuteCommand(f"DELETE FROM tasks WHERE task_id={self.ID};")
+        ExecuteCommand(f"DELETE FROM texttasks WHERE task_id={self.ID};")
+        del self
 
+    def UpdateText(self,NewText: str):
+        self.TaskText=NewText
+        ExecuteCommand("UPDATE texttasks SET texttask_text=? WHERE texttask_id=? ;",(self.TaskText,self.ID))
 
 
 class TaskBuilder:
 
-    def __init__(self, TaskTitle, TaskType, TaskDesc=None, priority=None, DueDate=None, Labels=list()):
-        self.TaskTitle=TaskTitle
-        self.TaskType=TaskType
-        self.TaskDesc=TaskDesc
-        self.priority=priority
-        self.DueDate=DueDate
-        self.Labels=Labels
+    def __init__(self,IsTextTask: bool, TaskTitles: list, TaskDescs: list=None,ParentSection: Section=None, PriorityLevel: int=None, DueDate: datetime.datetime=None, Labels: list=list()):
+        
+        if Priority.IsValid(PriorityLevel):
+            pass
+        else:
+            PriorityLevel=Priority.UpperBound
+
+        if IsTextTask:
+            for Text in TaskTitles:
+                TextTask(ParentSection=ParentSection,TaskText=Text)
+        else:
+            for Title,Descs in zip(TaskTitles,TaskDescs):
+                Task(ParentSection=ParentSection,TaskTitle=Title,TaskDesc=Descs,PriorityLevel=PriorityLevel,DueDate=DueDate,Labels=Labels)
     
-    def build(self):
-        if self.TaskType=='text':
-            TaskTitle=TextTask(self.TaskTitle, self.priority)
-            return TaskTitle
-        if self.TaskType=='normal':
-            TaskTitle=Task(self.TaskTitle, self.TaskType, self.TaskDesc, self.priority, self.DueDate, self.Labels)
-            return TaskTitle
-        ErrorLog(f"Unable to get task type due to invalid task type input {self.TaskType}")
-        return None
 
