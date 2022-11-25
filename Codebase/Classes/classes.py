@@ -511,7 +511,7 @@ class Task:
         return self.__repr__()
         
 
-class text_task:
+class TextTask:
     def __init__(self, TaskTitle, priority=None, DueDate=None):
         self.TaskTitle=TaskTitle
         if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
@@ -521,7 +521,7 @@ class text_task:
             Log(f"Task {self.TaskTitle} given no priority. Default Value Assigned")
         self.DueDate=DueDate
 
-class task_builer:
+class TaskBuilder:
 
     def __init__(self, TaskTitle, TaskType, TaskDesc=None, priority=None, DueDate=None, Labels=list()):
         self.TaskTitle=TaskTitle
@@ -533,7 +533,7 @@ class task_builer:
     
     def build(self):
         if self.TaskType=='text':
-            TaskTitle=text_task(self.TaskTitle, self.priority)
+            TaskTitle=TextTask(self.TaskTitle, self.priority)
             return TaskTitle
         if self.TaskType=='normal':
             TaskTitle=Task(self.TaskTitle, self.TaskType, self.TaskDesc, self.priority, self.DueDate, self.Labels)
