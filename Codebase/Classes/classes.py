@@ -118,6 +118,7 @@ class Section:
         
         self.ParentProject = SectionProject    #Get the Parent Project
         self.Tasks=dict()                    #Set the dict of Tasks (TaskId:TaskObject)
+        self.ActiveTasks=dict()              #Set the dict with incomplete tasks
 
         #Add the Section to the Database
         self.ID=ExecuteCommand(
@@ -162,11 +163,14 @@ class Section:
         Task(ParentSection=self, TaskTitle=Title, TaskDesc=Description, PriorityLevel=Priority, DueDate=DueDate, Labels=Labels)
 
     def DeleteAllTasks(self):
-        
+
+        #Clears the Dictionary with active tasks
+        self.ActiveTasks.clear()
         #While the section still has tasks
         while self.Tasks!={}:
             #Pop and delete them one after another
-            self.Tasks.popitem().DeleteTask()            
+            self.Tasks.popitem().DeleteTask()          
+          
 
     def __str__(self):
         #fstring returns the string representation
@@ -176,6 +180,7 @@ class Section:
         {self.ID=}
         {self.ParentProject.ID=}
         Task Count : {len(self.Tasks)}
+        Task Active : {len(self.ActiveTasks)}
         """       
         
 
@@ -407,14 +412,17 @@ class Task:
         
         #Add a reference to this task in sections
         self.ParentSection.Tasks[self.ID]=self
+        self.ParentSection.ActiveTasks[self.ID]=self
         ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount+1 WHERE section_id=?",(self.ParentSection.ID))
 
         #Makes the List of labels assigned to the task
-        if Labels==None:
+            
+        if Labels!=None:
             self.Labels=[]
-        else:
             for Label in Labels:
                 self.AddLabel(Label)
+        else:
+            self.Labels=[]
 
 
     def ToggleLabel(self,Label):
@@ -433,7 +441,6 @@ class Task:
         
         #Insert into the Labels for tasks table
         ExecuteCommand("INSERT INTO labelsfortasks(task,label) VALUES(?,?);",(self.ID,NewLabel.Title))
-
         #Increment the TaskCount
         ExecuteCommand("UPDATE labels SET label_taskcount=label_taskcount+1 WHERE label_title=?;",(NewLabel.Title,))
         self.Labels.append(NewLabel)
@@ -452,29 +459,44 @@ class Task:
 
         self.Labels.remove(Label)
 
-#
-    def ReConfigureTask(self, TaskID, TaskTitle=None, TaskDesc=None, priority=None, DueDate=None, Labels=None):
+
+    def ReConfigureTask(self, TaskTitle: str=None, TaskDesc: str=None, PriorityLevel: int=None, DueDate: datetime.datetime=None, Labels: list=None):
+        
         if TaskTitle!=None:
             self.TaskTitle=TaskTitle                    #Changes the title to a newly provided title, if not provided stays the same
+        
         if TaskDesc!=None:
             self.TaskDesc=TaskDesc                      #Changes the desc to a newly provided desc
         else:
-            self.TaskDesc=None                          #makes task desc null if not provided
+            self.TaskDesc=''                             #makes task desc empty if not provided
+        
         if DueDate!=None:
             self.DueDate=DueDate                        #Changes the due date to a newly provided due date
-        else:
-            self.DueDate=None                           #makes due date null if none provided
-        if Priority.IsValid(priority):          #Checks if the incoming argument is a valid priority level
-            self.PriorityLevel=priority            #If so, then give the task its new priority
-        if Labels!=None:
-            self.AddLabel(Labels)
-        ExecuteCommand(f"UPDATE tasks SET task_title={self.TaskTitle},task_desc={self.TaskDesc}, duedate={self.DueDate}, priority={self.PriorityLevel.PriorityLevel}, labels={self.Labels} where taskid={TaskID}")
+        
+        if Priority.IsValid(PriorityLevel):          #Checks if the incoming argument is a valid priority level
+            self.PriorityLevel=PriorityLevel            #If so, then give the task its new priority
 
-#
+        if Labels!=None:
+            self.Labels=[]
+            for Label in Labels:
+                self.AddLabel(Label)
+        else:
+            self.Labels=[]
+        
+        ExecuteCommand(f"""
+        UPDATE tasks SET task_title=?,task_description=?,task_priority={self.PriorityLevel}, 
+        task_duedate=? WHERE taskid={self.ID}""",(
+            self.TaskTitle,
+            self.TaskDesc,
+            self.DueDate
+            ))
+
+
     def CompleteTask(self):
-        self.Completed=1                                #completes the task
+        self.Completed=1                                #Completes the task
         self.CompletedDate=datetime.datetime.now()      #records the completed time
-        ExecuteCommand(f"UPDATE tasks SET task_completed={self.Completed}, completed_date={self.CompletedDate} WHERE task_id={self.ID}")
+        self.ParentSection.ActiveTasks.pop(self)
+        ExecuteCommand(f"UPDATE tasks SET task_completed={1}, task_completed_date={self.CompletedDate} WHERE task_id={self.ID}")
 
     def DeleteTask(self):
         
@@ -486,6 +508,12 @@ class Task:
 
         #Pops the task from its parent section
         self.ParentSection.Tasks.pop(self.ID)
+
+        #If the Task is active, remove it from the active tasks dictionary
+        if self.Completed:
+            pass
+        else: 
+            self.ParentSection.ActiveTasks.pop(self.ID)
 
         #Pops the item from the dictionary of instances
         Task.Instances.pop(self.ID)
@@ -504,10 +532,11 @@ class Task:
             self.PriorityLevel=Priority(priority)           #If so, then give the task its new priority
             self.Color=Priority.ColorOfLevel(priority)      #Give the task its new color
             ExecuteCommand(f"UPDATE tasks SET task_priority=? WHERE task_id=?",(self.PriorityLevel,self.ID))
+        else:
+            ErrorLog(f"WARNING : NO-OP DUE TO Invalid Argument for Priority : {priority}")
             
     def __repr__(self) -> str:                         
         return f"Task('{self.TaskTitle=}','{self.TaskDesc=}',{self.PriorityLevel=},{self.DueDate=},{self.Labels=})" 
-        #Repr returns how to create the task
     
     def __str__(self) -> str:
         return self.__repr__()
