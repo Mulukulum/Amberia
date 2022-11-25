@@ -544,7 +544,7 @@ class task_builer:
             TaskTitle=text_task(self.TaskTitle, self.priority)
             return TaskTitle
         if self.TaskType=='normal':
-            TaskTitle=task(self.TaskTitle, self.TaskType, self.TaskDesc, self.priority, self.DueDate, self.Labels)
+            TaskTitle=Task(self.TaskTitle, self.TaskType, self.TaskDesc, self.priority, self.DueDate, self.Labels)
             return TaskTitle
         ErrorLog(f"Unable to get task type due to invalid task type input {self.TaskType}")
         return None
