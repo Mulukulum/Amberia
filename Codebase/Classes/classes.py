@@ -54,6 +54,23 @@ class Project:
 
         #Create the Dictionary of Sections
 
+    def DeleteProject(self):
+        
+        #Remove all Sections from the Project
+        self.RemoveAllSections()
+
+
+    def RemoveAllSections(self):
+
+        while self.Sections!={}:
+            self.Sections.popitem()[-1].DeleteSection()
+        ExecuteCommand(f"DELETE FROM projects WHERE project_id={self.ID}")
+        Project.Instances.pop(self.ID)
+
+
+    
+
+
     #Method to set a New name for the Project
     def SetName(self, NewName: str):                 
         self.Title = NewName            #Set name of project
@@ -172,7 +189,7 @@ class Section:
         #While the section still has tasks
         while self.Tasks!={}:
             #Pop and delete them one after another
-            self.Tasks.popitem().DeleteTask()          
+            self.Tasks.popitem()[-1].DeleteTask()          
           
 
     def __str__(self):
