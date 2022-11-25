@@ -90,15 +90,17 @@ class Project:
             return ErrorLog("WARNING: Section Delete Request Issued for Invalid Section")
         
         self.Sections[SectionID]
-        
+    
 
     def __str__(self):
-        return  f'Project name: {self.Title} \
-                \nDisplay color: {self.Color} \
-                \nSections: {[str(s) for s in self.Sections]}'
-
-    def __repr__(self):
-        return f"Project({self.Title},{self.Color},{self.Sections})"
+        return  f"""
+        Project Title : {self.Title}
+        Color : {self.Color}
+        {self.ID=}
+        Section Count: {len(self.Sections)}
+        List of Sections:
+            {[s.Title for s in list(self.Sections.values())]}
+        """
 
 
 
@@ -115,7 +117,7 @@ class Section:
             self.Title=(f"__{SectionTitle.strip('_')}__")   #Sets Title to __sectionname__
         
         self.ParentProject = SectionProject    #Get the Parent Project
-        self.Tasks=dict()                    #Set the dict of Tasks
+        self.Tasks=dict()                    #Set the dict of Tasks (TaskId:TaskObject)
 
         #Add the Section to the Database
         self.ID=ExecuteCommand(
@@ -204,19 +206,26 @@ class Label:
             
             return True
 
-
+    @classmethod
+    def DeleteLabel(cls,LabelName: str):
         
-    #Method to check whether a label currently exists
-    @staticmethod
-    def LabelExists(LabelTitle) -> bool:
+        if LabelName in Label.LabelInstances :
+            Label.LabelInstances.pop(LabelName)
+            ExecuteCommand("DELETE FROM labelsfortasks WHERE label=?",(LabelName,))
+            ExecuteCommand("DELETE FROM labels WHERE label_title=?")
+        return False
 
-        #Find the label
-        #If it doesn't exist, return False
-        
-        if ExecuteCommand("SELECT title FROM labels WHERE title=?",(LabelTitle,))==[]:
-            return False
-        else:
+    @classmethod
+    def ValidRename(cls,LabelTitle: str) -> bool:
+        return not Label.LabelExists(LabelTitle)
+
+    @classmethod
+    def LabelExists(cls,LabelTitle: str) -> bool:
+        #Check whether the label is currently active
+        if LabelTitle in Label.LabelInstances():
             return True
+        else:
+            return False
 
     #Method to change the color of a label
     def SetColor(self,Color: int) -> None :
@@ -227,13 +236,6 @@ class Label:
         else:
             ErrorLog(f" TRIVIAL : NO-OP DUE TO Invalid Color Assignment ({Color}) for Label {self.Title}")
 
-    @classmethod
-    def CheckRenameAvailability(cls,Name: str):
-        if Name in Label.LabelInstances:
-            return False
-        else:
-            return True
-    
     #Use this method only when rename availability is known
     def RenameLabel(self,NewName: str):
         
@@ -351,10 +353,6 @@ class Priority:
         return True
 
 
-
-
-
-
 class Task:
 
     Instances=dict()
@@ -365,6 +363,7 @@ class Task:
         self.TaskTitle=TaskTitle
         self.TaskDesc=TaskDesc
         self.ParentSection=ParentSection
+
 
         self.DueDate=DueDate
         self.Completed=0                                #sets completed to False, sql doesn't have bool so I'm using 0 and 1
@@ -491,7 +490,6 @@ class Task:
         #Pops the item from the dictionary of instances
         Task.Instances.pop(self.ID)
 
-        #And Finally, deletes the object in python
         del self
 
     def ChangeDueDate(self, NewDueDate: datetime.datetime):
