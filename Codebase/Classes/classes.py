@@ -498,7 +498,7 @@ class Task:
         #And Finally, deletes the object in python
         del self
 
-    def ChangeDueDate(self, NewDueDate):
+    def ChangeDueDate(self, NewDueDate: datetime.datetime):
         self.DueDate=NewDueDate                         #Accepts a new due date
         ExecuteCommand(f"UPDATE tasks SET task_duedate={self.DueDate} WHERE task_id={self.ID}")
     
