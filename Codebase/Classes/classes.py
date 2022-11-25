@@ -210,14 +210,14 @@ class Label:
 
     CreationSucess=True
     LabelInstances={}
-    TaskIndex={}
+    LabelNames=[]
 
     #Class initialisation | Method returns True if Creation was successful
-    def __init__(self, Title : str ,Color : int=None,LoadedFromDB: bool=False) -> None:
+    def __init__(self, Title : str ,Color : int=None,LoadedFromDB: bool=False,ID: int=-1) -> None:
 
         if Label.LabelExists(Title):
             #If the Label already exists, then Log an Error
-            ErrorLog(f" TRIVIAL : Attempt to create label {Title} which already exists")
+            ErrorLog(f" TRIVIAL : Attempt to create label with name {Title} which already exists")
             Label.CreationSucess=False
         
         else:
@@ -229,25 +229,37 @@ class Label:
             else:
                 #Set the specified Color
                 self.Color=Color
-
-            if LoadedFromDB==False: ExecuteCommand("INSERT INTO labels(label_title,label_color,label_taskcount) VALUES(?,?,0) ;",(self.Title,self.Color))
             
-            #Dictionary with LabelName<str> : LabelObject
-            Label.LabelInstances[self.Title]=self
-            #Dictionary with LabelName<str> : List of Task IDs that link to it
-            Label.TaskIndex[self.Title]=self.Tasks
-
+            self.ID=ID
+            if LoadedFromDB==False: 
+                self.ID=ExecuteCommand("INSERT INTO labels(label_title,label_color,label_taskcount) VALUES(?,?,0) RETURNING label_id;",(self.Title,self.Color))
+            
+            #Dictionary with LabelID<int> : LabelObject
+            Label.LabelInstances[self.ID]=self
+            #Dictionary with LabelID<int> : List of Task IDs that link to it
+            Label.TaskIndex[self.ID]=self.Tasks
+            #Add the name to the list of LabelNames
+            Label.LabelNames.append(self.Title)
+            #Set the flag to True
             Label.CreationSucess=True
 
-    @classmethod
-    def DeleteLabel(cls,LabelName: str):
+    def DeleteLabel(self,LabelID: int):
         
-        if LabelName in Label.LabelInstances :
-            Label.LabelInstances.pop(LabelName)
-            Label.TaskIndex.pop(LabelName)
-            ExecuteCommand("DELETE FROM labelsfortasks WHERE label=?",(LabelName,))
-            ExecuteCommand("DELETE FROM labels WHERE label_title=?")
-            
+        if LabelID in Label.LabelInstances :
+
+            self.DeLinkFromTasks()            
+
+            #Remove any references to the label
+            Label.LabelInstances.pop(LabelID)
+            Label.TaskIndex.pop(LabelID)
+            Label.LabelNames.remove(LabelID)
+            ExecuteCommand("DELETE FROM labelsfortasks WHERE label=?",(LabelID,))
+            ExecuteCommand("DELETE FROM labels WHERE label_id=?",(LabelID,))
+    
+    def DeLinkFromTasks(self):
+        for TaskID in self.Tasks:
+                Task.Instances[TaskID].RemoveLabel()
+
 
     @classmethod
     def ValidRename(cls,LabelTitle: str) -> bool:
@@ -256,7 +268,7 @@ class Label:
     @classmethod
     def LabelExists(cls,LabelTitle: str) -> bool:
         #Check whether the label is currently active
-        if LabelTitle in Label.LabelInstances():
+        if LabelTitle in Label.LabelNames:
             return True
         else:
             return False
@@ -274,7 +286,7 @@ class Label:
     def RenameLabel(self,NewName: str):
         
         #Change the Database
-        ExecuteCommand("UPDATE labels SET label_title=? WHERE label_title=?",(NewName,self.Title))
+        ExecuteCommand("UPDATE labels SET label_title=? WHERE label_id=?",(NewName,self.ID))
         ExecuteCommand("UPDATE labelsfortasks SET label=? WHERE label=?",(NewName,self.Title))
         Label.LabelInstances[NewName]=Label.LabelInstances.pop(self.Title)
         Label.TaskIndex[NewName]=Label.LabelInstances.pop(self.Title)
@@ -286,11 +298,11 @@ class Label:
 
     #Label repr 
     def __repr__(self) -> str:
-        return f'Label({self.Title},{self.Color})'
+        return f'Label({self.Title},{self.Color},{self.ID})'
     
     #String Representation
     def __str__(self) -> str:
-        return f'Label {self.Title} Color {self.Color}'
+        return f'Label {self.Title} Color {self.Color} ID {self.ID}'
 
 
 
@@ -473,7 +485,7 @@ class Task:
         if Label in self.Labels:
 
             #Remove the label from the task
-            self.RemoveLabel(Label=Label)
+            self.RemoveLabel(LabelID=Label)
         
         else:
 
@@ -492,15 +504,15 @@ class Task:
         while self.Labels!=[]:
             self.RemoveLabel(self.Labels[0])
 
-    def RemoveLabel(self,Label: str):
+    def RemoveLabel(self,LabelID: int):
         
         #Delete from the Labels for tasks table
-        ExecuteCommand("DELETE FROM labelsfortasks WHERE label=? AND task=?;",(Label.Title,self.ID))
+        ExecuteCommand("DELETE FROM labelsfortasks WHERE label=? AND task=?;",(LabelID,self.ID))
 
         #Decrement the TaskCount
-        ExecuteCommand("UPDATE labels SET label_taskcount=label_taskcount-1 WHERE label_title=?;",(Label.Title,))
+        ExecuteCommand("UPDATE labels SET label_taskcount=label_taskcount-1 WHERE label_id=?;",(LabelID,))
 
-        self.Labels.remove(Label)
+        self.Labels.remove(LabelID)
 
 
     def ReConfigureTask(self, TaskTitle: str=None, TaskDesc: str=None, PriorityLevel: int=None, DueDate: datetime.datetime=None, Labels: list=None):
