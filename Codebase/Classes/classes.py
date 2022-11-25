@@ -103,14 +103,6 @@ class Project:
         ExecuteCommand("")
         ...
 
-    def DisplaySections(self):
-        print(*self.Sections,sep='\n')
-
-    def DisplayProjects(self):
-        print(*self.SubProjects,sep='\n')
-
-    def DisplayParentProjects(self):
-        print(*self.parentprojects,sep='\n')
 
     def __str__(self):
         return  f'Project name: {self.Title} \
