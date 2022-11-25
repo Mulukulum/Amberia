@@ -119,6 +119,7 @@ class Section:
         self.ParentProject = SectionProject    #Get the Parent Project
         self.Tasks=dict()                    #Set the dict of Tasks (TaskId:TaskObject)
         self.ActiveTasks=dict()              #Set the dict with incomplete tasks
+        self.TextTasks=dict()
 
         #Add the Section to the Database
         self.ID=ExecuteCommand(
@@ -542,15 +543,24 @@ class Task:
         return self.__repr__()
         
 
-class TextTask:
-    def __init__(self, TaskTitle, priority=None, DueDate=None):
-        self.TaskTitle=TaskTitle
-        if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
-            self.priority=Priority(priority)            #If so, then give the task its priority
-        else:
-            self.priority=Priority(10)                  #If not, then set it to a default value of 10
-            Log(f"Task {self.TaskTitle} given no priority. Default Value Assigned")
-        self.DueDate=DueDate
+class TextTask():
+    
+    def __init__(self,ParentSection: Section , TaskText: str,) -> None:
+        
+        
+        self.TaskText=TaskText
+        self.ParentSection=ParentSection
+        self.ParentProject=ParentSection.ParentProject
+
+        self.ID=ExecuteCommand(f"""
+        INSERT INTO texttask(texttask_text,texttask_sectionid,texttask_projectid)
+        VALUES (?,?,?) RETURNING texttask_id;
+        """,(self.TaskText,self.ParentSection.ID))[0][0]
+        
+        self.ParentSection.TextTasks[self.ID]=self
+        ExecuteCommand(f"UPDATE sections SET section_taskcount=section_taskcount+1 WHERE section_id={self.ParentSection.ID}")
+
+
 
 class TaskBuilder:
 

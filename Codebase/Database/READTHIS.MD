@@ -59,12 +59,21 @@ task_completed INTEGER NOT NULL
 task_duedate DATE
 task_completed_date DATE
 
+texttask
+Attributes:-
+texttask_id INTEGER PRIMARY KEY
+texttask_text TEXT NOT NULL
+texttask_sectionid INTEGER NOT NULL
+texttask_projectid INTEGER NOT NULL
+
 sections
 Attributes:-
 section_id INTEGER PRIMARY KEY
 section_parentprojectid INTEGER NOT NULL
 section_title TEXT NOT NULL
 section_taskcount INTEGER NOT NULL
+section_activetaskcount INTEGER NOT NULL 
+section_texttaskcount INTEGER NOT NULL
 
 prcolors
 Attributes:-
