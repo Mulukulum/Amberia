@@ -157,13 +157,7 @@ class Section:
         del self    
 
     def AddTask(self, Title: str, Description: str, Priority: int, DueDate:datetime.datetime=None,Labels: list=None):         #Add a new task to the section        
-        #Creation of Task Object
         Task(ParentSection=self, TaskTitle=Title, TaskDesc=Description, PriorityLevel=Priority, DueDate=DueDate, Labels=Labels)
-
-
-    def RemoveTask(self, DelTask):      #Remove a task from the list of tasks
-        self.Tasks.remove(DelTask)
-        ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount-1 WHERE section_id=?",(self.ID))
 
     def DeleteAllTasks(self):
         
@@ -171,11 +165,8 @@ class Section:
         while self.Tasks!={}:
             #Pop and delete them one after another
             self.Tasks.popitem().DeleteTask()
-        
-        #Delete the tasks from the Database
-        ExecuteCommand("DELETE FROM tasks WHERE task_sectionid=?",(self.ID))
 
-    def DisplayTasks(self):             #Display the list of tasks
+    def DisplayTasks(self):              #Display the list of tasks
         print(*self.Tasks,sep='\n')      #Displays tasks without a for loop         
 
     def __repr__(self):
