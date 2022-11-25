@@ -59,7 +59,7 @@ task_completed INTEGER NOT NULL
 task_duedate DATE
 task_completed_date DATE
 
-texttask
+texttasks
 Attributes:-
 texttask_id INTEGER PRIMARY KEY
 texttask_text TEXT NOT NULL

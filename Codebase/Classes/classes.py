@@ -544,6 +544,8 @@ class Task:
         
 
 class TextTask():
+
+    Instances=dict()
     
     def __init__(self,ParentSection: Section , TaskText: str,) -> None:
         
@@ -556,9 +558,19 @@ class TextTask():
         INSERT INTO texttask(texttask_text,texttask_sectionid,texttask_projectid)
         VALUES (?,?,?) RETURNING texttask_id;
         """,(self.TaskText,self.ParentSection.ID))[0][0]
-        
+
         self.ParentSection.TextTasks[self.ID]=self
-        ExecuteCommand(f"UPDATE sections SET section_taskcount=section_taskcount+1 WHERE section_id={self.ParentSection.ID}")
+        ExecuteCommand(f"UPDATE sections SET section_texttaskcount=section_texttaskcount+1 WHERE section_id={self.ParentSection.ID}")
+        TextTask.Instances[self.ID]=self
+    
+    def DeleteTextTask(self):
+        
+        #Remove the TextTask from the Section
+        self.ParentSection.TextTasks.pop(self.ID)
+        TextTask.Instances.pop(self.ID)
+
+        ExecuteCommand("UPDATE sections SET section_texttaskcount=section_texttaskcount-1 WHERE section_id=?",(self.ParentSection.ID,))
+        ExecuteCommand(f"DELETE FROM tasks WHERE task_id={self.ID};")
 
 
 
