@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>747</width>
+    <width>800</width>
     <height>382</height>
    </rect>
   </property>
@@ -16,129 +16,123 @@
   <property name="styleSheet">
    <string notr="true">background : #2c2825;</string>
   </property>
-  <widget class="QWidget" name="">
-   <property name="geometry">
-    <rect>
-     <x>12</x>
-     <y>12</y>
-     <width>721</width>
-     <height>349</height>
-    </rect>
-   </property>
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="3">
-     <widget class="QLabel" name="TaskName">
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>24</pointsize>
-       </font>
-      </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color : rgb(236, 236, 236);</string>
-      </property>
-      <property name="text">
-       <string>TaskName</string>
-      </property>
-      <property name="scaledContents">
-       <bool>false</bool>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0" colspan="3">
-     <widget class="QLabel" name="label_3">
-      <property name="styleSheet">
-       <string notr="true">background: rgb(0, 0, 0)</string>
-      </property>
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; color:#ffffff;&quot;&gt;Display Description alongside the selected labels here&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label">
-      <property name="styleSheet">
-       <string notr="true">background: rgb(255, 255, 255)</string>
-      </property>
-      <property name="text">
-       <string>Priority Level:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLCDNumber" name="lcdNumber">
-      <property name="styleSheet">
-       <string notr="true">background: rgb(255, 255, 255)</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2">
-     <widget class="QPushButton" name="TaskCompleteButton">
-      <property name="styleSheet">
-       <string notr="true">background: #fdcb52;
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0" colspan="3">
+      <widget class="QLabel" name="TaskName">
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color : rgb(236, 236, 236);</string>
+       </property>
+       <property name="text">
+        <string>TaskName</string>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="3">
+      <widget class="QLabel" name="label_3">
+       <property name="styleSheet">
+        <string notr="true">background: rgb(0, 0, 0)</string>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; color:#ffffff;&quot;&gt;Display Description alongside the selected labels here&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label">
+       <property name="styleSheet">
+        <string notr="true">background: rgb(255, 255, 255)</string>
+       </property>
+       <property name="text">
+        <string>Priority Level:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLCDNumber" name="lcdNumber">
+       <property name="styleSheet">
+        <string notr="true">background: rgb(255, 255, 255)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QPushButton" name="TaskCompleteButton">
+       <property name="styleSheet">
+        <string notr="true">background: #fdcb52;
 </string>
-      </property>
-      <property name="text">
-       <string>Complete Task</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="styleSheet">
-       <string notr="true">background: rgb(255, 255, 255)</string>
-      </property>
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Days Left:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QLCDNumber" name="lcdNumber_2">
-      <property name="styleSheet">
-       <string notr="true">background: rgb(255, 255, 255)</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="2">
-     <widget class="QPushButton" name="TaskDeleteButton">
-      <property name="styleSheet">
-       <string notr="true">background: #fdcb52;
+       </property>
+       <property name="text">
+        <string>Complete Task</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="styleSheet">
+        <string notr="true">background: rgb(255, 255, 255)</string>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Days Left:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLCDNumber" name="lcdNumber_2">
+       <property name="styleSheet">
+        <string notr="true">background: rgb(255, 255, 255)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QPushButton" name="TaskDeleteButton">
+       <property name="styleSheet">
+        <string notr="true">background: #fdcb52;
 </string>
-      </property>
-      <property name="text">
-       <string>Delete Task</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QPushButton" name="BackButton">
-      <property name="styleSheet">
-       <string notr="true">background: rgb(255, 85, 0)</string>
-      </property>
-      <property name="text">
-       <string>Back</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="2">
-     <widget class="QPushButton" name="TaskEditButton">
-      <property name="styleSheet">
-       <string notr="true">background: #fdcb52;</string>
-      </property>
-      <property name="text">
-       <string>Edit Task</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+       </property>
+       <property name="text">
+        <string>Delete Task</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QPushButton" name="BackButton">
+       <property name="styleSheet">
+        <string notr="true">background: rgb(255, 85, 0)</string>
+       </property>
+       <property name="text">
+        <string>Back</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QPushButton" name="TaskEditButton">
+       <property name="styleSheet">
+        <string notr="true">background: #fdcb52;</string>
+       </property>
+       <property name="text">
+        <string>Edit Task</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

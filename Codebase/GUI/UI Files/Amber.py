@@ -17,25 +17,29 @@ class AmberApplicationWindow(QtWidgets.QMainWindow):
         self.ui=AmberWindowUI()
         self.ui.setupUi(self)
         self.ui.date_label.setText(f"{datetime.date.today().strftime('%A, %B %d %Y')}")
+        self.ui.vert=QtWidgets.QVBoxLayout(self.ui.WidgetFrame)
+        self.ui.vert.setObjectName(u"Layout for Widget")
+        
+    def AddTask(self):
+        layout= self.ui.vert
+        layout.addWidget(TaskDisplayWidget(self.ui.WidgetFrame))
+
         
 
-    def ShowTaskWidget(self,Widget):
-        self.ui.vertical.addWidget(Widget)
-        self.show()
 
 
 
 class TaskDisplayWidget(QtWidgets.QWidget):
 
-    def __init__(self,MainWindow: AmberApplicationWindow) -> None:
-        super().__init__(MainWindow.ui.scrollAreaWidgetContents_2)
+    def __init__(self,Frame) -> None:
+        super().__init__()
         ui=TaskDispUI()
-        ui.setupUi(MainWindow)
+        ui.setupUi(Frame)
         
 
 app=QtWidgets.QApplication(sys.argv)
 win=AmberApplicationWindow()
-win.ShowTaskWidget(TaskDisplayWidget(win))
+win.AddTask()
 win.show()
 sys.exit(app.exec_())
 
