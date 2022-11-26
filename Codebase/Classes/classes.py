@@ -133,6 +133,7 @@ class Section:
         #Ensuring that SectionTitle's can't start with a single underscore followed by characters
         if SectionTitle[0]=="_" and DefaultSection==False :
             self.Title=(f"__{SectionTitle.strip('_')}__")   #Sets Title to __sectionname__
+        self.DefaultSection=DefaultSection
         
         self.ParentProject = SectionProject    #Get the Parent Project
         self.Tasks=dict()                    #Set the dict of Tasks (TaskId:TaskObject)
@@ -236,8 +237,6 @@ class Label:
             
             #Dictionary with LabelID<int> : LabelObject
             Label.LabelInstances[self.ID]=self
-            #Dictionary with LabelID<int> : List of Task IDs that link to it
-            Label.TaskIndex[self.ID]=self.Tasks
             #Add the name to the list of LabelNames
             Label.LabelNames.append(self.Title)
             #Set the flag to True
@@ -246,20 +245,17 @@ class Label:
     def DeleteLabel(self,LabelID: int):
         
         if LabelID in Label.LabelInstances :
-
+            
+            #Decouples the Label from all tasks
             self.DeLinkFromTasks()            
-
             #Remove any references to the label
             Label.LabelInstances.pop(LabelID)
-            Label.TaskIndex.pop(LabelID)
-            Label.LabelNames.remove(LabelID)
-            ExecuteCommand("DELETE FROM labelsfortasks WHERE label=?",(LabelID,))
+            Label.LabelNames.remove(self.Title)
             ExecuteCommand("DELETE FROM labels WHERE label_id=?",(LabelID,))
     
     def DeLinkFromTasks(self):
-        for TaskID in self.Tasks:
-                Task.Instances[TaskID].RemoveLabel()
-
+        while self.Tasks!=[]:
+                Task.Instances[self.Tasks[0]].RemoveLabel(self.ID)
 
     @classmethod
     def ValidRename(cls,LabelTitle: str) -> bool:
@@ -287,9 +283,10 @@ class Label:
         
         #Change the Database
         ExecuteCommand("UPDATE labels SET label_title=? WHERE label_id=?",(NewName,self.ID))
-        ExecuteCommand("UPDATE labelsfortasks SET label=? WHERE label=?",(NewName,self.Title))
-        Label.LabelInstances[NewName]=Label.LabelInstances.pop(self.Title)
-        Label.TaskIndex[NewName]=Label.LabelInstances.pop(self.Title)
+        ExecuteCommand("UPDATE labelsfortasks SET label=? WHERE label=?",(NewName,self.ID))
+        #Update the python stuff
+        Label.LabelNames.remove(self.Title)
+        Label.LabelNames.append(NewName)
         #Update the object in python
         self.Title=NewName
 
@@ -406,7 +403,7 @@ class Task:
 
     def __init__(self, ParentSection: Section, TaskTitle: str, TaskDesc: str=None, PriorityLevel: int=Priority.UpperBound, 
                 DueDate: datetime.datetime=None,Labels: list=None, LoadedFromDB: bool=False,
-                CompletionState: int=0, CompletionDate: datetime.datetime=None
+                CompletionState: int=0, CompletionDate: datetime.datetime=None, ID: int=-1
                 ): #Initializes the class
 
         #Sets the Title and Description for the task
@@ -430,6 +427,7 @@ class Task:
         self.Color=Priority.ColorOfLevel(PriorityLevel)     #And assign the color as well
         
         #ID of Task
+        self.ID=ID
         if LoadedFromDB==False: self.ID=ExecuteCommand(f"""
         INSERT INTO tasks(
         task_title,
@@ -463,24 +461,21 @@ class Task:
 
         #Makes the List of labels assigned to the task
         if LoadedFromDB==False:
-            if Labels!=None:
-                self.Labels=[]
-                #Note that Label is a string, and Labels is a list of Strings
-                for labelname in Labels:
-                    self.AddLabel(Label.LabelInstances[labelname])
-            else:
-                self.Labels=[]
+            
+            self.Labels=[]  # list <int>
+            #Note that Label is an int, and Labels is a list of ints
+            for labelId in Labels:
+                self.AddLabel(labelId)
+        
         else:
             #For Loading Labels Directly from the Database, we have to ensure that the label object exists first
-            if Labels!=None:
-                self.Labels=[]
-                for labelname in Labels:
-                    self.Labels.append(Label.LabelInstances[labelname])
-            else:
-                self.Labels=[]
+            self.Labels=[]
+            for labelId in Labels:
+                self.Labels.append(labelId)
+            
 
 
-    def ToggleLabel(self,Label: str):
+    def ToggleLabel(self,Label: int):
 
         if Label in self.Labels:
 
@@ -492,13 +487,14 @@ class Task:
             #Add the Label to the task
             self.AddLabel(Label)
 
-    def AddLabel(self,NewLabel: str):
-        
+    def AddLabel(self,NewLabelID: int):
+
+        Label.LabelInstances[NewLabelID].Tasks.append(self.ID)
         #Insert into the Labels for tasks table
-        ExecuteCommand("INSERT INTO labelsfortasks(task,label) VALUES(?,?);",(self.ID,NewLabel.Title))
+        ExecuteCommand("INSERT INTO labelsfortasks(task,label) VALUES(?,?);",(self.ID,NewLabelID))
         #Increment the TaskCount
-        ExecuteCommand("UPDATE labels SET label_taskcount=label_taskcount+1 WHERE label_title=?;",(NewLabel.Title,))
-        self.Labels.append(NewLabel)
+        ExecuteCommand("UPDATE labels SET label_taskcount=label_taskcount+1 WHERE label_id=?;",(NewLabelID,))
+        self.Labels.append(NewLabelID)
 
     def RemoveAllLabels(self):
         while self.Labels!=[]:
@@ -512,8 +508,9 @@ class Task:
         #Decrement the TaskCount
         ExecuteCommand("UPDATE labels SET label_taskcount=label_taskcount-1 WHERE label_id=?;",(LabelID,))
 
+        #From the label object's list of Task IDs, remove this task
+        Label.LabelInstances[LabelID].Tasks.remove(self.ID)
         self.Labels.remove(LabelID)
-
 
     def ReConfigureTask(self, TaskTitle: str=None, TaskDesc: str=None, PriorityLevel: int=None, DueDate: datetime.datetime=None, Labels: list=None):
         
@@ -544,7 +541,6 @@ class Task:
             self.DueDate
             ))
 
-
     def CompleteTask(self):
 
         self.Completed=1                                #Completes the task
@@ -552,7 +548,6 @@ class Task:
         self.ParentSection.ActiveTasks.pop(self.ID)
         ExecuteCommand(f"UPDATE tasks SET task_completed={1}, task_completed_date={self.CompletedDate} WHERE task_id={self.ID}")
         ExecuteCommand(f"UPDATE sections SET section_activetaskcount=section_activetaskcount-1 WHERE section_id={self.ParentSection.ID}")
-
 
     def DeleteTask(self):
         
@@ -602,14 +597,15 @@ class TextTask:
 
     Instances=dict()
     
-    def __init__(self,ParentSection: Section , TaskText: str,) -> None:
+    def __init__(self,ParentSection: Section , TaskText: str,LoadedFromDB: bool=False,ID: int=-1) -> None:
         
         
         self.TaskText=TaskText
         self.ParentSection=ParentSection
         self.ParentProject=ParentSection.ParentProject
 
-        self.ID=ExecuteCommand(f"""
+        self.ID=ID
+        if LoadedFromDB: self.ID=ExecuteCommand(f"""
         INSERT INTO texttask(texttask_text,texttask_sectionid,texttask_projectid)
         VALUES (?,?,?) RETURNING texttask_id;
         """,(self.TaskText,self.ParentSection.ID))[0][0]
