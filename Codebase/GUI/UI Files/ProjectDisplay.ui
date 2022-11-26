@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
+    <width>749</width>
     <height>380</height>
    </rect>
   </property>
@@ -16,199 +16,168 @@
   <property name="styleSheet">
    <string notr="true">background : #2c2825;</string>
   </property>
-  <widget class="QLabel" name="ProjectName">
-   <property name="geometry">
-    <rect>
-     <x>156</x>
-     <y>0</y>
-     <width>385</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Times New Roman</family>
-     <pointsize>36</pointsize>
-    </font>
-   </property>
-   <property name="cursor">
-    <cursorShape>UpArrowCursor</cursorShape>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: #fdcb52;
-size:36px;</string>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:24pt;&quot;&gt;ProjName&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>157</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background:rgb(255, 238, 49);
-color:rgb(255, 15, 79);
-border-radius:20px ;</string>
-   </property>
-   <property name="text">
-    <string>Back to Main</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="ProjectDeleteButton">
-   <property name="geometry">
-    <rect>
-     <x>540</x>
-     <y>0</y>
-     <width>157</width>
-     <height>49</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: rgb(255, 0, 0)</string>
-   </property>
-   <property name="text">
-    <string>Delete Project</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="ProjectEditButton">
-   <property name="geometry">
-    <rect>
-     <x>540</x>
-     <y>60</y>
-     <width>157</width>
-     <height>49</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: rgb(255, 170, 0)</string>
-   </property>
-   <property name="text">
-    <string>Edit Project</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="SectionAddButton">
-   <property name="geometry">
-    <rect>
-     <x>540</x>
-     <y>120</y>
-     <width>157</width>
-     <height>49</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: rgb(0, 255, 0)
-</string>
-   </property>
-   <property name="text">
-    <string>Add Section</string>
-   </property>
-  </widget>
-  <widget class="QStackedWidget" name="stackedWidget">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
      <x>12</x>
-     <y>72</y>
-     <width>517</width>
-     <height>301</height>
+     <y>-84</y>
+     <width>709</width>
+     <height>541</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true">background: rgb(255, 170, 255)</string>
-   </property>
-   <widget class="QWidget" name="page">
-    <widget class="QScrollArea" name="scrollArea">
-     <property name="geometry">
-      <rect>
-       <x>12</x>
-       <y>60</y>
-       <width>493</width>
-       <height>229</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::WheelFocus</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background : rgb(85, 170, 255)</string>
-     </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOn</enum>
-     </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAsNeeded</enum>
-     </property>
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>478</width>
-        <height>227</height>
-       </rect>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QPushButton" name="pushButton">
+      <property name="styleSheet">
+       <string notr="true">background:rgb(255, 238, 49);
+color:rgb(255, 15, 79);
+border-radius:20px ;</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout"/>
+      <property name="text">
+       <string>Back to Main</string>
+      </property>
      </widget>
-    </widget>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>12</x>
-       <y>12</y>
-       <width>301</width>
-       <height>37</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:24pt;&quot;&gt;Section Name&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="TaskAddButton">
-     <property name="geometry">
-      <rect>
-       <x>324</x>
-       <y>12</y>
-       <width>157</width>
-       <height>49</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background: rgb(170, 255, 255)</string>
-     </property>
-     <property name="text">
-      <string>Add Task</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="page_2"/>
-  </widget>
-  <widget class="QPushButton" name="BackButton">
-   <property name="geometry">
-    <rect>
-     <x>540</x>
-     <y>324</y>
-     <width>157</width>
-     <height>49</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: rgb(255, 0, 255)
+    </item>
+    <item row="0" column="1">
+     <widget class="QLabel" name="ProjectName">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>36</pointsize>
+       </font>
+      </property>
+      <property name="cursor">
+       <cursorShape>UpArrowCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: #fdcb52;
+size:36px;</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:24pt;&quot;&gt;ProjName&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QPushButton" name="ProjectDeleteButton">
+      <property name="styleSheet">
+       <string notr="true">background: rgb(255, 0, 0)</string>
+      </property>
+      <property name="text">
+       <string>Delete Project</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" rowspan="3" colspan="2">
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="styleSheet">
+       <string notr="true">background: rgb(255, 170, 255)</string>
+      </property>
+      <widget class="QWidget" name="page">
+       <widget class="QScrollArea" name="scrollArea">
+        <property name="geometry">
+         <rect>
+          <x>12</x>
+          <y>72</y>
+          <width>325</width>
+          <height>157</height>
+         </rect>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::WheelFocus</enum>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background : rgb(85, 170, 255)</string>
+        </property>
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOn</enum>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAsNeeded</enum>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>310</width>
+           <height>155</height>
+          </rect>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QLabel" name="label">
+        <property name="geometry">
+         <rect>
+          <x>12</x>
+          <y>12</y>
+          <width>133</width>
+          <height>37</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Section Name&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="TaskAddButton">
+        <property name="geometry">
+         <rect>
+          <x>144</x>
+          <y>12</y>
+          <width>157</width>
+          <height>49</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background: rgb(170, 255, 255)</string>
+        </property>
+        <property name="text">
+         <string>Add Task</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="page_2"/>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QPushButton" name="ProjectEditButton">
+      <property name="styleSheet">
+       <string notr="true">background: rgb(255, 170, 0)</string>
+      </property>
+      <property name="text">
+       <string>Edit Project</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QPushButton" name="SectionAddButton">
+      <property name="styleSheet">
+       <string notr="true">background: rgb(0, 255, 0)
 </string>
-   </property>
-   <property name="text">
-    <string>Back</string>
-   </property>
+      </property>
+      <property name="text">
+       <string>Add Section</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2">
+     <widget class="QPushButton" name="BackButton">
+      <property name="styleSheet">
+       <string notr="true">background: rgb(255, 0, 255)
+</string>
+      </property>
+      <property name="text">
+       <string>Back</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>
