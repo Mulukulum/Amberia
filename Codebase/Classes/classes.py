@@ -488,11 +488,11 @@ class Task:
             ExecuteCommand(f"UPDATE tasks SET task_priority=? WHERE task_id=?",(self.PriorityLevel,self.ID))
 
     def Notify(self, Title, Message):
-            notification.notify(
-                title=str(Title),
-                message=str(Message),
-                timeout=10
-                )
+        notification.notify(
+            title=str(Title),
+            message=str(Message),
+            timeout=10
+            )
 
             
     def __repr__(self) -> str:                         
@@ -506,12 +506,20 @@ class Task:
 class text_task:
     def __init__(self, TaskTitle, priority=None, DueDate=None):
         self.TaskTitle=TaskTitle
+        self.DueDate=DueDate
         if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
             self.priority=Priority(priority)            #If so, then give the task its priority
         else:
             self.priority=Priority(10)                  #If not, then set it to a default value of 10
             Log(f"Task {self.TaskTitle} given no priority. Default Value Assigned")
-        self.DueDate=DueDate
+        
+    
+    def Notify(self, Title, Message):
+        notification.notify(
+            title=str(Title),
+            message=str(Message),
+            timeout=10
+            )
 
 class task_builer:
 
