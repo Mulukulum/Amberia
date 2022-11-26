@@ -41,9 +41,9 @@ project_color INTEGER NOT NULL
 project_sectioncount INTEGER NOT NULL
 
 labels 
-There is no ID here because having Labels with the same titles is a bad idea
 Attributes:-
-label_title TEXT PRIMARY KEY
+label_id INTEGER PRIMARY KEY
+label_title TEXT UNIQUE
 label_color INTEGER NOT NULL
 label_taskcount INTEGER NOT NULL                          
 
@@ -59,12 +59,21 @@ task_completed INTEGER NOT NULL
 task_duedate DATE
 task_completed_date DATE
 
+texttasks
+Attributes:-
+texttask_id INTEGER PRIMARY KEY
+texttask_text TEXT NOT NULL
+texttask_sectionid INTEGER NOT NULL
+texttask_projectid INTEGER NOT NULL
+
 sections
 Attributes:-
 section_id INTEGER PRIMARY KEY
 section_parentprojectid INTEGER NOT NULL
 section_title TEXT NOT NULL
 section_taskcount INTEGER NOT NULL
+section_activetaskcount INTEGER NOT NULL 
+section_texttaskcount INTEGER NOT NULL
 
 prcolors
 Attributes:-
@@ -74,7 +83,7 @@ clrvalue INTEGER NOT NULL
 labelsfortasks
 Attributes:-
 task INTEGER NOT NULL
-label TEXT NOT NULL
+label INTEGER NOT NULL
 
 REMEMBER TO ALSO CHANGE THE CORRESPONDING VALUES IN [INITIALIZE.PY](./Initialize.py) BOTH IN THE DICTIONARY AND IN THE TUPLE
 
