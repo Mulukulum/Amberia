@@ -29,7 +29,7 @@ class Ui_Form(object):
         self.TaskName.setLayoutDirection(Qt.LeftToRight)
         self.TaskName.setStyleSheet(u"color : rgb(236, 236, 236);")
         self.TaskName.setScaledContents(False)
-        self.TaskName.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.TaskName.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
 
         self.gridLayout.addWidget(self.TaskName, 0, 0, 1, 3)
 
@@ -98,6 +98,7 @@ class Ui_Form(object):
         self.retranslateUi(Form)
 
         QMetaObject.connectSlotsByName(Form)
+        
     # setupUi
 
     def retranslateUi(self, Form):
