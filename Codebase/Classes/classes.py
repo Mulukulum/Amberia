@@ -8,6 +8,9 @@ from Codebase.Functions.Database import ExecuteCommand,ExecuteScript
 #Importing The Required Colors for Labels
 from Codebase.Functions.Colors import GetRandomColor
 
+#Importing notification fnctions
+from plyer import notification
+
 import datetime
 
 class Project:
@@ -483,6 +486,15 @@ class Task:
             self.PriorityLevel=Priority(priority)           #If so, then give the task its new priority
             self.Color=Priority.ColorOfLevel(priority)      #Give the task its new color
             ExecuteCommand(f"UPDATE tasks SET task_priority=? WHERE task_id=?",(self.PriorityLevel,self.ID))
+
+    @classmethod
+    def Notify(cls, Title: str, Message: str):
+        notification.notify(
+            title=Title,
+            message=Message,
+            timeout=10
+            )
+
             
     def __repr__(self) -> str:                         
         return f"Task('{self.TaskTitle=}','{self.TaskDesc=}',{self.PriorityLevel=},{self.DueDate=},{self.Labels=})" 
@@ -495,12 +507,20 @@ class Task:
 class text_task:
     def __init__(self, TaskTitle, priority=None, DueDate=None):
         self.TaskTitle=TaskTitle
+        self.DueDate=DueDate
         if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
             self.priority=Priority(priority)            #If so, then give the task its priority
         else:
             self.priority=Priority(10)                  #If not, then set it to a default value of 10
             Log(f"Task {self.TaskTitle} given no priority. Default Value Assigned")
-        self.DueDate=DueDate
+        
+    @classmethod
+    def Notify(cls, Title: str, Message: str):
+        notification.notify(
+            title=Title,
+            message=Message,
+            timeout=10
+            )
 
 class task_builer:
 
@@ -517,7 +537,7 @@ class task_builer:
             TaskTitle=text_task(self.TaskTitle, self.priority)
             return TaskTitle
         if self.TaskType=='normal':
-            TaskTitle=task(self.TaskTitle, self.TaskType, self.TaskDesc, self.priority, self.DueDate, self.Labels)
+            TaskTitle=Task(self.TaskTitle, self.TaskType, self.TaskDesc, self.priority, self.DueDate, self.Labels)
             return TaskTitle
         ErrorLog(f"Unable to get task type due to invalid task type input {self.TaskType}")
         return None
