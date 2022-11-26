@@ -487,10 +487,11 @@ class Task:
             self.Color=Priority.ColorOfLevel(priority)      #Give the task its new color
             ExecuteCommand(f"UPDATE tasks SET task_priority=? WHERE task_id=?",(self.PriorityLevel,self.ID))
 
-    def Notify(self, Title, Message):
+    @classmethod
+    def Notify(cls, Title: str, Message: str):
         notification.notify(
-            title=str(Title),
-            message=str(Message),
+            title=Title,
+            message=Message,
             timeout=10
             )
 
@@ -513,11 +514,11 @@ class text_task:
             self.priority=Priority(10)                  #If not, then set it to a default value of 10
             Log(f"Task {self.TaskTitle} given no priority. Default Value Assigned")
         
-    
-    def Notify(self, Title, Message):
+    @classmethod
+    def Notify(cls, Title: str, Message: str):
         notification.notify(
-            title=str(Title),
-            message=str(Message),
+            title=Title,
+            message=Message,
             timeout=10
             )
 
