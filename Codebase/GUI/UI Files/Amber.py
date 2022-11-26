@@ -20,9 +20,15 @@ class AmberApplicationWindow(QtWidgets.QMainWindow):
         self.ui.vert=QtWidgets.QVBoxLayout(self.ui.WidgetFrame)
         self.ui.vert.setObjectName(u"Layout for Widget")
         
+
     def AddTask(self):
-        layout= self.ui.vert
-        layout.addWidget(TaskDisplayWidget(self.ui.WidgetFrame))
+        frame=QtWidgets.QFrame(self.ui.WidgetFrame)
+        framelayout=QtWidgets.QVBoxLayout(frame)
+        framelayout.addWidget(TaskDisplayWidget())
+
+        layout= self.ui.vert    
+
+        layout.addWidget(frame)
 
         
 
@@ -31,10 +37,10 @@ class AmberApplicationWindow(QtWidgets.QMainWindow):
 
 class TaskDisplayWidget(QtWidgets.QWidget):
 
-    def __init__(self,Frame) -> None:
+    def __init__(self) -> None:
         super().__init__()
         ui=TaskDispUI()
-        ui.setupUi(Frame)
+        ui.setupUi(self)
         
 
 app=QtWidgets.QApplication(sys.argv)
