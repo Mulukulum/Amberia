@@ -35,20 +35,20 @@ class TaskTodayUI(object):
         self.horizontalFrame.setObjectName(u"horizontalFrame")
         self.gridLayout = QGridLayout(self.horizontalFrame)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.pushButton_3 = QPushButton(self.horizontalFrame)
-        self.pushButton_3.setObjectName(u"pushButton_3")
+        self.SortNameButton = QPushButton(self.horizontalFrame)
+        self.SortNameButton.setObjectName(u"pushButton_3")
 
-        self.gridLayout.addWidget(self.pushButton_3, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.SortNameButton, 0, 0, 1, 1)
 
-        self.pushButton_2 = QPushButton(self.horizontalFrame)
-        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.SortPriorityButton = QPushButton(self.horizontalFrame)
+        self.SortPriorityButton.setObjectName(u"pushButton_2")
 
-        self.gridLayout.addWidget(self.pushButton_2, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.SortPriorityButton, 0, 1, 1, 1)
 
-        self.pushButton = QPushButton(self.horizontalFrame)
-        self.pushButton.setObjectName(u"pushButton")
+        self.SortProjectButton = QPushButton(self.horizontalFrame)
+        self.SortProjectButton.setObjectName(u"pushButton")
 
-        self.gridLayout.addWidget(self.pushButton, 0, 2, 1, 1)
+        self.gridLayout.addWidget(self.SortProjectButton, 0, 2, 1, 1)
 
 
         self.verticalLayout_2.addWidget(self.horizontalFrame)
@@ -57,12 +57,14 @@ class TaskTodayUI(object):
         self.scrollArea.setObjectName(u"scrollArea")
         self.scrollArea.setStyleSheet(u"")
         self.scrollArea.setWidgetResizable(True)
-        self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 752, 465))
-        self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        
+        self.ScrollAreaForTaskWidgets = QWidget()
+        self.ScrollAreaForTaskWidgets.setObjectName(u"ScrollAreaForTaskWidgets")
+        self.ScrollAreaForTaskWidgets.setGeometry(QRect(0, 0, 752, 465))
+        self.VLayoutForTaskWidgets = QVBoxLayout(self.ScrollAreaForTaskWidgets)
+        self.VLayoutForTaskWidgets.setObjectName(u"VLayoutForTaskWidgets")
+        
+        self.scrollArea.setWidget(self.ScrollAreaForTaskWidgets)
 
         self.verticalLayout_2.addWidget(self.scrollArea)
 
@@ -77,8 +79,8 @@ class TaskTodayUI(object):
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
-        self.pushButton_3.setText(QCoreApplication.translate("Form", u"Sort by Name", None))
-        self.pushButton_2.setText(QCoreApplication.translate("Form", u"Sort by Priority", None))
-        self.pushButton.setText(QCoreApplication.translate("Form", u"Sort by Label", None))
+        self.SortNameButton.setText(QCoreApplication.translate("Form", u"Sort by Name", None))
+        self.SortPriorityButton.setText(QCoreApplication.translate("Form", u"Sort by Priority", None))
+        self.SortProjectButton.setText(QCoreApplication.translate("Form", u"Sort by Project", None))
     # retranslateUi
 

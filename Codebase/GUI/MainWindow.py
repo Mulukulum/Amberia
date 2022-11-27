@@ -7,22 +7,11 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 
 from UI_Classes.AmberMainWin import AmberWindowUI
-from UI_Classes.TasksTodayWindow import TaskTodayUI
-from UI_Classes.TaskWidget import TaskWidget
+from UI_Classes.TaskWidget import TaskWidgetUI
+from Codebase.GUI.Widgets import (
+    TodayTasksWidget,TaskWidget
+    )
 
-
-class TodayTasksWidget(QtWidgets.QWidget):
-
-    def __init__(self,frame) -> None:
-        super().__init__(frame)
-        self.ui=TaskTodayUI()
-        self.ui.setupUi(self)
-        #Sets the name of the widget
-        # self.setObjectName(u"TaskTodayWidget")
-    
-    def AddTaskToWidget(self,TaskObject):
-        
-        ...
         
 
 class AmberMainWindow(QtWidgets.QMainWindow):
