@@ -29,15 +29,22 @@ class TaskWidget(QtWidgets.QWidget):
     #Lambda Function because python somehow doesn't have a method for this
     OrdinalTimeFunction=lambda n : str(n) + {1:'st',2:'nd',3:'rd'}.get(abs(n)%10,'th')
 
-    def __init__(self,frame) -> None:
+    def __init__(self,frame,Task=None) -> None:
         super().__init__(frame)
         self.ui=TaskWidgetUI()
         self.ui.setupUi(frame)
+        
+        if Task==None:
+            self.TaskID=-1
+        else:
+            self.SetInformation(Task)
     
+    #Set Information is basically reconfiguring the label
     def SetInformation(self,TaskObject: cl.Task):
         
         #Sets the name of the object for easy identification
         self.setObjectName(f"TaskWidget{TaskObject.ID}")
+        self.TaskID=TaskObject.ID
         
         #Sets the Display to show priority Level
         self.ui.PriorityLevelDisplay.display(TaskObject.PriorityLevel)
