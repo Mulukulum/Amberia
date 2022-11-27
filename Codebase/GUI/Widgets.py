@@ -88,6 +88,7 @@ class TaskWidget(QtWidgets.QWidget):
         #Set the Title text
         self.ui.TaskTitle_label.setText(Text)
 
+        #Adds the Label Widget
         for Label in TaskObject.Labels:
             ...
 
