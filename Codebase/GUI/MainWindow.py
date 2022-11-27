@@ -11,7 +11,6 @@ from UI_Classes.TasksTodayWindow import TaskTodayUI
 from UI_Classes.TaskWidget import TaskWidget
 
 
-
 class TodayTasksWidget(QtWidgets.QWidget):
 
     def __init__(self,frame) -> None:
@@ -21,7 +20,8 @@ class TodayTasksWidget(QtWidgets.QWidget):
         #Sets the name of the widget
         # self.setObjectName(u"TaskTodayWidget")
     
-    def AddTaskToWidget(self):
+    def AddTaskToWidget(self,TaskObject):
+        
         ...
         
 

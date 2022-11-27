@@ -67,10 +67,10 @@ class TaskWidget(object):
 
         self.gridLayout.addWidget(self.TaskDescription, 1, 0, 1, 7)
 
-        self.AddLabelsButton = QPushButton(Form)
-        self.AddLabelsButton.setObjectName(u"AddLabelsButton")
+        self.EditLabelsButton = QPushButton(Form)
+        self.EditLabelsButton.setObjectName(u"EditLabelsButton")
 
-        self.gridLayout.addWidget(self.AddLabelsButton, 2, 0, 1, 2)
+        self.gridLayout.addWidget(self.EditLabelsButton, 2, 0, 1, 2)
 
         self.EditTaskButton = QPushButton(Form)
         self.EditTaskButton.setObjectName(u"EditTaskButton")
@@ -130,7 +130,7 @@ class TaskWidget(object):
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.TaskDescription.setPlaceholderText(QCoreApplication.translate("Form", u"Enter Description Here", None))
-        self.AddLabelsButton.setText(QCoreApplication.translate("Form", u"Add Labels", None))
+        self.EditLabelsButton.setText(QCoreApplication.translate("Form", u"Edit Labels", None))
         self.EditTaskButton.setText(QCoreApplication.translate("Form", u"Edit Task", None))
         self.DeleteTaskButton.setText(QCoreApplication.translate("Form", u"Delete Task", None))
         self.Labels_Title.setText(QCoreApplication.translate("Form", u"Labels: ", None))
