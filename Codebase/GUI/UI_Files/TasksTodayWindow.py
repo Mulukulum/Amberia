@@ -15,9 +15,13 @@ from PyQt5.QtWidgets import *
 
 class TaskTodayUI(object):
     def setupUi(self, Form):
+
+        '''
         if not Form.objectName():
             Form.setObjectName(u"Form")
         Form.resize(792, 536)
+        '''
+        
         Form.setMinimumSize(QSize(550, 500))
         self.verticalLayout = QVBoxLayout(Form)
         self.verticalLayout.setObjectName(u"verticalLayout")

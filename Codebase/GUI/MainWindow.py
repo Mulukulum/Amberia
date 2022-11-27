@@ -1,14 +1,23 @@
 #Required Imports
 import datetime
 import sys
-import PyQt5.QtWidgets
-import PyQt5.QtCore
-import PyQt5.QtGui
+import PyQt5
+from PyQt5 import QtWidgets
+from PyQt5 import QtCore
+from PyQt5 import QtGui
 
 from UI_Files.AmberMainWin import AmberWindow
-from UI_Files.TasksTodayWindow import 
+from UI_Files.TasksTodayWindow import TaskTodayUI
+from UI_Files.TaskWidget import Task
 
-class AmberMainWindow(PyQt5.QtWidgets.QMainWindow):
+
+
+class TodayTasksWidget(QtWidgets.QWidget):
+
+    def __init__(self,frame) -> None:
+        super().__init__()
+
+class AmberMainWindow(QtWidgets.QMainWindow):
 
     def __init__(self) -> None:
         
@@ -30,7 +39,10 @@ class AmberMainWindow(PyQt5.QtWidgets.QMainWindow):
         date=datetime.date.today().strftime("%A %B %d %Y")
         text=f"Today : {date}" 
         self.ui.CurrentWidgetTitleLabel.setText(text)
-        self.ui.CurrentWidgetTitleLabel.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
+    
+    
+    
     
     
     
@@ -38,6 +50,6 @@ class AmberMainWindow(PyQt5.QtWidgets.QMainWindow):
 
 
 if __name__=='__main__':
-    AmberApp=PyQt5.QtWidgets.QApplication(sys.argv)
+    AmberApp=QtWidgets.QApplication(sys.argv)
     win=AmberMainWindow()
     sys.exit(AmberApp.exec_())
