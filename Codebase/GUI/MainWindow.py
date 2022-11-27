@@ -6,6 +6,7 @@ import PyQt5.QtCore
 import PyQt5.QtGui
 
 from UI_Files.AmberMainWin import AmberWindow
+from UI_Files.TasksTodayWindow import 
 
 class AmberMainWindow(PyQt5.QtWidgets.QMainWindow):
 
@@ -32,6 +33,8 @@ class AmberMainWindow(PyQt5.QtWidgets.QMainWindow):
         self.ui.CurrentWidgetTitleLabel.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
     
     
+    
+
 
 
 if __name__=='__main__':
