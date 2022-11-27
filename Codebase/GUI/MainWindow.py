@@ -13,9 +13,12 @@ from UI_Files.TaskWidget import TaskWidget
 
 
 class TodayTasksWidget(QtWidgets.QWidget):
-
     def __init__(self,frame) -> None:
-        super().__init__()
+        super().__init__(frame)
+        self.ui=TaskTodayUI()
+        self.ui.setupUi(self)
+        #Sets the name of the widget
+        # self.setObjectName(u"TaskTodayWidget")
 
 class AmberMainWindow(QtWidgets.QMainWindow):
 
@@ -28,8 +31,8 @@ class AmberMainWindow(QtWidgets.QMainWindow):
 
         #Mainwindow Ui Setup
 
-        #Sets the current Date
-        self.SetTasksTodayWidgetTitle()
+        #Sets the default widget
+        self.ShowTasksTodayWidget()
 
         #Show Window
         self.show()
@@ -40,6 +43,34 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         text=f"Today : {date}" 
         self.ui.CurrentWidgetTitleLabel.setText(text)
         self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
+
+    def ShowTasksTodayWidget(self):
+
+        #Sets the Title
+        self.SetTasksTodayWidgetTitle()
+
+        #Remove Everything on the WidgetFrame
+
+        #Widget Frame is clear now
+
+        #Show the tasks widget
+
+        FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
+        framelayout=QtWidgets.QGridLayout(FrameForMainWidget)
+        framelayout.addWidget(TodayTasksWidget(FrameForMainWidget))
+        layout=self.ui.VLayoutForMainWidget
+    
+        layout.addWidget(FrameForMainWidget)
+        FrameForMainWidget.setStyleSheet("background-color: #36b6b0 ;")
+        
+
+        
+        
+
+
+
+
+
     
 
     

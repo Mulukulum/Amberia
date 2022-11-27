@@ -27,21 +27,21 @@ class AmberWindow(object):
         self.gridLayout = QGridLayout()
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.WidgetFrame = QFrame(self.centralwidget)
-        self.WidgetFrame.setObjectName(u"WidgetFrame")
-        self.WidgetFrame.setEnabled(True)
-        self.WidgetFrame.setMinimumSize(QSize(0, 0))
+        self.MainWidgetFrame = QFrame(self.centralwidget)
+        self.MainWidgetFrame.setObjectName(u"WidgetFrame")
+        self.MainWidgetFrame.setEnabled(True)
+        self.MainWidgetFrame.setMinimumSize(QSize(0, 0))
 
         #Vertical layout to add the frame to
-        self.verticalLayout = QVBoxLayout(self.WidgetFrame)
-        self.verticalLayout.setObjectName(u"LayoutForMainWidget")
+        self.VLayoutForMainWidget = QVBoxLayout(self.MainWidgetFrame)
+        self.VLayoutForMainWidget.setObjectName(u"VLayoutForMainWidget")
 
-        self.gridLayout.addWidget(self.WidgetFrame, 3, 2, 2, 3)
+        self.gridLayout.addWidget(self.MainWidgetFrame, 3, 2, 2, 3)
 
-        self.date_label = QLabel(self.centralwidget)
-        self.date_label.setObjectName(u"date_label")
+        self.CurrentWidgetTitleLabel = QLabel(self.centralwidget)
+        self.CurrentWidgetTitleLabel.setObjectName(u"CurrentWidgetTitleLabel")
 
-        self.gridLayout.addWidget(self.date_label, 2, 2, 1, 3)
+        self.gridLayout.addWidget(self.CurrentWidgetTitleLabel, 2, 2, 1, 3)
 
         self.ProjectScrollArea = QScrollArea(self.centralwidget)
         self.ProjectScrollArea.setObjectName(u"ProjectScrollArea")
@@ -184,7 +184,7 @@ class AmberWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.date_label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#ffffff;\">Today's Date: Curdate</span></p></body></html>", None))
+        self.CurrentWidgetTitleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#ffffff;\">Today's Date: Curdate</span></p></body></html>", None))
         self.pushButton_7.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
         self.pushButton_18.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
         self.tasks_today_button.setText(QCoreApplication.translate("MainWindow", u"Today's Task(s)", None))
