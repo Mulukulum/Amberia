@@ -8,7 +8,7 @@ from PyQt5 import QtGui
 
 from UI_Files.AmberMainWin import AmberWindow
 from UI_Files.TasksTodayWindow import TaskTodayUI
-from UI_Files.TaskWidget import Task
+from UI_Files.TaskWidget import TaskWidget
 
 
 
@@ -41,7 +41,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.CurrentWidgetTitleLabel.setText(text)
         self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
     
-    
+
     
     
     

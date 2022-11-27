@@ -13,7 +13,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 
-class Task(object):
+class TaskWidget(object):
     def setupUi(self, Form):
         '''
         if not Form.objectName():
@@ -21,7 +21,7 @@ class Task(object):
         Form.resize(874, 289)
         Form.setMinimumSize(QSize(550, 200))
         '''
-        
+
         self.gridLayout = QGridLayout(Form)
         self.gridLayout.setObjectName(u"gridLayout")
         self.pushButton = QPushButton(Form)

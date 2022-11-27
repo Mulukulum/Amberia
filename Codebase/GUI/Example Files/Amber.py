@@ -28,7 +28,7 @@ class AmberApplicationWindow(QtWidgets.QMainWindow):
         frame=QtWidgets.QFrame(self.ui.WidgetFrame)
         frame.setObjectName(u"uniqueid")
         framelayout=QtWidgets.QVBoxLayout(frame)
-        framelayout.addWidget(TaskDisplayWidget())
+        framelayout.addWidget(TaskDisplayWidget(frame))
         frame.setStyleSheet("background-color: #36b6b0 ;")
 
         layout= self.ui.vert    
@@ -55,8 +55,8 @@ class AmberApplicationWindow(QtWidgets.QMainWindow):
 
 class TaskDisplayWidget(QtWidgets.QWidget):
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self,frame) -> None:
+        super().__init__(frame)
         ui=TaskDispUI()
         ui.setupUi(self)
         

@@ -31,8 +31,10 @@ class AmberWindow(object):
         self.WidgetFrame.setObjectName(u"WidgetFrame")
         self.WidgetFrame.setEnabled(True)
         self.WidgetFrame.setMinimumSize(QSize(0, 0))
+
+        #Vertical layout to add the frame to
         self.verticalLayout = QVBoxLayout(self.WidgetFrame)
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setObjectName(u"LayoutForMainWidget")
 
         self.gridLayout.addWidget(self.WidgetFrame, 3, 2, 2, 3)
 
