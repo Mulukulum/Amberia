@@ -13,12 +13,17 @@ from UI_Classes.TaskWidget import TaskWidget
 
 
 class TodayTasksWidget(QtWidgets.QWidget):
+
     def __init__(self,frame) -> None:
         super().__init__(frame)
         self.ui=TaskTodayUI()
         self.ui.setupUi(self)
         #Sets the name of the widget
         # self.setObjectName(u"TaskTodayWidget")
+    
+    def AddTaskToWidget(self):
+        ...
+        
 
 class AmberMainWindow(QtWidgets.QMainWindow):
 
