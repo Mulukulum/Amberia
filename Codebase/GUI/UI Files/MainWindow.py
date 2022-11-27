@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'MainWindowoorVQG.ui'
+## Form generated from reading UI file 'MainWindowzFqUAc.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -17,8 +17,8 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1366,768)
-        MainWindow.setMinimumSize(QSize(800,625))
+        MainWindow.resize(800, 626)
+        MainWindow.setMinimumSize(QSize(800, 625))
         MainWindow.setStyleSheet(u"background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 178, 102, 255), stop:0.55 rgba(235, 148, 61, 255), stop:0.98 rgba(0, 0, 0, 255), stop:1 rgba(0, 0, 0, 0))")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
@@ -30,7 +30,7 @@ class Ui_MainWindow(object):
         self.WidgetFrame = QFrame(self.centralwidget)
         self.WidgetFrame.setObjectName(u"WidgetFrame")
         self.WidgetFrame.setEnabled(True)
-        self.WidgetFrame.setMinimumSize(QSize(300, 0))
+        self.WidgetFrame.setMinimumSize(QSize(0, 0))
 
         self.gridLayout.addWidget(self.WidgetFrame, 3, 2, 2, 3)
 
@@ -38,29 +38,6 @@ class Ui_MainWindow(object):
         self.date_label.setObjectName(u"date_label")
 
         self.gridLayout.addWidget(self.date_label, 2, 2, 1, 3)
-
-        self.title_label = QLabel(self.centralwidget)
-        self.title_label.setObjectName(u"title_label")
-
-        self.gridLayout.addWidget(self.title_label, 0, 3, 1, 2)
-
-        self.left_button = QPushButton(self.centralwidget)
-        self.left_button.setObjectName(u"left_button")
-        self.left_button.setStyleSheet(u"background: rgb(255, 85, 0)")
-
-        self.gridLayout.addWidget(self.left_button, 0, 1, 1, 1)
-
-        self.settings_button = QToolButton(self.centralwidget)
-        self.settings_button.setObjectName(u"settings_button")
-        self.settings_button.setStyleSheet(u"background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255))")
-
-        self.gridLayout.addWidget(self.settings_button, 0, 0, 1, 1)
-
-        self.right_button = QPushButton(self.centralwidget)
-        self.right_button.setObjectName(u"right_button")
-        self.right_button.setStyleSheet(u"background: rgb(255, 85, 0)")
-
-        self.gridLayout.addWidget(self.right_button, 0, 2, 1, 1)
 
         self.ProjectScrollArea = QScrollArea(self.centralwidget)
         self.ProjectScrollArea.setObjectName(u"ProjectScrollArea")
@@ -180,6 +157,17 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.ProjectScrollArea, 4, 0, 1, 2)
 
+        self.settings_button = QToolButton(self.centralwidget)
+        self.settings_button.setObjectName(u"settings_button")
+        self.settings_button.setStyleSheet(u"background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255))")
+
+        self.gridLayout.addWidget(self.settings_button, 0, 0, 2, 1)
+
+        self.title_label = QLabel(self.centralwidget)
+        self.title_label.setObjectName(u"title_label")
+
+        self.gridLayout.addWidget(self.title_label, 0, 1, 1, 4)
+
 
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
 
@@ -193,10 +181,6 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.date_label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#ffffff;\">Today's Date: Curdate</span></p></body></html>", None))
-        self.title_label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; color:#ffffff;\">AMBERIA </span><span style=\" font-size:24pt; color:#ffffff; vertical-align:super;\">\u00a92022</span></p><p align=\"center\"><br/></p></body></html>", None))
-        self.left_button.setText(QCoreApplication.translate("MainWindow", u"<---", None))
-        self.settings_button.setText(QCoreApplication.translate("MainWindow", u"...", None))
-        self.right_button.setText(QCoreApplication.translate("MainWindow", u"--->", None))
         self.pushButton_7.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
         self.pushButton_18.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
         self.tasks_today_button.setText(QCoreApplication.translate("MainWindow", u"Today's Task(s)", None))
@@ -218,5 +202,7 @@ class Ui_MainWindow(object):
         self.pushButton_17.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
         self.projects_label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; color:#ffffff;\">Project(s)</span></p></body></html>", None))
         self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
+        self.settings_button.setText(QCoreApplication.translate("MainWindow", u"...", None))
+        self.title_label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; color:#ffffff;\">AMBERIA </span><span style=\" font-size:24pt; color:#ffffff; vertical-align:super;\">\u00a92022</span></p><p align=\"center\"><br/></p></body></html>", None))
     # retranslateUi
 
