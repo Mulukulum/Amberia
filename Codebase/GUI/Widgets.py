@@ -53,7 +53,7 @@ class TaskWidget(QtWidgets.QWidget):
         Due=TaskObject.DueDate
         Completed=TaskObject.Completed
 
-        #If the task is given a duedate
+        #If the task is not given a duedate
         if Due==None:
 
             #Then Hide the days left part
@@ -61,24 +61,34 @@ class TaskWidget(QtWidgets.QWidget):
             self.ui.DaysLeftLabel.hide()
             Text=Title
         
+        #The Task is not completed
+        elif not Completed:
+            
+            DaysLeft=abs(Due-datetime.datetime.now()).days()
+            Text=f"Due On {Due.strftime(f'%a, {TaskWidget.OrdinalTimeFunction(Due.day)} %b %Y')} "+Title
+            self.ui.DaysLeftDisplay.display(DaysLeft)
+            #Show the labels if they're meant to be shown
+            self.ui.DaysLeftDisplay.show()
+            self.ui.DaysLeftLabel.show()
+            
+        #The Task is complete
         else:
-            if not Completed:
-                Text=f"Due On {Due.strftime(f'%a, {TaskWidget.OrdinalTimeFunction(Due.day)} %b %Y')} "+Title
-                
-            else:
-                Text=f"Task Finished at {TaskObject.CompletedDate.strftime('%c')}"
-
-                #We can hide these labels since there's no need for a days left counter
-                self.ui.DaysLeftDisplay.hide()
-                self.ui.DaysLeftLabel.hide()
+            Text=f"Finished at {TaskObject.CompletedDate.strftime('%c')}"+Title
+            #We can hide these labels since there's no need for a days left counter
+            self.ui.DaysLeftDisplay.hide()
+            self.ui.DaysLeftLabel.hide()
         
         #Set the Title text
         self.ui.TaskTitle_label.setText(Text)
 
-        #Show the labels if they're meant to be shown
-        if 1:
-            self.ui.DaysLeftDisplay.show()
-            self.ui.DaysLeftLabel.show()
+        for Label in TaskObject.Labels:
+            ...
+
+    def AddLabelWidget(self,LabelObject: cl.Label):
+        ...
+
+
+            
 
 
         
