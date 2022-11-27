@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'MainWindowzFqUAc.ui'
+## Form generated from reading UI file 'MainWindowApEVmX.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -13,7 +13,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 
-class Ui_MainWindow(object):
+class AmberWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
@@ -27,17 +27,21 @@ class Ui_MainWindow(object):
         self.gridLayout = QGridLayout()
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.WidgetFrame = QFrame(self.centralwidget)
-        self.WidgetFrame.setObjectName(u"WidgetFrame")
-        self.WidgetFrame.setEnabled(True)
-        self.WidgetFrame.setMinimumSize(QSize(0, 0))
+        self.MainWidgetFrame = QFrame(self.centralwidget)
+        self.MainWidgetFrame.setObjectName(u"WidgetFrame")
+        self.MainWidgetFrame.setEnabled(True)
+        self.MainWidgetFrame.setMinimumSize(QSize(0, 0))
 
-        self.gridLayout.addWidget(self.WidgetFrame, 3, 2, 2, 3)
+        #Vertical layout to add the frame to
+        self.VLayoutForMainWidget = QVBoxLayout(self.MainWidgetFrame)
+        self.VLayoutForMainWidget.setObjectName(u"VLayoutForMainWidget")
 
-        self.date_label = QLabel(self.centralwidget)
-        self.date_label.setObjectName(u"date_label")
+        self.gridLayout.addWidget(self.MainWidgetFrame, 3, 2, 2, 3)
 
-        self.gridLayout.addWidget(self.date_label, 2, 2, 1, 3)
+        self.CurrentWidgetTitleLabel = QLabel(self.centralwidget)
+        self.CurrentWidgetTitleLabel.setObjectName(u"CurrentWidgetTitleLabel")
+
+        self.gridLayout.addWidget(self.CurrentWidgetTitleLabel, 2, 2, 1, 3)
 
         self.ProjectScrollArea = QScrollArea(self.centralwidget)
         self.ProjectScrollArea.setObjectName(u"ProjectScrollArea")
@@ -180,7 +184,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.date_label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#ffffff;\">Today's Date: Curdate</span></p></body></html>", None))
+        self.CurrentWidgetTitleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#ffffff;\">Today's Date: Curdate</span></p></body></html>", None))
         self.pushButton_7.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
         self.pushButton_18.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
         self.tasks_today_button.setText(QCoreApplication.translate("MainWindow", u"Today's Task(s)", None))
@@ -205,4 +209,3 @@ class Ui_MainWindow(object):
         self.settings_button.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.title_label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; color:#ffffff;\">AMBERIA </span><span style=\" font-size:24pt; color:#ffffff; vertical-align:super;\">\u00a92022</span></p><p align=\"center\"><br/></p></body></html>", None))
     # retranslateUi
-

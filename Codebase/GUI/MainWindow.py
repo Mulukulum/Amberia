@@ -6,7 +6,7 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 
-from UI_Classes.AmberMainWin import AmberWindow
+from UI_Classes.AmberMainWin import AmberWindowUI
 from UI_Classes.TasksTodayWindow import TaskTodayUI
 from UI_Classes.TaskWidget import TaskWidget
 
@@ -26,13 +26,15 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         
         #Sets up the mainwindow class
         super(AmberMainWindow,self).__init__()
-        self.ui=AmberWindow()
+        self.ui=AmberWindowUI()
         self.ui.setupUi(self)
 
         #Mainwindow Ui Setup
 
         #Sets the default widget
         self.ShowTasksTodayWidget()
+
+
 
         #Show Window
         self.show()
@@ -61,7 +63,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         layout=self.ui.VLayoutForMainWidget
     
         layout.addWidget(FrameForMainWidget)
-        FrameForMainWidget.setStyleSheet("background-color: #36b6b0 ;")
+        #FrameForMainWidget.setStyleSheet("background-color: #36b6b0 ;")
         
 
         
