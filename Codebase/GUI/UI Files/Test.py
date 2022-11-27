@@ -6,7 +6,7 @@ class Window(QtWidgets.QWidget):
     
     def __init__(self,Tasks:list=[]) -> None:
         super(Window,self).__init__()
-        uic.loadUi(ProjectPath+"//UI Files//rough.ui",self)
+        uic.loadUi(ProjectPath+"//rough.ui",self)
         for task in Tasks:
             self.AddTask(task)
         self.AddButton.clicked.connect(lambda: self.AddTask(str(self.lineEdit.text())))
