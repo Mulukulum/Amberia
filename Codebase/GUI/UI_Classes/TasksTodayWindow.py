@@ -58,13 +58,13 @@ class TaskTodayUI(object):
         self.scrollArea.setStyleSheet(u"")
         self.scrollArea.setWidgetResizable(True)
         
-        self.ScrollAreaForTaskWidgets = QWidget()
-        self.ScrollAreaForTaskWidgets.setObjectName(u"ScrollAreaForTaskWidgets")
-        self.ScrollAreaForTaskWidgets.setGeometry(QRect(0, 0, 752, 465))
-        self.VLayoutForTaskWidgets = QVBoxLayout(self.ScrollAreaForTaskWidgets)
+        self.ScrollAreaContentsForTaskWidgets = QWidget()
+        self.ScrollAreaContentsForTaskWidgets.setObjectName(u"ScrollAreaForTaskWidgets")
+        self.ScrollAreaContentsForTaskWidgets.setGeometry(QRect(0, 0, 752, 465))
+        self.VLayoutForTaskWidgets = QVBoxLayout(self.ScrollAreaContentsForTaskWidgets)
         self.VLayoutForTaskWidgets.setObjectName(u"VLayoutForTaskWidgets")
         
-        self.scrollArea.setWidget(self.ScrollAreaForTaskWidgets)
+        self.scrollArea.setWidget(self.ScrollAreaContentsForTaskWidgets)
 
         self.verticalLayout_2.addWidget(self.scrollArea)
 
