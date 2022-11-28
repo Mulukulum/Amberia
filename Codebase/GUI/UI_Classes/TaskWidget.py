@@ -49,11 +49,11 @@ class TaskWidgetUI(object):
 
         self.gridLayout.addWidget(self.DaysLeftLabel, 0, 3, 1, 1)
 
-        self.textBrowser = QTextBrowser(Form)
-        self.textBrowser.setObjectName(u"textBrowser")
-        self.textBrowser.setReadOnly(False)
+        self.TaskDescription = QTextBrowser(Form)
+        self.TaskDescription.setObjectName(u"TaskDescription")
+        self.TaskDescription.setReadOnly(False)
 
-        self.gridLayout.addWidget(self.textBrowser, 1, 0, 1, 7)
+        self.gridLayout.addWidget(self.TaskDescription, 1, 0, 1, 7)
 
         self.DaysLeftDisplay = QLCDNumber(Form)
         self.DaysLeftDisplay.setObjectName(u"DaysLeftDisplay")
@@ -133,13 +133,13 @@ class TaskWidgetUI(object):
         self.DeleteTaskButton.setText(QCoreApplication.translate("Form", u"Delete Task", None))
         self.CompleteTaskButton.setText(QCoreApplication.translate("Form", u"Complete ", None))
         self.DaysLeftLabel.setText(QCoreApplication.translate("Form", u"Days Left:", None))
-        self.textBrowser.setMarkdown("")
-        self.textBrowser.setHtml(QCoreApplication.translate("Form", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.TaskDescription.setMarkdown("")
+        self.TaskDescription.setHtml(QCoreApplication.translate("Form", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
-        self.textBrowser.setPlaceholderText(QCoreApplication.translate("Form", u"Enter Description Here", None))
+        self.TaskDescription.setPlaceholderText(QCoreApplication.translate("Form", u"Enter Description Here", None))
         self.PriorityLabel.setText(QCoreApplication.translate("Form", u"Priority Level :", None))
         self.TaskTitle_label.setText(QCoreApplication.translate("Form", u"TaskName", None))
         self.Labels_Title.setText(QCoreApplication.translate("Form", u"Labels: ", None))
