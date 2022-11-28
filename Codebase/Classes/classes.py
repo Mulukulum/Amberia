@@ -520,7 +520,9 @@ class Task:
         Label.LabelInstances[LabelID].Tasks.remove(self.ID)
         self.Labels.remove(LabelID)
 
-    def SignalReminder(self):
+    def SignalReminder(self,State: int):
+        #This will send a signal to the QThread that handles timers
+        
         ...
 
     def ReConfigureTask(self, TaskTitle: str=None, TaskDesc: str=None, PriorityLevel: int=None, Reminder: int=None, DueDate: datetime.datetime=None, Labels: list=None):
