@@ -17,12 +17,13 @@ class NotificationThread:
 
     def ShowReminder(self,Date: datetime.datetime):
         #If the date is less than the current time then just return
-        if Date<=datetime.datetime.now():
-            ErrorLog("WARNING: Show Reminder called without Initialisation of ")
+        now=datetime.datetime.now()
+        if now >= Date:
+            ErrorLog(f"WARNING: Show Reminder called on {self.Task.ID} for an event in the past")
             return
+        
+        self.timediff=Date-datetime.datetime.now()
+        
         #Create a daemon thread
         self.CurrentThread=threading.Thread(target=None,args=(),daemon=True)
     
-
-def main():
-    ...

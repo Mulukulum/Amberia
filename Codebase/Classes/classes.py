@@ -11,6 +11,8 @@ from Codebase.Functions.Colors import GetRandomColor
 #Importing notification fnctions
 from plyer import notification
 
+import threading
+
 import datetime
 
 class Project:
@@ -698,3 +700,22 @@ class TaskBuilder:
                 Task(ParentSection=ParentSection,TaskTitle=Title,TaskDesc=Descs,PriorityLevel=PriorityLevel,DueDate=DueDate,Labels=Labels)
     
 
+#This File contains functionality for the threads of the tasks
+class NotificationThread:
+    
+    def __init__(self,Task: Task) -> None:
+        self.Task=Task
+        self.Stop=threading.Event()
+
+
+    def ShowReminder(self,Date: datetime.datetime):
+        #If the date is less than the current time then just return
+        now=datetime.datetime.now()
+        if now >= Date:
+            ErrorLog(f"WARNING: Show Reminder called on {self.Task.ID} for an event in the past")
+            return
+        
+        self.timediff=Date-datetime.datetime.now()
+        
+        #Create a daemon thread
+        self.CurrentThread=threading.Thread(target=None,args=(),daemon=True)
