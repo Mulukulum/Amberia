@@ -418,7 +418,7 @@ class Task:
         self.TaskTitle=TaskTitle
         self.TaskDesc=TaskDesc
         self.ParentSection=ParentSection
-        self.Reminder=ReminderState
+        self.ShowReminder=ReminderState
 
         self.DueDate=DueDate
         self.Completed=CompletionState                                #sets completed to False, sql doesn't have bool so I'm using 0 and 1
@@ -520,7 +520,10 @@ class Task:
         Label.LabelInstances[LabelID].Tasks.remove(self.ID)
         self.Labels.remove(LabelID)
 
-    def ReConfigureTask(self, TaskTitle: str=None, TaskDesc: str=None, PriorityLevel: int=None, DueDate: datetime.datetime=None, Labels: list=None):
+    def SignalReminder(self):
+        ...
+
+    def ReConfigureTask(self, TaskTitle: str=None, TaskDesc: str=None, PriorityLevel: int=None, Reminder: int=None, DueDate: datetime.datetime=None, Labels: list=None):
         
         if TaskTitle!=None:
             self.TaskTitle=TaskTitle                    #Changes the title to a newly provided title, if not provided stays the same
@@ -530,6 +533,9 @@ class Task:
         
         if DueDate!=None:
             self.DueDate=DueDate                        #Changes the due date to a newly provided due date
+
+        if Reminder!=None:
+            self.ShowReminder=Reminder                  #Changes the Reminder State
         
         if Priority.IsValid(PriorityLevel):          #Checks if the incoming argument is a valid priority level
             self.PriorityLevel=PriorityLevel            #If so, then give the task its new priority
