@@ -227,6 +227,7 @@ class Label:
         else:
             self.Title=Title                #Set Title
             self.Tasks=[]
+            self.Widgets=[]                 #Sets the list with Appropriate QWidgets 
             if Color==None:                 #If there is no Color specified 
                 self.Color=GetRandomColor() #Pick a random Color
 
@@ -251,6 +252,10 @@ class Label:
             
             #Decouples the Label from all tasks
             self.DeLinkFromTasks()            
+            for LabelWidget in self.Widgets:
+                #Deletes all instances of this widget
+                LabelWidget.deleteLater()
+            self.Widgets.clear()
             #Remove any references to the label
             Label.LabelInstances.pop(LabelID)
             Label.LabelNames.remove(self.Title)
