@@ -9,7 +9,7 @@ from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.AmberMainWin import AmberWindowUI
 from Codebase.GUI.UI_Classes.TasksTodayWindow import TaskTodayUI
 from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
-
+from Codebase.ErrorLogs.logging import ErrorLog,Log
 
 class TodayTasksWidget(QtWidgets.QWidget):
 
@@ -35,6 +35,7 @@ class TaskWidget(QtWidgets.QWidget):
         self.ui.setupUi(frame)
         
         if Task==None:
+            ErrorLog("WARNING : TaskWidget Constructor called without providing a task")
             self.TaskID=-1
         else:
             self.SetInformation(Task)

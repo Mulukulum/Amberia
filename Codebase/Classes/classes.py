@@ -411,14 +411,14 @@ class Task:
 
     def __init__(self, ParentSection: Section, TaskTitle: str, TaskDesc: str=None, PriorityLevel: int=Priority.UpperBound, 
                 DueDate: datetime.datetime=None,Labels: list=None, LoadedFromDB: bool=False,
-                CompletionState: int=0, CompletionDate: datetime.datetime=None, ID: int=-1
+                CompletionState: int=0, ReminderState: int=0, CompletionDate: datetime.datetime=None, ID: int=-1
                 ): #Initializes the class
 
         #Sets the Title and Description for the task
         self.TaskTitle=TaskTitle
         self.TaskDesc=TaskDesc
         self.ParentSection=ParentSection
-
+        self.Reminder=ReminderState
 
         self.DueDate=DueDate
         self.Completed=CompletionState                                #sets completed to False, sql doesn't have bool so I'm using 0 and 1
