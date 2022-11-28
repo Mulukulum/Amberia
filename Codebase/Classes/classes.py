@@ -587,6 +587,20 @@ class Task:
 
         del self
 
+    def SetReminderState(self,State:int):
+        if State==self.ShowReminder: 
+            return
+        else:
+            self.ShowReminder=State
+            if State:
+                #Start the Thread
+                ...
+            else: 
+                ...
+
+
+
+
     def ChangeDueDate(self, NewDueDate: datetime.datetime):
         self.DueDate=NewDueDate                         #Accepts a new due date
         ExecuteCommand(f"UPDATE tasks SET task_duedate={self.DueDate} WHERE task_id={self.ID}")
