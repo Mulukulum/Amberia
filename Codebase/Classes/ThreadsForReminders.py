@@ -8,20 +8,21 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from Codebase.ErrorLogs.logging import ErrorLog
 
-class EmitNotificationThread(QtCore.QObject):
+class NotificationThread:
     
+    def __init__(self,Task: cl.Task) -> None:
+        self.Task=Task
+        self.Stop=threading.Event()
 
 
-    def __init__(self) -> None:
-        pass
-
-    @QtCore.pyqtSlot(datetime.datetime)
-    def StartThread(self,Date: datetime.datetime):
+    def ShowReminder(self,Date: datetime.datetime):
         #If the date is less than the current time then just return
         if Date<=datetime.datetime.now():
-            ErrorLog
+            ErrorLog("WARNING: Show Reminder called without Initialisation of ")
             return
-        ...
+        #Create a daemon thread
+        self.CurrentThread=threading.Thread(target=None,args=(),daemon=True)
+    
 
 def main():
     ...
