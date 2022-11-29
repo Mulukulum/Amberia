@@ -6,6 +6,7 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 
+from Codebase.Functions.Colors import HexFormat
 from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.AmberMainWin import AmberWindowUI
 from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
@@ -28,11 +29,14 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Mainwindow Ui Setup
 
         #Setup of buttons
+        self.ui.TasksTodayButton.setShortcut("ctrl+h")
         self.ui.TasksTodayButton.clicked.connect(self.ShowTasksTodayWidget)
+        self.ui.CreateProjectButton.setShortcut("ctrl+n")
         self.ui.CreateProjectButton.clicked.connect(self.AddProjectButtonClicked)
 
         #Sets the default widget
-
+        self.ShowTasksTodayWidget()
+        
         #Show Window
         self.show()
     
@@ -43,18 +47,19 @@ class AmberMainWindow(QtWidgets.QMainWindow):
             Proj=cl.Project(Title)
             button=QtWidgets.QPushButton(self.ui.ProjectContents)
             button.setObjectName(f"AccessProjectButton_{Proj.ID}")
+            button.setText(Proj.Title)
+            button.setStyleSheet(f"background-color: {HexFormat(Proj.Color)} ; ")
             self.ui.ButtonList.addWidget(button)
-            button.clicked.connect(self.ShowProjectWidget(Proj))
+            button.clicked.connect(lambda: self.ShowProjectWidget(Proj))
             
     def ShowProjectWidget(self,ProjectObj):
         self.WidgetFrame.deleteLater()
         FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
-        framelayout=QtWidgets.QGridLayout(FrameForMainWidget)
+        framelayout=QtWidgets.QGridLayout()
         framelayout.addWidget(ProjectWidget(frame=FrameForMainWidget, Project=ProjectObj))
         layout=self.ui.VLayoutForMainWidget
         layout.addWidget(FrameForMainWidget)
         self.WidgetFrame=FrameForMainWidget
-
 
     def SetTasksTodayWidgetTitle(self):
         
@@ -64,18 +69,11 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
 
     def ShowTasksTodayWidget(self):
+        
+        #Deletes the current widget frame
         self.WidgetFrame.deleteLater()
-        if self.TodaysTasksShown==False:
-            self.TodaysTasksShown=True
-        else:
-            return
         #Sets the Title
         self.SetTasksTodayWidgetTitle()
-
-        #Remove Everything on the WidgetFrame
-
-        #Widget Frame is clear now
-
         #Show the tasks widget
         FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
         framelayout=QtWidgets.QGridLayout(FrameForMainWidget)
@@ -83,6 +81,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         layout=self.ui.VLayoutForMainWidget
         layout.addWidget(FrameForMainWidget)
         self.WidgetFrame=FrameForMainWidget
+        
 
 if __name__=='__main__':
     AmberApp=QtWidgets.QApplication(sys.argv)
