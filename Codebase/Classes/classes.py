@@ -11,6 +11,10 @@ from Codebase.Functions.Colors import GetRandomColor
 #Importing notification fnctions
 from plyer import notification
 
+import threading
+
+import sys,time
+
 import datetime
 
 class Project:
@@ -56,7 +60,6 @@ class Project:
         #Create and Set the DefaultSection
         self.DefaultSection = Section(SectionProject=self , SectionTitle=f"_{self.Title}",DefaultSection=True,Loaded=True)
 
-        #Create the Dictionary of Sections
 
     def DeleteProject(self):
         
@@ -68,7 +71,7 @@ class Project:
 
         while self.Sections!={}:
             self.Sections.popitem()[-1].DeleteSection()
-        ExecuteCommand(f"DELETE FROM projects WHERE project_id={self.ID}")
+        ExecuteCommand(f"DELETE FROM projects WHERE project_id=?",(self.ID,))
         Project.Instances.pop(self.ID)
 
 
@@ -227,6 +230,7 @@ class Label:
         else:
             self.Title=Title                #Set Title
             self.Tasks=[]
+            self.Widgets=[]                 #Sets the list with Appropriate QWidgets 
             if Color==None:                 #If there is no Color specified 
                 self.Color=GetRandomColor() #Pick a random Color
 
@@ -251,6 +255,10 @@ class Label:
             
             #Decouples the Label from all tasks
             self.DeLinkFromTasks()            
+            for LabelWidget in self.Widgets:
+                #Deletes all instances of this widget
+                LabelWidget.deleteLater()
+            self.Widgets.clear()
             #Remove any references to the label
             Label.LabelInstances.pop(LabelID)
             Label.LabelNames.remove(self.Title)
@@ -406,14 +414,14 @@ class Task:
 
     def __init__(self, ParentSection: Section, TaskTitle: str, TaskDesc: str=None, PriorityLevel: int=Priority.UpperBound, 
                 DueDate: datetime.datetime=None,Labels: list=None, LoadedFromDB: bool=False,
-                CompletionState: int=0, CompletionDate: datetime.datetime=None, ID: int=-1
+                CompletionState: int=0, ReminderState: int=0, CompletionDate: datetime.datetime=None, ID: int=-1
                 ): #Initializes the class
 
         #Sets the Title and Description for the task
         self.TaskTitle=TaskTitle
         self.TaskDesc=TaskDesc
         self.ParentSection=ParentSection
-
+        self.ShowReminder=ReminderState
 
         self.DueDate=DueDate
         self.Completed=CompletionState                                #sets completed to False, sql doesn't have bool so I'm using 0 and 1
@@ -428,6 +436,8 @@ class Task:
             Log(f"Task {self.TaskTitle} given no priority. Default Value {self.PriorityLevel} Assigned")
 
         self.Color=Priority.ColorOfLevel(PriorityLevel)     #And assign the color as well
+
+        self.ReminderThread=NotificationThread()
         
         #ID of Task
         self.ID=ID
@@ -439,8 +449,9 @@ class Task:
         task_sectionid,
         task_priority,
         task_completed,
-        task_duedate
-        ) VALUES(?,?,?,?,?,?)
+        task_duedate,
+        task_showreminder
+        ) VALUES(?,?,?,?,?,?,?)
         RETURNING task_id;
         """,
         (self.TaskTitle,
@@ -449,7 +460,8 @@ class Task:
         ParentSection.ID,
         self.PriorityLevel,
         self.Completed,
-        self.DueDate
+        self.DueDate,
+        self.ShowReminder,
         )
         )[0][0]
 
@@ -460,7 +472,7 @@ class Task:
         self.ParentSection.Tasks[self.ID]=self
         self.ParentSection.ActiveTasks[self.ID]=self
 
-        if LoadedFromDB==False: ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount+1,section_activetaskcount=section_activetaskcount+1 WHERE section_id=?",(self.ParentSection.ID))
+        if LoadedFromDB==False: ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount+1,section_activetaskcount=section_activetaskcount+1 WHERE section_id=?",(self.ParentSection.ID,))
 
         #Makes the List of labels assigned to the task
         if LoadedFromDB==False:
@@ -515,16 +527,26 @@ class Task:
         Label.LabelInstances[LabelID].Tasks.remove(self.ID)
         self.Labels.remove(LabelID)
 
-    def ReConfigureTask(self, TaskTitle: str=None, TaskDesc: str=None, PriorityLevel: int=None, DueDate: datetime.datetime=None, Labels: list=None):
+    def SignalReminder(self,Title=None,msg=None):
+        self.ReminderThread.ScheduleReminder(self.DueDate,Title,msg)
+
+    def ReConfigureTask(self, TaskTitle: str=None, TaskDesc: str=None, PriorityLevel: int=None, Reminder: int=None, DueDate: datetime.datetime=None, Labels: list=None,title=None,msg=None):
         
         if TaskTitle!=None:
             self.TaskTitle=TaskTitle                    #Changes the title to a newly provided title, if not provided stays the same
         
         if TaskDesc!=None:
             self.TaskDesc=TaskDesc                      #Changes the desc to a newly provided desc
-        
+
         if DueDate!=None:
             self.DueDate=DueDate                        #Changes the due date to a newly provided due date
+                  
+        if Reminder==1:       
+            self.ReminderThread.ScheduleReminder(self.DueDate,title,msg)
+        else:
+            self.ReminderThread.StopCurrentThread()
+        self.ShowReminder=Reminder
+        
         
         if Priority.IsValid(PriorityLevel):          #Checks if the incoming argument is a valid priority level
             self.PriorityLevel=PriorityLevel            #If so, then give the task its new priority
@@ -537,11 +559,14 @@ class Task:
             self.Labels=[]
         
         ExecuteCommand(f"""
-        UPDATE tasks SET task_title=?,task_description=?,task_priority={self.PriorityLevel}, 
-        task_duedate=? WHERE taskid={self.ID}""",(
+        UPDATE tasks SET task_title=?,task_description=?,task_priority=?, 
+        task_duedate=?,task_showreminder=? WHERE taskid=?""",(
             self.TaskTitle,
             self.TaskDesc,
-            self.DueDate
+            self.PriorityLevel,
+            self.DueDate,
+            self.ShowReminder,
+            self.ID
             ))
 
     def CompleteTask(self):
@@ -549,16 +574,18 @@ class Task:
         self.Completed=1                                #Completes the task
         self.CompletedDate=datetime.datetime.now()      #records the completed time
         self.ParentSection.ActiveTasks.pop(self.ID)
-        ExecuteCommand(f"UPDATE tasks SET task_completed={1}, task_completed_date={self.CompletedDate} WHERE task_id={self.ID}")
-        ExecuteCommand(f"UPDATE sections SET section_activetaskcount=section_activetaskcount-1 WHERE section_id={self.ParentSection.ID}")
+        ExecuteCommand(f"UPDATE tasks SET task_completed=?, task_completed_date=? WHERE task_id=?",(1,self.CompletedDate,self.ID))
+        ExecuteCommand(f"UPDATE sections SET section_activetaskcount=section_activetaskcount-1 WHERE section_id=?",(self.ParentSection.ID,))
+        self.ReminderThread.StopCurrentThread()
 
     def DeleteTask(self):
-        
+
+        self.ReminderThread.StopCurrentThread()
         #Remove all the labels
         self.RemoveAllLabels()
 
         ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount-1 WHERE section_id=?",(self.ParentSection.ID,))
-        ExecuteCommand(f"DELETE FROM tasks WHERE task_id={self.ID};")
+        ExecuteCommand(f"DELETE FROM tasks WHERE task_id=?;",(self.ID,))
 
         #Pops the task from its parent section
         self.ParentSection.Tasks.pop(self.ID)
@@ -574,13 +601,25 @@ class Task:
 
         del self
 
+    def SetReminderState(self,State:int,Title=None,msg=None):
+        if State==self.ShowReminder: 
+            return
+        else:
+            self.ShowReminder=State
+            ExecuteCommand("UPDATE tasks SET task_showreminder=? WHERE task_id=?",(self.ShowReminder,self.ID))
+            #If reminder is to be set
+            if State:
+                self.ReminderThread.ScheduleReminder(self.DueDate,Title,msg)
+            else: 
+                self.ReminderThread.StopCurrentThread()
+
     def ChangeDueDate(self, NewDueDate: datetime.datetime):
         self.DueDate=NewDueDate                         #Accepts a new due date
-        ExecuteCommand(f"UPDATE tasks SET task_duedate={self.DueDate} WHERE task_id={self.ID}")
-    
+        ExecuteCommand(f"UPDATE tasks SET task_duedate=? WHERE task_id=?",(NewDueDate,self.ID))
+        if self.ShowReminder:
+            self.ReminderThread.ScheduleReminder(NewDue=NewDueDate)
     
     #Update the PriorityLevel of the Task
-
     def UpdatePriority(self, priority: int):
         if Priority.IsValid(priority):                      #Checks if the incoming argument is a valid priority level
             self.PriorityLevel=Priority(priority)           #If so, then give the task its new priority
@@ -590,7 +629,6 @@ class Task:
         else:
             ErrorLog(f"WARNING : NO-OP DUE TO Invalid Argument for Priority : {priority}")
 
-
     @classmethod
     def Notify(cls, Title: str, Message: str):
         notification.notify(
@@ -598,7 +636,6 @@ class Task:
             message=Message,
             timeout=10
             )
-        
 
 class TextTask:
 
@@ -636,7 +673,7 @@ class TextTask:
         """,(self.TaskText,self.ParentSection.ID))[0][0]
 
         self.ParentSection.TextTasks[self.ID]=self
-        ExecuteCommand(f"UPDATE sections SET section_texttaskcount=section_texttaskcount+1 WHERE section_id={self.ParentSection.ID}")
+        ExecuteCommand(f"UPDATE sections SET section_texttaskcount=section_texttaskcount+1 WHERE section_id=?",(self.ParentSection.ID,))
         TextTask.Instances[self.ID]=self
     
     def DeleteTextTask(self):
@@ -646,7 +683,7 @@ class TextTask:
         TextTask.Instances.pop(self.ID)
 
         ExecuteCommand("UPDATE sections SET section_texttaskcount=section_texttaskcount-1 WHERE section_id=?",(self.ParentSection.ID,))
-        ExecuteCommand(f"DELETE FROM texttasks WHERE task_id={self.ID};")
+        ExecuteCommand(f"DELETE FROM texttasks WHERE task_id=?;",(self.ID,))
         del self
 
     def UpdateText(self,NewText: str):
@@ -671,3 +708,53 @@ class TaskBuilder:
                 Task(ParentSection=ParentSection,TaskTitle=Title,TaskDesc=Descs,PriorityLevel=PriorityLevel,DueDate=DueDate,Labels=Labels)
     
 
+#Class for sending notifs using threads
+class NotificationThread:
+    
+    def __init__(self,Task: Task) -> None:
+        self.Task=Task
+        self.Stop=threading.Event()
+
+    def StopCurrentThread(self):
+        #Sets the stop flag
+        self.Stop.set()
+        
+    def ScheduleReminder(self,NewDue: datetime.datetime,Title=None,Message=None):
+        #If stop is set, then show the reminder
+        if self.Stop.is_set():
+            self.ShowReminder(NewDue,Title,Message)
+        else:
+            self.StopCurrentThread()
+            self.ShowReminder(NewDue,Title,Message)
+    
+    def ShowReminder(self,Date: datetime.datetime,title=None,msg=None):
+        #If the date is less than the current time then just return
+        now=datetime.datetime.now()
+        if now+datetime.timedelta(0,3) >= Date:
+            ErrorLog(f"WARNING: Show Reminder called on {self.Task.ID} for an event in the past")
+            return
+        if title==None: self.title=f"Task {self.Task.TaskTitle[0:20]}... is Due"
+        if msg==None : self.msg=f"Priority {self.Task.PriorityLevel} in Project {self.Task.ParentSection.ParentProject.Title[0:20]}..."
+        self.timediff=Date-datetime.datetime.now()
+        #Create a daemon thread
+        self.CurrentThread=threading.Thread(target=self.ThreadFunction,args=(self.timediff.total_seconds(),self.title,self.msg),daemon=True)
+        #Starts the thread
+        self.CurrentThread.start()
+    
+
+    def ThreadFunction(self,delta: float,title,msg):
+        
+        #Calculate the no of seconds to sleep for
+        iterations=delta//10 ; final=delta%10
+        #While the stop flag is not set and the time has not been reached
+        while not self.Stop.is_set() and iterations:
+            time.sleep(10) ; iterations-=1
+        #If the event flag is set, then return immediately
+        if self.Stop.is_set():
+            return
+        time.sleep(final)
+        #Task Notifications 
+        self.Task.Notify(Title=title,Message=msg)
+        return
+            
+            
