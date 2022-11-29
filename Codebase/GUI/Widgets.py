@@ -9,6 +9,7 @@ from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.TasksTodayWindow import TaskTodayUI
 from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
 from Codebase.GUI.UI_Classes.ProjectWidget import ProjectWidgetUI
+from Codebase.GUI.UI_Classes.SectionWidget import SectionWidgetUI
 from Codebase.ErrorLogs.logging import ErrorLog
 from Codebase.Functions.Colors import HexFormat
 
@@ -23,7 +24,10 @@ class TodayTasksWidget(QtWidgets.QWidget):
     
     def AddTaskToWidget(self,TaskObject: cl.Task):
         
-        ...
+        frame=QtWidgets.QFrame(self.ui.ScrollAreaContentsForTaskWidgets)
+        framelayout=QtWidgets.QGridLayout(frame)
+        framelayout.addWidget(TaskWidget(TaskObject))
+
 
 class TaskWidget(QtWidgets.QWidget):
 
@@ -98,6 +102,36 @@ class TaskWidget(QtWidgets.QWidget):
     def AddLabelWidget(self,LabelObject: cl.Label):
         ...
 
+class SectionWidget(QtWidgets.QWidget):
+
+    def __init__(self,frame,Section=None) -> None:
+        super().__init__(frame)
+        self.ui=SectionWidgetUI()
+        self.ui.setupUi(frame)
+
+        if Section==None:
+            self.SectionID=-1
+        else:
+            self.SetInformation(Section)
+    
+    def SetInformation(self,Section: cl.Section):
+
+        self.SectionID=Section.ID
+        #If the section is a default section, hide the buttons to 
+        #Delete and Show the Name of the Section
+        if Section.DefaultSection==True:
+            self.ui.SectionDeleteButton.hide()
+            self.ui.SectionName.hide()
+        else:
+            for Task in Section.Tasks.values():
+    
+                #Create the frame to add the widget to
+                frame=QtWidgets.QFrame(self.ui.TasksContents)
+                framelayout=QtWidgets.QGridLayout(self.ui.TasksContents)
+                framelayout.addWidget(TaskWidget(frame,Task))
+                self.ui.VerticalLayoutForTaskWidgets.addWidget(framelayout)
+                #Task Widget added to section Widget now
+
 
 class ProjectWidget(QtWidgets.QWidget):
     
@@ -123,6 +157,8 @@ class ProjectWidget(QtWidgets.QWidget):
 
         #Add the Section Widgets
         
+        for Section in ProjectObj.Sections.values():
+            ...
 
 
         
