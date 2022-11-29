@@ -21,7 +21,9 @@ class TodayTasksWidget(QtWidgets.QWidget):
         self.ui=TaskTodayUI()
         self.ui.setupUi(self)
         #Sets the name of the widget
-        TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0")
+        TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0")[0]
+        for ID in TaskIDs:
+            self.AddTaskToWidget(cl.Task.Instances[ID])
         self.setObjectName(u"TaskTodayWidget")
     
     def AddTaskToWidget(self,TaskObject: cl.Task):
@@ -119,6 +121,7 @@ class SectionWidget(QtWidgets.QWidget):
     def SetInformation(self,Section: cl.Section):
 
         self.SectionID=Section.ID
+        self.setObjectName(f"SectionWidget{self.SectionID}")
         #If the section is a default section, hide the buttons to 
         #Delete and Show the Name of the Section
         if Section.DefaultSection==True:
@@ -150,9 +153,9 @@ class ProjectWidget(QtWidgets.QWidget):
     
     def SetInformation(self, ProjectObj: cl.Project):
         
-        self.setObjectName(f"ProjectWidget{ProjectObj.ID}")
         self.ProjectID=ProjectObj.ID
-
+        self.setObjectName(f"ProjectWidget{self.ProjectID}")
+        
         #Sets the Label to display the Project name
         self.ui.ProjectName.setText(ProjectObj.Title)
         self.ui.ProjectName.setStyleSheet(f"background-color: {HexFormat(ProjectObj.Color)} ;")
@@ -160,7 +163,12 @@ class ProjectWidget(QtWidgets.QWidget):
         #Add the Section Widgets
         
         for Section in ProjectObj.Sections.values():
-            ...
+            #Create the frame to add the widget
+            frame=QtWidgets.QFrame(self.ui.SectionWidgetArea)
+            framelayout=QtWidgets.QGridLayout(self.ui.SectionWidgetArea)
+            framelayout.addWidget(SectionWidget(frame,Section))
+            self.ui.LayoutToAddSections.addWidget(framelayout)
+            #Task Widget added to section Widget now
 
 
         

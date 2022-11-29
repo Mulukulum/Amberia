@@ -12,7 +12,6 @@ from Codebase.GUI.Widgets import (
     TodayTasksWidget,TaskWidget
     )
 
-        
 
 class AmberMainWindow(QtWidgets.QMainWindow):
 
@@ -26,7 +25,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Mainwindow Ui Setup
 
         #Setup of buttons
-        self.ui.TasksTodayButton
+        #self.ui.TasksTodayButton
 
         #Sets the default widget
         self.ShowTasksTodayWidget()
@@ -51,14 +50,11 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Widget Frame is clear now
 
         #Show the tasks widget
-
         FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
         framelayout=QtWidgets.QGridLayout(FrameForMainWidget)
         framelayout.addWidget(TodayTasksWidget(FrameForMainWidget))
         layout=self.ui.VLayoutForMainWidget
-    
         layout.addWidget(FrameForMainWidget)
-        #FrameForMainWidget.setStyleSheet("background-color: #36b6b0 ;")
 
 
 if __name__=='__main__':
