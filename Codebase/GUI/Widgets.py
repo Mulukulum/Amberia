@@ -27,7 +27,7 @@ class TodayTasksWidget(QtWidgets.QWidget):
         frame=QtWidgets.QFrame(self.ui.ScrollAreaContentsForTaskWidgets)
         framelayout=QtWidgets.QGridLayout(frame)
         framelayout.addWidget(TaskWidget(TaskObject))
-
+        
 
 class TaskWidget(QtWidgets.QWidget):
 

@@ -738,6 +738,8 @@ class NotificationThread:
         self.timediff=Date-datetime.datetime.now()
         #Create a daemon thread
         self.CurrentThread=threading.Thread(target=self.ThreadFunction,args=(self.timediff.total_seconds(),self.title,self.msg),daemon=True)
+        #Starts the thread
+        self.CurrentThread.start()
     
 
     def ThreadFunction(self,delta: float,title,msg):
