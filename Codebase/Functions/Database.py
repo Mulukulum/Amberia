@@ -6,7 +6,7 @@ ConnectionObject=sqlite3.connect(DataBasePath,detect_types=sqlite3.PARSE_COLNAME
 def UDF() -> None:                                          #Function to call the UserDefinedFunctions
     global ConnectionObject
     ConnectionObject.create_function(name="HexFormat",narg=1,func=HexFormat,deterministic=True)
-    ConnectionObject.create_function(name='CheckIfToday',narg=1,func=HexFormat,deterministic=False)
+    ConnectionObject.create_function(name='CheckIfToday',narg=1,func=CheckIfToday,deterministic=False)
 
 def HexFormat(number: int) -> str:
     number=abs(number)          #Line to ensure someone that negative values don't mess stuff up
