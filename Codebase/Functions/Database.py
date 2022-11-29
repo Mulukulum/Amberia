@@ -1,3 +1,4 @@
+import datetime
 import sqlite3                                      
 from Codebase.Variables import DataBasePath         #Get the location of the Database
 ConnectionObject=sqlite3.connect(DataBasePath,detect_types=sqlite3.PARSE_COLNAMES)      #Creates the connection to the databse
@@ -5,6 +6,7 @@ ConnectionObject=sqlite3.connect(DataBasePath,detect_types=sqlite3.PARSE_COLNAME
 def UDF() -> None:                                          #Function to call the UserDefinedFunctions
     global ConnectionObject
     ConnectionObject.create_function(name="HexFormat",narg=1,func=HexFormat,deterministic=True)
+    ConnectionObject.create_function(name='CheckIfToday',narg=1,func=HexFormat,deterministic=False)
 
 def HexFormat(number: int) -> str:
     number=abs(number)          #Line to ensure someone that negative values don't mess stuff up
@@ -15,7 +17,14 @@ def HexFormat(number: int) -> str:
     hexcode=hex(number)[2::].upper().rjust(6,"0")       
     return "#"+hexcode
 
-#UDF()                                                   #Defines the functions
+def CheckIfToday(Date:datetime.datetime):
+    if datetime.date.today()==Date.date():
+        return 1
+    else:
+        return 0
+
+
+UDF()                                                   #Defines the functions
 
 #Main Functions used to query the DB:
 

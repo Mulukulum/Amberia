@@ -10,6 +10,7 @@ from Codebase.GUI.UI_Classes.TasksTodayWindow import TaskTodayUI
 from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
 from Codebase.GUI.UI_Classes.ProjectWidget import ProjectWidgetUI
 from Codebase.GUI.UI_Classes.SectionWidget import SectionWidgetUI
+from Codebase.Functions.Database import ExecuteCommand
 from Codebase.ErrorLogs.logging import ErrorLog
 from Codebase.Functions.Colors import HexFormat
 
@@ -20,6 +21,7 @@ class TodayTasksWidget(QtWidgets.QWidget):
         self.ui=TaskTodayUI()
         self.ui.setupUi(self)
         #Sets the name of the widget
+        TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0")
         self.setObjectName(u"TaskTodayWidget")
     
     def AddTaskToWidget(self,TaskObject: cl.Task):
@@ -27,7 +29,7 @@ class TodayTasksWidget(QtWidgets.QWidget):
         frame=QtWidgets.QFrame(self.ui.ScrollAreaContentsForTaskWidgets)
         framelayout=QtWidgets.QGridLayout(frame)
         framelayout.addWidget(TaskWidget(TaskObject))
-        
+        self.ui.VLayoutForTaskWidgets.addWidget(frame)
 
 class TaskWidget(QtWidgets.QWidget):
 
