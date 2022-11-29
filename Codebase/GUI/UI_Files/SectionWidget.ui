@@ -23,6 +23,13 @@
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="SectionMenu">
      <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Section Name</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="TaskAddButton">
        <property name="text">
         <string>Add Task</string>

@@ -6,13 +6,12 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 
-from UI_Classes.AmberMainWin import AmberWindowUI
-from UI_Classes.TaskWidget import TaskWidgetUI
+from Codebase.GUI.UI_Classes.AmberMainWin import AmberWindowUI
+from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
 from Codebase.GUI.Widgets import (
-    TodayTasksWidget,TaskWidget
+    TodayTasksWidget, ProjectWidget
     )
 
-        
 
 class AmberMainWindow(QtWidgets.QMainWindow):
 
@@ -22,18 +21,22 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         super(AmberMainWindow,self).__init__()
         self.ui=AmberWindowUI()
         self.ui.setupUi(self)
+        self.TodaysTasksShown=False
 
         #Mainwindow Ui Setup
 
         #Setup of buttons
-        self.ui.TasksTodayButton
+        self.ui.TasksTodayButton.clicked.connect(self.ShowTasksTodayWidget)
+        self.ui.CreateProjectButton.clicked.connect(lambda: print(5))
 
         #Sets the default widget
-        self.ShowTasksTodayWidget()
 
         #Show Window
         self.show()
     
+    def AddProject(self):
+        ...
+
     def SetTasksTodayWidgetTitle(self):
         
         date=datetime.date.today().strftime("%A %B %d %Y")
@@ -43,6 +46,10 @@ class AmberMainWindow(QtWidgets.QMainWindow):
 
     def ShowTasksTodayWidget(self):
 
+        if self.TodaysTasksShown==False:
+            self.TodaysTasksShown=True
+        else:
+            return
         #Sets the Title
         self.SetTasksTodayWidgetTitle()
 
@@ -51,14 +58,11 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Widget Frame is clear now
 
         #Show the tasks widget
-
         FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
         framelayout=QtWidgets.QGridLayout(FrameForMainWidget)
         framelayout.addWidget(TodayTasksWidget(FrameForMainWidget))
         layout=self.ui.VLayoutForMainWidget
-    
         layout.addWidget(FrameForMainWidget)
-        #FrameForMainWidget.setStyleSheet("background-color: #36b6b0 ;")
 
 
 if __name__=='__main__':

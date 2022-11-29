@@ -39,7 +39,7 @@ class AmberWindowUI(object):
         self.CreateProjectButton.setObjectName(u"CreateProjectButton")
         self.CreateProjectButton.setStyleSheet(u"background: rgb(255, 255, 127)")
 
-        self.gridLayout_3.addWidget(self.TasksTodayButton, 1, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.CreateProjectButton, 1, 0, 1, 1)
 
         self.ProjectsLabel = QLabel(self.ProjectContents)
         self.ProjectsLabel.setObjectName(u"ProjectsLabel")
@@ -94,7 +94,7 @@ class AmberWindowUI(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.TasksTodayButton.setText(QCoreApplication.translate("MainWindow", u"Add Project", None))
+        self.CreateProjectButton.setText(QCoreApplication.translate("MainWindow", u"Add Project", None))
         self.ProjectsLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; color:#ffffff;\">Project(s)</span></p></body></html>", None))
         self.TasksTodayButton.setText(QCoreApplication.translate("MainWindow", u"Today's Task(s)", None))
         self.CurrentWidgetTitleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#ffffff;\">Today's Date: Curdate</span></p></body></html>", None))
