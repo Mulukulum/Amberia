@@ -13,6 +13,8 @@ from plyer import notification
 
 import threading
 
+import sys,time
+
 import datetime
 
 class Project:
@@ -435,6 +437,8 @@ class Task:
             Log(f"Task {self.TaskTitle} given no priority. Default Value {self.PriorityLevel} Assigned")
 
         self.Color=Priority.ColorOfLevel(PriorityLevel)     #And assign the color as well
+
+        self.ReminderThread=NotificationThread()
         
         #ID of Task
         self.ID=ID
@@ -446,8 +450,9 @@ class Task:
         task_sectionid,
         task_priority,
         task_completed,
-        task_duedate
-        ) VALUES(?,?,?,?,?,?)
+        task_duedate,
+        task_showreminder
+        ) VALUES(?,?,?,?,?,?,?)
         RETURNING task_id;
         """,
         (self.TaskTitle,
@@ -456,7 +461,8 @@ class Task:
         ParentSection.ID,
         self.PriorityLevel,
         self.Completed,
-        self.DueDate
+        self.DueDate,
+        self.ShowReminder,
         )
         )[0][0]
 
@@ -522,24 +528,26 @@ class Task:
         Label.LabelInstances[LabelID].Tasks.remove(self.ID)
         self.Labels.remove(LabelID)
 
-    def SignalReminder(self,State: int):
-        #This will send a signal to the QThread that handles timers
-        
-        ...
+    def SignalReminder(self,Title=None,msg=None):
+        self.ReminderThread.ScheduleReminder(self.DueDate,Title,msg)
 
-    def ReConfigureTask(self, TaskTitle: str=None, TaskDesc: str=None, PriorityLevel: int=None, Reminder: int=None, DueDate: datetime.datetime=None, Labels: list=None):
+    def ReConfigureTask(self, TaskTitle: str=None, TaskDesc: str=None, PriorityLevel: int=None, Reminder: int=None, DueDate: datetime.datetime=None, Labels: list=None,title=None,msg=None):
         
         if TaskTitle!=None:
             self.TaskTitle=TaskTitle                    #Changes the title to a newly provided title, if not provided stays the same
         
         if TaskDesc!=None:
             self.TaskDesc=TaskDesc                      #Changes the desc to a newly provided desc
-        
+
         if DueDate!=None:
             self.DueDate=DueDate                        #Changes the due date to a newly provided due date
-
-        if Reminder!=None:
-            self.ShowReminder=Reminder                  #Changes the Reminder State
+                  
+        if Reminder==1:       
+            self.ReminderThread.ScheduleReminder(self.DueDate,title,msg)
+        else:
+            self.ReminderThread.StopCurrentThread()
+        self.ShowReminder=Reminder
+        
         
         if Priority.IsValid(PriorityLevel):          #Checks if the incoming argument is a valid priority level
             self.PriorityLevel=PriorityLevel            #If so, then give the task its new priority
@@ -552,11 +560,14 @@ class Task:
             self.Labels=[]
         
         ExecuteCommand(f"""
-        UPDATE tasks SET task_title=?,task_description=?,task_priority={self.PriorityLevel}, 
-        task_duedate=? WHERE taskid={self.ID}""",(
+        UPDATE tasks SET task_title=?,task_description=?,task_priority=?, 
+        task_duedate=?,task_showreminder=? WHERE taskid=?""",(
             self.TaskTitle,
             self.TaskDesc,
-            self.DueDate
+            self.PriorityLevel,
+            self.DueDate,
+            self.ShowReminder,
+            self.ID
             ))
 
     def CompleteTask(self):
@@ -589,16 +600,17 @@ class Task:
 
         del self
 
-    def SetReminderState(self,State:int):
+    def SetReminderState(self,State:int,Title=None,msg=None):
         if State==self.ShowReminder: 
             return
         else:
             self.ShowReminder=State
+            ExecuteCommand("UPDATE tasks SET task_showreminder=? WHERE task_id=?",(self.ShowReminder,self.ID))
+            #If reminder is to be set
             if State:
-                #Start the Thread
-                ...
+                self.ReminderThread.ScheduleReminder(self.DueDate,Title,msg)
             else: 
-                ...
+                self.ReminderThread.StopCurrentThread()
 
 
 
@@ -700,22 +712,51 @@ class TaskBuilder:
                 Task(ParentSection=ParentSection,TaskTitle=Title,TaskDesc=Descs,PriorityLevel=PriorityLevel,DueDate=DueDate,Labels=Labels)
     
 
-#This File contains functionality for the threads of the tasks
+#Class for sending notifs using threads
 class NotificationThread:
     
     def __init__(self,Task: Task) -> None:
         self.Task=Task
         self.Stop=threading.Event()
 
-
-    def ShowReminder(self,Date: datetime.datetime):
+    def StopCurrentThread(self):
+        #Sets the stop flag
+        self.Stop.set()
+        
+    def ScheduleReminder(self,NewDue: datetime.datetime,Title=None,Message=None):
+        #If stop is set, then show the reminder
+        if self.Stop.is_set():
+            self.ShowReminder(NewDue,Title,Message)
+        else:
+            self.StopCurrentThread()
+            self.ShowReminder(NewDue,Title,Message)
+    
+    def ShowReminder(self,Date: datetime.datetime,title=None,msg=None):
         #If the date is less than the current time then just return
         now=datetime.datetime.now()
-        if now >= Date:
+        if now+datetime.timedelta(0,3) >= Date:
             ErrorLog(f"WARNING: Show Reminder called on {self.Task.ID} for an event in the past")
             return
-        
+        if title==None: self.title=f"Task {self.Task.TaskTitle[0:20]}... is Due"
+        if msg==None : self.msg=f"Priority {self.Task.PriorityLevel} in Project {self.Task.ParentSection.ParentProject.Title[0:20]}..."
         self.timediff=Date-datetime.datetime.now()
-        
         #Create a daemon thread
-        self.CurrentThread=threading.Thread(target=None,args=(),daemon=True)
+        self.CurrentThread=threading.Thread(target=self.ThreadFunction,args=(self.timediff.total_seconds(),self.title,self.msg),daemon=True)
+    
+
+    def ThreadFunction(self,delta: float,title,msg):
+        
+        #Calculate the no of seconds to sleep for
+        iterations=delta//10 ; final=delta%10
+        #While the stop flag is not set and the time has not been reached
+        while not self.Stop.is_set() and iterations:
+            time.sleep(10) ; iterations-=1
+        #If the event flag is set, then return immediately
+        if self.Stop.is_set():
+            return
+        time.sleep(final)
+        #Task Notifications 
+        self.Task.Notify(Title=title,Message=msg)
+        return
+            
+            
