@@ -35,9 +35,9 @@ class AmberWindowUI(object):
         self.ProjectContents.setGeometry(QRect(0, 0, 310, 504))
         self.gridLayout_3 = QGridLayout(self.ProjectContents)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.TasksTodayButton = QPushButton(self.ProjectContents)
-        self.TasksTodayButton.setObjectName(u"TasksTodayButton")
-        self.TasksTodayButton.setStyleSheet(u"background: rgb(255, 255, 127)")
+        self.CreateProjectButton = QPushButton(self.ProjectContents)
+        self.CreateProjectButton.setObjectName(u"CreateProjectButton")
+        self.CreateProjectButton.setStyleSheet(u"background: rgb(255, 255, 127)")
 
         self.gridLayout_3.addWidget(self.TasksTodayButton, 1, 0, 1, 1)
 
@@ -46,11 +46,11 @@ class AmberWindowUI(object):
 
         self.gridLayout_3.addWidget(self.ProjectsLabel, 4, 0, 1, 1)
 
-        self.TasksTodayButton_2 = QPushButton(self.ProjectContents)
-        self.TasksTodayButton_2.setObjectName(u"TasksTodayButton_2")
-        self.TasksTodayButton_2.setStyleSheet(u"background: rgb(255, 255, 127)")
+        self.TasksTodayButton = QPushButton(self.ProjectContents)
+        self.TasksTodayButton.setObjectName(u"TasksTodayButton")
+        self.TasksTodayButton.setStyleSheet(u"background: rgb(255, 255, 127)")
 
-        self.gridLayout_3.addWidget(self.TasksTodayButton_2, 0, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.TasksTodayButton, 0, 0, 1, 1)
 
         self.ProjectScrollArea.setWidget(self.ProjectContents)
 
@@ -96,7 +96,7 @@ class AmberWindowUI(object):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.TasksTodayButton.setText(QCoreApplication.translate("MainWindow", u"Add Project", None))
         self.ProjectsLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; color:#ffffff;\">Project(s)</span></p></body></html>", None))
-        self.TasksTodayButton_2.setText(QCoreApplication.translate("MainWindow", u"Today's Task(s)", None))
+        self.TasksTodayButton.setText(QCoreApplication.translate("MainWindow", u"Today's Task(s)", None))
         self.CurrentWidgetTitleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#ffffff;\">Today's Date: Curdate</span></p></body></html>", None))
         self.ProjectTitleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; color:#ffffff;\">AMBERIA </span><span style=\" font-size:24pt; color:#ffffff; vertical-align:super;\">\u00a92022</span></p><p align=\"center\"><br/></p></body></html>", None))
         self.SettingsButton.setText(QCoreApplication.translate("MainWindow", u"Settings Button", None))

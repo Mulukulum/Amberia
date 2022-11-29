@@ -6,7 +6,6 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 
 from Codebase.Classes import classes as cl
-from Codebase.GUI.UI_Classes.AmberMainWin import AmberWindowUI
 from Codebase.GUI.UI_Classes.TasksTodayWindow import TaskTodayUI
 from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
 from Codebase.ErrorLogs.logging import ErrorLog,Log
