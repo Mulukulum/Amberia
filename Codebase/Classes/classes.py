@@ -72,7 +72,7 @@ class Project:
 
         while self.Sections!={}:
             self.Sections.popitem()[-1].DeleteSection()
-        ExecuteCommand(f"DELETE FROM projects WHERE project_id={self.ID}")
+        ExecuteCommand(f"DELETE FROM projects WHERE project_id=?",(self.ID,))
         Project.Instances.pop(self.ID)
 
 
@@ -473,7 +473,7 @@ class Task:
         self.ParentSection.Tasks[self.ID]=self
         self.ParentSection.ActiveTasks[self.ID]=self
 
-        if LoadedFromDB==False: ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount+1,section_activetaskcount=section_activetaskcount+1 WHERE section_id=?",(self.ParentSection.ID))
+        if LoadedFromDB==False: ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount+1,section_activetaskcount=section_activetaskcount+1 WHERE section_id=?",(self.ParentSection.ID,))
 
         #Makes the List of labels assigned to the task
         if LoadedFromDB==False:
@@ -575,16 +575,18 @@ class Task:
         self.Completed=1                                #Completes the task
         self.CompletedDate=datetime.datetime.now()      #records the completed time
         self.ParentSection.ActiveTasks.pop(self.ID)
-        ExecuteCommand(f"UPDATE tasks SET task_completed={1}, task_completed_date={self.CompletedDate} WHERE task_id={self.ID}")
-        ExecuteCommand(f"UPDATE sections SET section_activetaskcount=section_activetaskcount-1 WHERE section_id={self.ParentSection.ID}")
+        ExecuteCommand(f"UPDATE tasks SET task_completed=?, task_completed_date=? WHERE task_id=?",(1,self.CompletedDate,self.ID))
+        ExecuteCommand(f"UPDATE sections SET section_activetaskcount=section_activetaskcount-1 WHERE section_id=?",(self.ParentSection.ID,))
+        self.ReminderThread.StopCurrentThread()
 
     def DeleteTask(self):
-        
+
+        self.ReminderThread.StopCurrentThread()
         #Remove all the labels
         self.RemoveAllLabels()
 
         ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount-1 WHERE section_id=?",(self.ParentSection.ID,))
-        ExecuteCommand(f"DELETE FROM tasks WHERE task_id={self.ID};")
+        ExecuteCommand(f"DELETE FROM tasks WHERE task_id=?;",(self.ID,))
 
         #Pops the task from its parent section
         self.ParentSection.Tasks.pop(self.ID)
@@ -612,16 +614,13 @@ class Task:
             else: 
                 self.ReminderThread.StopCurrentThread()
 
-
-
-
     def ChangeDueDate(self, NewDueDate: datetime.datetime):
         self.DueDate=NewDueDate                         #Accepts a new due date
-        ExecuteCommand(f"UPDATE tasks SET task_duedate={self.DueDate} WHERE task_id={self.ID}")
-    
+        ExecuteCommand(f"UPDATE tasks SET task_duedate=? WHERE task_id=?",(NewDueDate,self.ID))
+        if self.ShowReminder:
+            self.ReminderThread.ScheduleReminder(NewDue=NewDueDate)
     
     #Update the PriorityLevel of the Task
-
     def UpdatePriority(self, priority: int):
         if Priority.IsValid(priority):                      #Checks if the incoming argument is a valid priority level
             self.PriorityLevel=Priority(priority)           #If so, then give the task its new priority
@@ -631,7 +630,6 @@ class Task:
         else:
             ErrorLog(f"WARNING : NO-OP DUE TO Invalid Argument for Priority : {priority}")
 
-
     @classmethod
     def Notify(cls, Title: str, Message: str):
         notification.notify(
@@ -639,7 +637,6 @@ class Task:
             message=Message,
             timeout=10
             )
-        
 
 class TextTask:
 
@@ -677,7 +674,7 @@ class TextTask:
         """,(self.TaskText,self.ParentSection.ID))[0][0]
 
         self.ParentSection.TextTasks[self.ID]=self
-        ExecuteCommand(f"UPDATE sections SET section_texttaskcount=section_texttaskcount+1 WHERE section_id={self.ParentSection.ID}")
+        ExecuteCommand(f"UPDATE sections SET section_texttaskcount=section_texttaskcount+1 WHERE section_id=?",(self.ParentSection.ID,))
         TextTask.Instances[self.ID]=self
     
     def DeleteTextTask(self):
@@ -687,7 +684,7 @@ class TextTask:
         TextTask.Instances.pop(self.ID)
 
         ExecuteCommand("UPDATE sections SET section_texttaskcount=section_texttaskcount-1 WHERE section_id=?",(self.ParentSection.ID,))
-        ExecuteCommand(f"DELETE FROM texttasks WHERE task_id={self.ID};")
+        ExecuteCommand(f"DELETE FROM texttasks WHERE task_id=?;",(self.ID,))
         del self
 
     def UpdateText(self,NewText: str):
