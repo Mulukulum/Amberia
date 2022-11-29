@@ -104,7 +104,22 @@ class ProjectWidget(QtWidgets.QWidget):
         super().__init__(frame)
         self.ui=ProjectWidgetUI()
         self.ui.setupUi(frame)
-            
+
+        if Project==None:
+            ErrorLog("WARNING : ProjectWidget Constructor called without providing a project")
+            self.ProjectID=-1
+        else:
+            self.SetInformation(Project)
+    
+    def SetInformation(self, ProjectObj: cl.Project):
+        
+        self.setObjectName(f"ProjectWidget{ProjectObj.ID}")
+        self.ProjectID=ProjectObj.ID
+
+        #Sets the Label to display the Project name
+        self.ui.ProjectName.setText(ProjectObj.Title)
+        
+        
 
 
         
