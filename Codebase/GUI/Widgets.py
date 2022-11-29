@@ -8,6 +8,7 @@ from PyQt5 import QtGui
 from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.TasksTodayWindow import TaskTodayUI
 from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
+from Codebase.GUI.UI_Classes import *
 from Codebase.ErrorLogs.logging import ErrorLog,Log
 
 class TodayTasksWidget(QtWidgets.QWidget):
@@ -92,8 +93,10 @@ class TaskWidget(QtWidgets.QWidget):
         for Label in TaskObject.Labels:
             ...
 
+    #This needs the label widget to be ready
     def AddLabelWidget(self,LabelObject: cl.Label):
         ...
+
 
 
             
