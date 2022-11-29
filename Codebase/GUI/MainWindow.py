@@ -41,9 +41,12 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.show()
     
     def AddProjectButtonClicked(self):
-        Title,Ok=QtWidgets.QInputDialog.getText(None,"Enter Project Name","Project Name:",)
+        Dialog=QtWidgets.QInputDialog(None)
+        Title,Ok=Dialog.getText(self,"Add Project","Project Name:",)
         if Ok:
             #If the user hit 'ok', then create the project
+            #If the input is empty, then do nothing
+            if not Title.strip(): return
             Proj=cl.Project(Title)
             button=QtWidgets.QPushButton(self.ui.ProjectContents)
             button.setObjectName(f"AccessProjectButton_{Proj.ID}")
