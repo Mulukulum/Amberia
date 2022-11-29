@@ -6,8 +6,8 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 
-from UI_Classes.AmberMainWin import AmberWindowUI
-from UI_Classes.TaskWidget import TaskWidgetUI
+from Codebase.GUI.UI_Classes.AmberMainWin import AmberWindowUI
+from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
 from Codebase.GUI.Widgets import (
     TodayTasksWidget,TaskWidget
     )

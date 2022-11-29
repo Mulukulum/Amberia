@@ -8,8 +8,8 @@ from PyQt5 import QtGui
 from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.TasksTodayWindow import TaskTodayUI
 from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
-from Codebase.GUI.UI_Classes import *
-from Codebase.ErrorLogs.logging import ErrorLog,Log
+from Codebase.GUI.UI_Classes.ProjectWidget import ProjectWidgetUI
+from Codebase.ErrorLogs.logging import ErrorLog
 
 class TodayTasksWidget(QtWidgets.QWidget):
 
@@ -98,7 +98,12 @@ class TaskWidget(QtWidgets.QWidget):
         ...
 
 
-
+class ProjectWidget(QtWidgets.QWidget):
+    
+    def __init__(self,frame,Project=None) -> None:
+        super().__init__(frame)
+        self.ui=ProjectWidgetUI()
+        self.ui.setupUi(frame)
             
 
 

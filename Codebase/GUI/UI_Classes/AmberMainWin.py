@@ -39,7 +39,7 @@ class AmberWindowUI(object):
         self.CreateProjectButton.setObjectName(u"CreateProjectButton")
         self.CreateProjectButton.setStyleSheet(u"background: rgb(255, 255, 127)")
 
-        self.gridLayout_3.addWidget(self.TasksTodayButton, 1, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.CreateProjectButton, 1, 0, 1, 1)
 
         self.ProjectsLabel = QLabel(self.ProjectContents)
         self.ProjectsLabel.setObjectName(u"ProjectsLabel")

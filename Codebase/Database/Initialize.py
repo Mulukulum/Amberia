@@ -35,7 +35,7 @@ Cursor=Con.cursor()                     #Creates a cursor object from the connec
 CheckList=('projects',
             'labels',
             'tasks',
-            'texttask',
+            'texttasks',
             'sections',
             'prcolors')
 #   MODIFY README.MD WHEN MAKING ANY CHANGES TO ANY OF THIS
