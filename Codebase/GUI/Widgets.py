@@ -119,7 +119,7 @@ class ProjectWidget(QtWidgets.QWidget):
 
         #Sets the Label to display the Project name
         self.ui.ProjectName.setText(ProjectObj.Title)
-        self.ui.ProjectName.setStyleSheet(f"background-color: {HexFormat(ProjectObj.Color)}")
+        self.ui.ProjectName.setStyleSheet(f"background-color: {HexFormat(ProjectObj.Color)} ;")
 
         #Add the Section Widgets
         
