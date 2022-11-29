@@ -15,7 +15,7 @@ def HexFormat(number: int) -> str:
     hexcode=hex(number)[2::].upper().rjust(6,"0")       
     return "#"+hexcode
 
-UDF()                                                   #Defines the functions
+#UDF()                                                   #Defines the functions
 
 #Main Functions used to query the DB:
 

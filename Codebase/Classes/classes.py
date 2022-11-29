@@ -60,7 +60,6 @@ class Project:
         #Create and Set the DefaultSection
         self.DefaultSection = Section(SectionProject=self , SectionTitle=f"_{self.Title}",DefaultSection=True,Loaded=True)
 
-        #Create the Dictionary of Sections
 
     def DeleteProject(self):
         

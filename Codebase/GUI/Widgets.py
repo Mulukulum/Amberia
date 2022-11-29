@@ -10,6 +10,7 @@ from Codebase.GUI.UI_Classes.TasksTodayWindow import TaskTodayUI
 from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
 from Codebase.GUI.UI_Classes.ProjectWidget import ProjectWidgetUI
 from Codebase.ErrorLogs.logging import ErrorLog
+from Codebase.Functions.Colors import HexFormat
 
 class TodayTasksWidget(QtWidgets.QWidget):
 
@@ -118,7 +119,7 @@ class ProjectWidget(QtWidgets.QWidget):
 
         #Sets the Label to display the Project name
         self.ui.ProjectName.setText(ProjectObj.Title)
-        
+        self.ui.ProjectName.setStyleSheet(u"background-color: {}")
         
 
 
