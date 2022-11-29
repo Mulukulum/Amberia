@@ -21,6 +21,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         super(AmberMainWindow,self).__init__()
         self.ui=AmberWindowUI()
         self.ui.setupUi(self)
+        self.TodaysTasksShown=False
 
         #Mainwindow Ui Setup
 
@@ -29,7 +30,6 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.CreateProjectButton.clicked.connect(lambda: print(5))
 
         #Sets the default widget
-        #self.ShowTasksTodayWidget()
 
         #Show Window
         self.show()
@@ -46,6 +46,10 @@ class AmberMainWindow(QtWidgets.QMainWindow):
 
     def ShowTasksTodayWidget(self):
 
+        if self.TodaysTasksShown==False:
+            self.TodaysTasksShown=True
+        else:
+            return
         #Sets the Title
         self.SetTasksTodayWidgetTitle()
 
