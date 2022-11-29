@@ -25,10 +25,11 @@ class AmberMainWindow(QtWidgets.QMainWindow):
 
         #Mainwindow Ui Setup
 
+        #Setup of buttons
+        self.ui.TasksTodayButton
+
         #Sets the default widget
         self.ShowTasksTodayWidget()
-
-
 
         #Show Window
         self.show()
@@ -58,22 +59,6 @@ class AmberMainWindow(QtWidgets.QMainWindow):
     
         layout.addWidget(FrameForMainWidget)
         #FrameForMainWidget.setStyleSheet("background-color: #36b6b0 ;")
-        
-
-        
-        
-
-
-
-
-
-    
-
-    
-    
-    
-    
-
 
 
 if __name__=='__main__':
