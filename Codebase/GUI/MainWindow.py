@@ -26,7 +26,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Mainwindow Ui Setup
 
         #Setup of buttons
-        self.ui.CreateProjectButton
+        self.ui.TasksTodayButton
 
         #Sets the default widget
         self.ShowTasksTodayWidget()
