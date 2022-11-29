@@ -40,6 +40,18 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Show Window
         self.show()
     
+    def RetrieveFromDB(self):
+        #Function to update the UI
+        ...
+    
+    def _AddProjectButton(self,Proj: cl.Project):
+        button=QtWidgets.QPushButton(self.ui.ProjectContents)
+        button.setObjectName(f"AccessProjectButton_{Proj.ID}")
+        button.setText(Proj.Title)
+        button.setStyleSheet(f"background-color: {HexFormat(Proj.Color)} ; ")
+        self.ui.ButtonList.addWidget(button)
+        button.clicked.connect(lambda: self.ShowProjectWidget(Proj))
+
     def AddProjectButtonClicked(self):
         Dialog=QtWidgets.QInputDialog(None)
         Title,Ok=Dialog.getText(self,"Add Project","Project Name:",)
