@@ -9,7 +9,7 @@ from PyQt5 import QtGui
 from Codebase.GUI.UI_Classes.AmberMainWin import AmberWindowUI
 from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
 from Codebase.GUI.Widgets import (
-    TodayTasksWidget,TaskWidget
+    TodayTasksWidget, ProjectWidget
     )
 
 
@@ -25,14 +25,18 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Mainwindow Ui Setup
 
         #Setup of buttons
-        #self.ui.TasksTodayButton
+        self.ui.TasksTodayButton.clicked.connect(self.ShowTasksTodayWidget)
+        self.ui.CreateProjectButton.clicked.connect(lambda: print(5))
 
         #Sets the default widget
-        self.ShowTasksTodayWidget()
+        #self.ShowTasksTodayWidget()
 
         #Show Window
         self.show()
     
+    def AddProject(self):
+        ...
+
     def SetTasksTodayWidgetTitle(self):
         
         date=datetime.date.today().strftime("%A %B %d %Y")
