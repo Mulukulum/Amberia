@@ -6,6 +6,7 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 
+from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.AmberMainWin import AmberWindowUI
 from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
 from Codebase.GUI.Widgets import (
@@ -22,20 +23,38 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui=AmberWindowUI()
         self.ui.setupUi(self)
         self.TodaysTasksShown=False
+        self.WidgetFrame=QtWidgets.QFrame()
 
         #Mainwindow Ui Setup
 
         #Setup of buttons
         self.ui.TasksTodayButton.clicked.connect(self.ShowTasksTodayWidget)
-        self.ui.CreateProjectButton.clicked.connect(lambda: print(5))
+        self.ui.CreateProjectButton.clicked.connect(self.AddProjectButtonClicked)
 
         #Sets the default widget
 
         #Show Window
         self.show()
     
-    def AddProject(self):
-        ...
+    def AddProjectButtonClicked(self):
+        Title,Ok=QtWidgets.QInputDialog.getText(None,"Enter Project Name","Project Name:",)
+        if Ok:
+            #If the user hit 'ok', then create the project
+            Proj=cl.Project(Title)
+            button=QtWidgets.QPushButton(self.ui.ProjectContents)
+            button.setObjectName(f"AccessProjectButton_{Proj.ID}")
+            self.ui.ButtonList.addWidget(button)
+            button.clicked.connect(self.ShowProjectWidget(Proj))
+            
+    def ShowProjectWidget(self,ProjectObj):
+        self.WidgetFrame.deleteLater()
+        FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
+        framelayout=QtWidgets.QGridLayout(FrameForMainWidget)
+        framelayout.addWidget(ProjectWidget(frame=FrameForMainWidget, Project=ProjectObj))
+        layout=self.ui.VLayoutForMainWidget
+        layout.addWidget(FrameForMainWidget)
+        self.WidgetFrame=FrameForMainWidget
+
 
     def SetTasksTodayWidgetTitle(self):
         
@@ -45,7 +64,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
 
     def ShowTasksTodayWidget(self):
-
+        self.WidgetFrame.deleteLater()
         if self.TodaysTasksShown==False:
             self.TodaysTasksShown=True
         else:
@@ -63,7 +82,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         framelayout.addWidget(TodayTasksWidget(FrameForMainWidget))
         layout=self.ui.VLayoutForMainWidget
         layout.addWidget(FrameForMainWidget)
-
+        self.WidgetFrame=FrameForMainWidget
 
 if __name__=='__main__':
     AmberApp=QtWidgets.QApplication(sys.argv)
