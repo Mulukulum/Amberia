@@ -14,7 +14,9 @@ def AddProjects():
         proj_id=Project[0]
         project_title=Project[1]
         project_color=Project[2]
-        cl.Project(ProjectTitle=project_title,ProjectColor=project_color,LoadedFromDB=True,ID=proj_id)
+        default_section_id=ExecuteCommand("SELECT section_id FROM sections WHERE section_parentprojectid=?",(proj_id,))[0][0]
+        #This happens when the project doesn't have a default section setup
+        cl.Project(ProjectTitle=project_title,ProjectColor=project_color,LoadedFromDB=True,ID=proj_id,DefaultSectionID=default_section_id)
     #Projects Added
 
 def AddLabels():

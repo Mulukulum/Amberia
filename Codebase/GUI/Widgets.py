@@ -156,13 +156,21 @@ class ProjectWidget(QtWidgets.QWidget):
             self.ProjectID=-1
         else:
             self.SetInformation(Project)
+        
+        #Setup buttons
+        self.ui.DeleteProject.clicked.connect(lambda: self.DeleteProject())
     
+    def DeleteProject(self):
+        #Delete the Existing Project from the db
+        (cl.Project.Instances[self.ProjectID]).DeleteProject()
+        #Delete the Widget
+        self.deleteLater()
+
+
     def SetInformation(self, ProjectObj: cl.Project):
         
         #Activate the buttons to do stuff
         self.ui.AddSection.clicked.connect(lambda: self.AddSectionClicked())
-
-        self.Project=ProjectObj
         self.ProjectID=ProjectObj.ID
         self.setObjectName(f"ProjectWidget{self.ProjectID}")
         
@@ -186,7 +194,7 @@ class ProjectWidget(QtWidgets.QWidget):
             #If the user hit 'ok', then create the project
             #If the input is empty, then do nothing
             if not Title.strip(): return
-            section=cl.Section(self.Project,Title)
+            section=cl.Section(cl.Project.Instances[self.ProjectID],Title)
             frame=QtWidgets.QFrame(self.ui.SectionWidgetArea)
             framelayout=QtWidgets.QGridLayout()
             framelayout.addWidget(SectionWidget(frame,section))

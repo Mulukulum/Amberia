@@ -22,7 +22,7 @@ class Project:
     #Empty dictionary to store the instances of all the projects
     Instances=dict()
 
-    def __init__(self, ProjectTitle: str, ProjectColor: int=678452056,LoadedFromDB: bool=False,ID: int=-1):
+    def __init__(self, ProjectTitle: str, ProjectColor: int=678452056,LoadedFromDB: bool=False,ID: int=-1,DefaultSectionID: int=-1):
 
         self.Title = ProjectTitle                 #Initialize name of project
         
@@ -58,11 +58,10 @@ class Project:
         self.Sections=dict()
 
         #Create and Set the DefaultSection
-        self.DefaultSection = Section(SectionProject=self , SectionTitle=f"_{self.Title}",DefaultSection=True,LoadedFromDB=True)
+        self.DefaultSection = Section(SectionProject=self , SectionTitle=f"_{self.Title}",DefaultSection=True,LoadedFromDB=LoadedFromDB,ID=DefaultSectionID)
 
 
     def DeleteProject(self):
-        
         #Remove all Sections from the Project
         self.RemoveAllSections()
 
@@ -70,7 +69,7 @@ class Project:
     def RemoveAllSections(self):
 
         while self.Sections!={}:
-            self.Sections.popitem()[-1].DeleteSection()
+            self.Sections.popitem().DeleteSection(RemoveReference=True)
         ExecuteCommand(f"DELETE FROM projects WHERE project_id=?",(self.ID,))
         Project.Instances.pop(self.ID)
 
@@ -165,8 +164,7 @@ class Section:
         (self.ParentProject.ID, #ID of the parentProject
         self.Title,       #Title of the Section
         0,0,0                 #New section so no tasks added
-        )
-        )[0][0]             
+        ))[0][0]             
         
         #Add the section to the dictionary of instances
         Section.Instances[self.ID]=self
@@ -174,13 +172,15 @@ class Section:
         #Add the Section to the dictionary of Sections in the Project
         self.ParentProject.Sections[self.ID]=self
 
-    def DeleteSection(self):
+    def DeleteSection(self,RemoveReference=False):
 
         #Remove all the Tasks 
         self.DeleteAllTasks()
 
         #Remove reference from project
-        self.ParentProject.Sections.pop(self.ID)
+        #This horribleness is because I have to use Popitem in somecases
+        if RemoveReference:
+            self.ParentProject.Sections.pop(self.ID)
 
         #Decrement project_sectioncount from database
         ExecuteCommand("UPDATE projects SET project_sectioncount=project_sectioncount-1 WHERE project_id=?",(self.ParentProject.ID))

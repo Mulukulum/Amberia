@@ -9,7 +9,6 @@ from PyQt5 import QtGui
 from Codebase.Functions.Colors import HexFormat
 from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.AmberMainWin import AmberWindowUI
-from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
 from Codebase.GUI.Widgets import (
     TodayTasksWidget, ProjectWidget
     )
@@ -48,9 +47,9 @@ class AmberMainWindow(QtWidgets.QMainWindow):
     def RetrieveFromDB(self):
         #Function to update the UI with project buttons
         for Project in cl.Project.Instances.values():
-            self._AddProjectButton(Project)
+            self._AddProjectFromDB(Project)
     
-    def _AddProjectButton(self,Proj: cl.Project):
+    def _AddProjectFromDB(self,Proj: cl.Project):
         button=QtWidgets.QPushButton(self.ui.ProjectContents)
         button.setObjectName(f"AccessProjectButton_{Proj.ID}")
         button.setText(Proj.Title)
@@ -59,6 +58,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         button.clicked.connect(lambda: self.ShowProjectWidget(Proj))
 
     def AddProjectButtonClicked(self):
+        #Popup the dialog
         Dialog=QtWidgets.QInputDialog(None)
         Title,Ok=Dialog.getText(self,"Add Project","Project Name:",)
         if Ok:
@@ -75,6 +75,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
             button.click()
             
     def ShowProjectWidget(self,ProjectObj):
+        #Delete the current Widget that is shown and add the other widget after creating it
         self.WidgetFrame.deleteLater()
         FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
         framelayout=QtWidgets.QGridLayout()
