@@ -13,86 +13,44 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QGroupBox" name="groupBox">
+  <property name="styleSheet">
+   <string notr="true">background: rgb(255, 255, 127)</string>
+  </property>
+  <widget class="QLineEdit" name="lineEdit">
    <property name="geometry">
     <rect>
-     <x>348</x>
-     <y>72</y>
-     <width>253</width>
-     <height>73</height>
+     <x>228</x>
+     <y>12</y>
+     <width>481</width>
+     <height>61</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true">background: rgb(255, 255, 127)</string>
-   </property>
-   <property name="title">
-    <string/>
-   </property>
-   <widget class="QLineEdit" name="lineEdit">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>12</y>
-      <width>253</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background: rgb(255,255,255)</string>
-    </property>
-    <property name="text">
-     <string>Task Title</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>84</x>
-      <y>36</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>4</x>
-     <y>0</y>
-     <width>229</width>
-     <height>373</height>
+     <x>12</x>
+     <y>12</y>
+     <width>205</width>
+     <height>61</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Available Label(s):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QScrollArea" name="scrollArea">
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>225</width>
-         <height>337</height>
-        </rect>
-       </property>
-      </widget>
-     </widget>
-    </item>
-   </layout>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Label Name:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>252</x>
+     <y>96</y>
+     <width>157</width>
+     <height>49</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Label Colour Picker</string>
+   </property>
   </widget>
  </widget>
  <resources/>
