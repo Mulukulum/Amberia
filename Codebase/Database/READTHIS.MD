@@ -56,6 +56,7 @@ task_projectid INTEGER NOT NULL
 task_sectionid INTEGER NOT NULL
 task_priority INTEGER NOT NULL
 task_completed INTEGER NOT NULL
+task_showreminder INTEGER NOT NULL
 task_duedate DATE
 task_completed_date DATE
 
