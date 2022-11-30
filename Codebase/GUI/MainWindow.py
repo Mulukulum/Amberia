@@ -29,9 +29,13 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Mainwindow Ui Setup
 
         #Setup of buttons
+        
+        #Set the Shortcuts for the Buttons
         self.ui.TasksTodayButton.setShortcut("ctrl+h")
-        self.ui.TasksTodayButton.clicked.connect(self.ShowTasksTodayWidget)
         self.ui.CreateProjectButton.setShortcut("ctrl+n")
+
+        #Set the connections of the buttons
+        self.ui.TasksTodayButton.clicked.connect(self.ShowTasksTodayWidget)
         self.ui.CreateProjectButton.clicked.connect(self.AddProjectButtonClicked)
 
         #Sets the default widget
@@ -66,6 +70,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
             button.setStyleSheet(f"background-color: {HexFormat(Proj.Color)} ; ")
             self.ui.ButtonList.addWidget(button)
             button.clicked.connect(lambda: self.ShowProjectWidget(Proj))
+            button.click()
             
     def ShowProjectWidget(self,ProjectObj):
         self.WidgetFrame.deleteLater()
