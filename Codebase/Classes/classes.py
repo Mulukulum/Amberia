@@ -67,7 +67,7 @@ class Project:
 
 
     def RemoveAllSections(self):
-
+        #Uses a while loop and does this pop item horribleness
         while self.Sections!={}:
             self.Sections.popitem()[-1].DeleteSection(RemoveReference=False)
         ExecuteCommand(f"DELETE FROM projects WHERE project_id=?",(self.ID,))
@@ -200,7 +200,7 @@ class Section:
         #While the section still has tasks
         while self.Tasks!={}:
             #Pop and delete them one after another
-            self.Tasks.popitem()[-1].DeleteTask()          
+            self.Tasks.popitem()[-1].DeleteTask(RemoveReference=False)          
           
 
     def __str__(self):
@@ -580,7 +580,7 @@ class Task:
         ExecuteCommand(f"UPDATE sections SET section_activetaskcount=section_activetaskcount-1 WHERE section_id=?",(self.ParentSection.ID,))
         self.ReminderThread.StopCurrentThread()
 
-    def DeleteTask(self):
+    def DeleteTask(self,RemoveReference=True):
 
         self.ReminderThread.StopCurrentThread()
         #Remove all the labels
@@ -590,7 +590,8 @@ class Task:
         ExecuteCommand(f"DELETE FROM tasks WHERE task_id=?;",(self.ID,))
 
         #Pops the task from its parent section
-        self.ParentSection.Tasks.pop(self.ID)
+        if RemoveReference:
+            self.ParentSection.Tasks.pop(self.ID)
 
         #If the Task is active, remove it from the active tasks dictionary
         if self.Completed:
