@@ -20,7 +20,7 @@ class TaskWidgetUI(object):
             Form.setObjectName(u"Form")
         Form.resize(874, 329)
         '''
-        Form.setMinimumSize(QSize(550, 200))
+        Form.setMinimumSize(QSize(300, 250))
         
         self.gridLayout = QGridLayout(Form)
         self.gridLayout.setObjectName(u"gridLayout")

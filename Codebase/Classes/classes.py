@@ -582,7 +582,6 @@ class Task:
         self.ReminderThread.StopCurrentThread()
 
     def DeleteTask(self,RemoveReference=True):
-
         self.ReminderThread.StopCurrentThread()
         #Remove all the labels
         self.RemoveAllLabels()
@@ -593,12 +592,6 @@ class Task:
         #Pops the task from its parent section
         if RemoveReference:
             self.ParentSection.Tasks.pop(self.ID)
-
-        #If the Task is active, remove it from the active tasks dictionary
-        if self.Completed:
-            pass
-        else: 
-            self.ParentSection.ActiveTasks.pop(self.ID)
 
         #Pops the item from the dictionary of instances
         Task.Instances.pop(self.ID)

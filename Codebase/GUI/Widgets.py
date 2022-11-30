@@ -135,6 +135,7 @@ class SectionWidget(QtWidgets.QWidget):
         if Section.DefaultSection==True:
             self.ui.SectionDeleteButton.hide()
             self.ui.SectionName.hide()
+            self.ui.TaskAddButton.setShortcut("ctrl+t")
         else:
             self.ui.SectionName.setText(Section.Title)
             for Task in Section.Tasks.values():
@@ -182,6 +183,7 @@ class ProjectWidget(QtWidgets.QWidget):
             self.SetInformation(Project)
         
         #Setup buttons
+        self.ui.DeleteProject.setShortcut('Delete')
         self.ui.DeleteProject.clicked.connect(lambda: self.DeleteProject())
     
     def DeleteProject(self):
