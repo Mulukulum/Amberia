@@ -23,8 +23,9 @@ class SectionWidgetUI(object):
         if ParentProjectFrame.objectName():
             ParentProjectFrame.setObjectName(u"ParentProjectFrame")
         ParentProjectFrame.resize(864, 300)
-        ParentProjectFrame.setMinimumSize(QSize(500, 300))
         '''
+        ParentProjectFrame.setMinimumSize(QSize(500, 200))
+        
 
         self.gridLayout = QGridLayout(ParentProjectFrame)
         self.gridLayout.setObjectName(u"gridLayout")

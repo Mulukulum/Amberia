@@ -20,7 +20,7 @@ class TaskWidgetUI(object):
             Form.setObjectName(u"Form")
         Form.resize(874, 329)
         '''
-        Form.setMinimumSize(QSize(550, 200))
+        Form.setMinimumSize(QSize(300, 250))
         
         self.gridLayout = QGridLayout(Form)
         self.gridLayout.setObjectName(u"gridLayout")
@@ -39,10 +39,10 @@ class TaskWidgetUI(object):
 
         self.gridLayout.addWidget(self.DeleteTaskButton, 2, 5, 1, 2)
 
-        self.CompleteTaskButton = QPushButton(Form)
-        self.CompleteTaskButton.setObjectName(u"CompleteTaskButton")
+        #self.CompleteTaskButton = QPushButton(Form)
+        #self.CompleteTaskButton.setObjectName(u"CompleteTaskButton")
 
-        self.gridLayout.addWidget(self.CompleteTaskButton, 0, 0, 1, 1)
+        #self.gridLayout.addWidget(self.CompleteTaskButton, 0, 0, 1, 1)
 
         self.DaysLeftLabel = QLabel(Form)
         self.DaysLeftLabel.setObjectName(u"DaysLeftLabel")
@@ -131,7 +131,7 @@ class TaskWidgetUI(object):
         self.AddLabelsButton.setText(QCoreApplication.translate("Form", u"Add Labels", None))
         self.EditTaskButton.setText(QCoreApplication.translate("Form", u"Edit Task", None))
         self.DeleteTaskButton.setText(QCoreApplication.translate("Form", u"Delete Task", None))
-        self.CompleteTaskButton.setText(QCoreApplication.translate("Form", u"Complete ", None))
+        #self.CompleteTaskButton.setText(QCoreApplication.translate("Form", u"Complete ", None))
         self.DaysLeftLabel.setText(QCoreApplication.translate("Form", u"Days Left:", None))
         self.TaskDescription.setMarkdown("")
         self.TaskDescription.setHtml(QCoreApplication.translate("Form", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

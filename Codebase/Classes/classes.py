@@ -191,7 +191,7 @@ class Section:
         del self    
 
     def AddTask(self, Title: str, Description: str, Priority: int, DueDate:datetime.datetime=None,Labels: list=None):         #Add a new task to the section        
-        Task(ParentSection=self, TaskTitle=Title, TaskDesc=Description, PriorityLevel=Priority, DueDate=DueDate, Labels=Labels)
+        Task(ParentSection=self, TaskTitle=Title, TaskDesc=Description, PriorityLevel=Priority, DueDate=DueDate, labels=Labels)
 
     def DeleteAllTasks(self):
 
@@ -415,7 +415,7 @@ class Task:
     Instances=dict()
 
     def __init__(self, ParentSection: Section, TaskTitle: str, TaskDesc: str=None, PriorityLevel: int=Priority.UpperBound, 
-                DueDate: datetime.datetime=None,Labels: list=None, LoadedFromDB: bool=False,
+                DueDate: datetime.datetime=None,labels: list=None, LoadedFromDB: bool=False,
                 CompletionState: int=0, ReminderState: int=0, CompletionDate: datetime.datetime=None, ID: int=-1
                 ): #Initializes the class
 
@@ -424,7 +424,8 @@ class Task:
         self.TaskDesc=TaskDesc
         self.ParentSection=ParentSection
         self.ShowReminder=ReminderState
-
+        if labels==None:
+            labels=[]
         self.DueDate=DueDate
         self.Completed=CompletionState                                #sets completed to False, sql doesn't have bool so I'm using 0 and 1
         self.CompletedDate=CompletionDate                                       #makes the object for completed date
@@ -439,7 +440,7 @@ class Task:
 
         self.Color=Priority.ColorOfLevel(PriorityLevel)     #And assign the color as well
 
-        self.ReminderThread=NotificationThread()
+        self.ReminderThread=NotificationThread(self)
         
         #ID of Task
         self.ID=ID
@@ -453,11 +454,11 @@ class Task:
         task_completed,
         task_duedate,
         task_showreminder
-        ) VALUES(?,?,?,?,?,?,?)
+        ) VALUES(?,?,?,?,?,?,?,?)
         RETURNING task_id;
         """,
         (self.TaskTitle,
-        self,TaskDesc,
+        self.TaskDesc,
         ParentSection.ParentProject.ID,
         ParentSection.ID,
         self.PriorityLevel,
@@ -481,13 +482,13 @@ class Task:
             
             self.Labels=[]  # list <int>
             #Note that Label is an int, and Labels is a list of ints
-            for labelId in Labels:
+            for labelId in labels:
                 self.AddLabel(labelId)
         
         else:
             #For Loading Labels Directly from the Database, we have to ensure that the label object exists first
             self.Labels=[]
-            for labelId in Labels:
+            for labelId in labels:
                 self.Labels.append(labelId)
             
 
@@ -581,7 +582,6 @@ class Task:
         self.ReminderThread.StopCurrentThread()
 
     def DeleteTask(self,RemoveReference=True):
-
         self.ReminderThread.StopCurrentThread()
         #Remove all the labels
         self.RemoveAllLabels()
@@ -592,12 +592,6 @@ class Task:
         #Pops the task from its parent section
         if RemoveReference:
             self.ParentSection.Tasks.pop(self.ID)
-
-        #If the Task is active, remove it from the active tasks dictionary
-        if self.Completed:
-            pass
-        else: 
-            self.ParentSection.ActiveTasks.pop(self.ID)
 
         #Pops the item from the dictionary of instances
         Task.Instances.pop(self.ID)
@@ -708,7 +702,7 @@ class TaskBuilder:
                 TextTask(ParentSection=ParentSection,TaskText=Text)
         else:
             for Title,Descs in zip(TaskTitles,TaskDescs):
-                Task(ParentSection=ParentSection,TaskTitle=Title,TaskDesc=Descs,PriorityLevel=PriorityLevel,DueDate=DueDate,Labels=Labels)
+                Task(ParentSection=ParentSection,TaskTitle=Title,TaskDesc=Descs,PriorityLevel=PriorityLevel,DueDate=DueDate,labels=Labels)
     
 
 #Class for sending notifs using threads

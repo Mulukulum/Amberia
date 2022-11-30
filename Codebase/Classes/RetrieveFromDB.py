@@ -49,17 +49,17 @@ def AddTasks():
     SELECT task_id,task_title,task_description,task_projectid,
     task_sectionid,task_priority,task_completed,task_duedate,task_completed_date FROM tasks
     """)
-
     for Task in Tasks:
-        id=Tasks[0]
-        title=Tasks[1]
-        desc=Tasks[2]
-        # projectid=Tasks[3]
-        sectionid=Tasks[4]
-        prlevel=Tasks[5]
-        completionstate=Tasks[6]
-        duedate=Tasks[7]
-        completeddate=Tasks[8]
+
+        id=Task[0]
+        title=Task[1]
+        desc=Task[2]
+        projectid=Task[3]
+        sectionid=Task[4]
+        prlevel=Task[5]
+        completionstate=Task[6]
+        duedate=Task[7]
+        completeddate=Task[8]
         cl.Task(
             ParentSection=cl.Section.Instances[sectionid],
             TaskTitle=title,
