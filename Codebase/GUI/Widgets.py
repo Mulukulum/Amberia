@@ -146,6 +146,8 @@ class SectionWidget(QtWidgets.QWidget):
 
 class ProjectWidget(QtWidgets.QWidget):
     
+    SignalDeleteProjectButton=QtCore.pyqtSignal(str)
+    
     def __init__(self,frame,Project=None) -> None:
         super().__init__(frame)
         self.ui=ProjectWidgetUI()
@@ -161,10 +163,13 @@ class ProjectWidget(QtWidgets.QWidget):
         self.ui.DeleteProject.clicked.connect(lambda: self.DeleteProject())
     
     def DeleteProject(self):
+        #Delete the Widgets parent frame
+        self.SignalDeleteProjectButton.emit(f"AccessProjectButton_{self.ProjectID}")
+        parentwidget=self.parentWidget()
+        parentwidget.deleteLater()
         #Delete the Existing Project from the db
         (cl.Project.Instances[self.ProjectID]).DeleteProject()
-        #Delete the Widget
-        self.deleteLater()
+        
 
 
     def SetInformation(self, ProjectObj: cl.Project):

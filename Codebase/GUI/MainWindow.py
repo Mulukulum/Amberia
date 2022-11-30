@@ -16,6 +16,7 @@ from Codebase.GUI.Widgets import (
 
 class AmberMainWindow(QtWidgets.QMainWindow):
 
+
     def __init__(self) -> None:
         
         #Sets up the mainwindow class
@@ -43,6 +44,11 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.RetrieveFromDB()
         #Show Window
         self.show()
+    
+    def RemoveProjectButton(self,ObjectName: str):
+        button=self.findChildren(QtWidgets.QPushButton,ObjectName)[0]
+        button.deleteLater()
+        self.ShowTasksTodayWidget()
     
     def RetrieveFromDB(self):
         #Function to update the UI with project buttons
@@ -79,7 +85,11 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.WidgetFrame.deleteLater()
         FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
         framelayout=QtWidgets.QGridLayout()
-        framelayout.addWidget(ProjectWidget(frame=FrameForMainWidget, Project=ProjectObj))
+        #Connect the signals and slots
+        ProjWid=ProjectWidget(frame=FrameForMainWidget, Project=ProjectObj)
+        ProjWid.SignalDeleteProjectButton.connect(lambda objname: self.RemoveProjectButton(objname))
+
+        framelayout.addWidget(ProjWid)
         layout=self.ui.VLayoutForMainWidget
         layout.addWidget(FrameForMainWidget)
         self.WidgetFrame=FrameForMainWidget
