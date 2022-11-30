@@ -11,10 +11,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Dialog(object):
+class LabelWidgetUI(object):
     def setupUi(self, Dialog):
+        '''
         Dialog.setObjectName("Dialog")
         Dialog.resize(722, 380)
+        '''
         Dialog.setStyleSheet("background: #03fccf")
         self.widget = QtWidgets.QWidget(Dialog)
         self.widget.setGeometry(QtCore.QRect(3, 6, 709, 373))
@@ -26,33 +28,36 @@ class Ui_Dialog(object):
         self.label.setMaximumSize(QtCore.QSize(683, 29))
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
-        self.lineEdit = QtWidgets.QLineEdit(self.widget)
-        self.lineEdit.setMinimumSize(QtCore.QSize(697, 97))
-        self.lineEdit.setObjectName("lineEdit")
-        self.verticalLayout.addWidget(self.lineEdit)
-        self.pushButton = QtWidgets.QPushButton(self.widget)
-        self.pushButton.setObjectName("pushButton")
-        self.pushButton.clicked.connect(self.colour)
-        self.verticalLayout.addWidget(self.pushButton)
+        self.LabelNameEdit = QtWidgets.QLineEdit(self.widget)
+        self.LabelNameEdit.setMinimumSize(QtCore.QSize(697, 97))
+        self.LabelNameEdit.setObjectName("LabelNameEdit")
+        self.verticalLayout.addWidget(self.LabelNameEdit)
+        self.EditColorButton = QtWidgets.QPushButton(self.widget)
+        self.EditColorButton.setObjectName("EditColorButton")
+        self.EditColorButton.clicked.connect(self.colour)
+        self.verticalLayout.addWidget(self.EditColorButton)
+        self.ChangeNameButton=QtWidgets.QPushButton(self.widget)
+        self.ChangeNameButton.setObjectName("ChangeNameButton")
+        self.verticalLayout.addWidget(self.ChangeNameButton)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def colour(self):
-        color = QtWidgets.QColorDialog.getColor()
+        return QtWidgets.QColorDialog.getColor()
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.label.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:18pt;\">Label Name:</span></p></body></html>"))
-        self.pushButton.setText(_translate("Dialog", "Label Colour Picker"))
-
+        self.EditColorButton.setText(_translate("Dialog", "Label Colour Picker"))
+        self.ChangeNameButton.setText(_translate("Dialog","Change Title"))
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Dialog = QtWidgets.QDialog()
-    ui = Ui_Dialog()
+    ui = LabelWidgetUI()
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())

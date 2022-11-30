@@ -8,6 +8,7 @@ from PyQt5 import QtGui
 from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.TasksTodayWindow import TaskTodayUI
 from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
+from Codebase.GUI.UI_Classes.LabelEditor import LabelWidgetUI
 from Codebase.GUI.UI_Classes.ProjectWidget import ProjectWidgetUI
 from Codebase.GUI.UI_Classes.SectionWidget import SectionWidgetUI
 from Codebase.Functions.Database import ExecuteCommand
@@ -36,6 +37,31 @@ class TodayTasksWidget(QtWidgets.QWidget):
         framelayout=QtWidgets.QGridLayout(frame)
         framelayout.addWidget(TaskWidget(TaskObject))
         self.ui.VLayoutForTaskWidgets.addWidget(frame)
+
+class LabelWidget(QtWidgets.QWidget):
+
+    def __init__(self,frame,Label=None) -> None:
+        super().__init__(frame)
+        self.ui=LabelWidgetUI()
+        self.ui.setupUi(frame)
+
+        if Label==None:
+            ErrorLog("WARNING : Label Widget Constructor called without provision of label")
+            self.LabelID=-1
+        else:
+            self.SetInformation(Label)
+    
+    def SetInformation(self,Label: cl.Label):
+        self.ui.EditColorButton.setStyleSheet(f"background : {HexFormat(Label.Color)}")
+        self.ui.LabelNameEdit.setText(Label.Title)
+        self.ui.LabelNameEdit.textChanged.connect(self.DisableReNameButton)
+    
+    def DisableReNameButton(self,Title):
+        if cl.Label.ValidRename(Title):
+            self.ui.ChangeNameButton.setEnabled()
+        else:
+            self.ui.ChangeNameButton.setDisabled()
+
 
 class TaskWidget(QtWidgets.QWidget):
 
@@ -104,11 +130,18 @@ class TaskWidget(QtWidgets.QWidget):
 
         #Adds the Label Widget
         for Label in TaskObject.Labels:
-            ...
+            
+            frame=QtWidgets.QFrame(self.ui.LabelsViewScrollContents)
+            layout=QtWidgets.QHBoxLayout()
+            layout.addWidget(LabelWidget(frame,Label))
+            self.ui.LabelsHBoxLayout.addWidget(frame)
 
     #This needs the label widget to be ready
     def AddLabelWidget(self,LabelObject: cl.Label):
-        ...
+        frame=QtWidgets.QFrame(self.ui.LabelsViewScrollContents)
+        layout=QtWidgets.QHBoxLayout()
+        layout.addWidget(LabelWidget(frame,LabelObject))
+        self.ui.LabelsHBoxLayout.addWidget(frame)
 
 class SectionWidget(QtWidgets.QWidget):
 
@@ -146,9 +179,6 @@ class SectionWidget(QtWidgets.QWidget):
                 framelayout.addWidget(TaskWidget(frame,Task))
                 self.ui.VerticalLayoutForTaskWidgets.addWidget(frame)
                 #Task Widget added to section Widget now
-    
-    def ShowTaskWidget(self):
-        ...
 
     
     def AddTaskClicked(self):
