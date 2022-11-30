@@ -154,3 +154,4 @@ cython_debug/
 .vscode/**
 Amber.db
 LogFiles/*.log
+*.log
