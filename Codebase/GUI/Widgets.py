@@ -185,6 +185,8 @@ class ProjectWidget(QtWidgets.QWidget):
         #Setup buttons
         self.ui.DeleteProject.setShortcut('Delete')
         self.ui.DeleteProject.clicked.connect(lambda: self.DeleteProject())
+
+        self.ui.AddSection.setShortcut('ctrl+s')
     
     def DeleteProject(self):
         #Delete the Widgets parent frame
