@@ -132,6 +132,7 @@ class SectionWidget(QtWidgets.QWidget):
             self.ui.SectionDeleteButton.hide()
             self.ui.SectionName.hide()
         else:
+            self.ui.SectionName.setText(Section.Title)
             for Task in Section.Tasks.values():
     
                 #Create the frame to add the widget to
@@ -140,6 +141,7 @@ class SectionWidget(QtWidgets.QWidget):
                 framelayout.addWidget(TaskWidget(frame,Task))
                 self.ui.VerticalLayoutForTaskWidgets.addWidget(framelayout)
                 #Task Widget added to section Widget now
+            
 
 
 class ProjectWidget(QtWidgets.QWidget):
@@ -157,6 +159,10 @@ class ProjectWidget(QtWidgets.QWidget):
     
     def SetInformation(self, ProjectObj: cl.Project):
         
+        #Activate the buttons to do stuff
+        self.ui.AddSection.clicked.connect(lambda: self.AddSectionClicked())
+
+        self.Project=ProjectObj
         self.ProjectID=ProjectObj.ID
         self.setObjectName(f"ProjectWidget{self.ProjectID}")
         
@@ -165,15 +171,28 @@ class ProjectWidget(QtWidgets.QWidget):
         self.ui.ProjectName.setStyleSheet(f"background-color: {HexFormat(ProjectObj.Color)} ;")
 
         #Add the Section Widgets
-        
         for Section in ProjectObj.Sections.values():
             #Create the frame to add the widget
             frame=QtWidgets.QFrame(self.ui.SectionWidgetArea)
             framelayout=QtWidgets.QGridLayout()
             framelayout.addWidget(SectionWidget(frame,Section))
             self.ui.LayoutToAddSections.addWidget(frame)
-            #Task Widget added to section Widget now
+            #Section Widget added to project Widget now
 
+    def AddSectionClicked(self):
+        Dialog=QtWidgets.QInputDialog(self)
+        Title,Ok=Dialog.getText(self,"Add Section","Section Name:",)
+        if Ok:
+            #If the user hit 'ok', then create the project
+            #If the input is empty, then do nothing
+            if not Title.strip(): return
+            section=cl.Section(self.Project,Title)
+            frame=QtWidgets.QFrame(self.ui.SectionWidgetArea)
+            framelayout=QtWidgets.QGridLayout()
+            framelayout.addWidget(SectionWidget(frame,section))
+            self.ui.LayoutToAddSections.addWidget(frame)
+            #Section Widget added to project Widget now
 
+        
         
         
