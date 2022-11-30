@@ -69,7 +69,7 @@ class Project:
     def RemoveAllSections(self):
 
         while self.Sections!={}:
-            self.Sections.popitem().DeleteSection(RemoveReference=True)
+            self.Sections.popitem()[-1].DeleteSection(RemoveReference=False)
         ExecuteCommand(f"DELETE FROM projects WHERE project_id=?",(self.ID,))
         Project.Instances.pop(self.ID)
 
@@ -172,7 +172,7 @@ class Section:
         #Add the Section to the dictionary of Sections in the Project
         self.ParentProject.Sections[self.ID]=self
 
-    def DeleteSection(self,RemoveReference=False):
+    def DeleteSection(self,RemoveReference=True):
 
         #Remove all the Tasks 
         self.DeleteAllTasks()
