@@ -126,6 +126,10 @@ class SectionWidget(QtWidgets.QWidget):
 
         self.SectionID=Section.ID
         self.setObjectName(f"SectionWidget{self.SectionID}")
+
+        #Button Widget
+        self.ui.TaskAddButton.clicked.connect(lambda: self.AddTaskClicked())
+
         #If the section is a default section, hide the buttons to 
         #Delete and Show the Name of the Section
         if Section.DefaultSection==True:
@@ -137,10 +141,28 @@ class SectionWidget(QtWidgets.QWidget):
     
                 #Create the frame to add the widget to
                 frame=QtWidgets.QFrame(self.ui.TasksContents)
-                framelayout=QtWidgets.QGridLayout(self.ui.TasksContents)
+                framelayout=QtWidgets.QGridLayout()
                 framelayout.addWidget(TaskWidget(frame,Task))
-                self.ui.VerticalLayoutForTaskWidgets.addWidget(framelayout)
+                self.ui.VerticalLayoutForTaskWidgets.addWidget(frame)
                 #Task Widget added to section Widget now
+    
+    def ShowTaskWidget(self):
+        ...
+
+    
+    def AddTaskClicked(self):
+        Dialog=QtWidgets.QInputDialog(self)
+        Title,Ok=Dialog.getText(self,"Add Task","Task Name:")
+        if Ok:
+            #If the user hit 'ok', then create the task
+            #If the input is empty, then do nothing
+            if not Title.strip(): return
+            task=cl.Task(ParentSection=cl.Section.Instances[self.SectionID],TaskTitle=Title)
+            frame=QtWidgets.QFrame(self.ui.TasksContents)
+            framelayout=QtWidgets.QGridLayout()
+            framelayout.addWidget(TaskWidget(frame,task))
+            self.ui.VerticalLayoutForTaskWidgets.addWidget(frame)
+            #Section Widget added to project Widget now
             
 
 
