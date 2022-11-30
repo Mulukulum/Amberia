@@ -152,6 +152,5 @@ cython_debug/
 
 .vscode/settings.json
 .vscode/**
-*.log
 Amber.db
-LogFiles/
+LogFiles/*.log
