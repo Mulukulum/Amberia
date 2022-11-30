@@ -22,7 +22,7 @@ class Project:
     #Empty dictionary to store the instances of all the projects
     Instances=dict()
 
-    def __init__(self, ProjectTitle: str, ProjectColor: int=678452056,LoadedFromDB: bool=False,ID: int=-1):
+    def __init__(self, ProjectTitle: str, ProjectColor: int=678452056,LoadedFromDB: bool=False,ID: int=-1,DefaultSectionID: int=-1):
 
         self.Title = ProjectTitle                 #Initialize name of project
         
@@ -58,19 +58,18 @@ class Project:
         self.Sections=dict()
 
         #Create and Set the DefaultSection
-        self.DefaultSection = Section(SectionProject=self , SectionTitle=f"_{self.Title}",DefaultSection=True,Loaded=True)
+        self.DefaultSection = Section(SectionProject=self , SectionTitle=f"_{self.Title}",DefaultSection=True,LoadedFromDB=LoadedFromDB,ID=DefaultSectionID)
 
 
     def DeleteProject(self):
-        
         #Remove all Sections from the Project
         self.RemoveAllSections()
 
 
     def RemoveAllSections(self):
-
+        #Uses a while loop and does this pop item horribleness
         while self.Sections!={}:
-            self.Sections.popitem()[-1].DeleteSection()
+            self.Sections.popitem()[-1].DeleteSection(RemoveReference=False)
         ExecuteCommand(f"DELETE FROM projects WHERE project_id=?",(self.ID,))
         Project.Instances.pop(self.ID)
 
@@ -139,6 +138,8 @@ class Section:
         #Ensuring that SectionTitle's can't start with a single underscore followed by characters
         if SectionTitle[0]=="_" and DefaultSection==False :
             self.Title=(f"__{SectionTitle.strip('_')}__")   #Sets Title to __sectionname__
+        else:
+            self.Title=SectionTitle
         self.DefaultSection=DefaultSection
         
         self.ParentProject = SectionProject    #Get the Parent Project
@@ -163,8 +164,7 @@ class Section:
         (self.ParentProject.ID, #ID of the parentProject
         self.Title,       #Title of the Section
         0,0,0                 #New section so no tasks added
-        )
-        )[0][0]             
+        ))[0][0]             
         
         #Add the section to the dictionary of instances
         Section.Instances[self.ID]=self
@@ -172,16 +172,18 @@ class Section:
         #Add the Section to the dictionary of Sections in the Project
         self.ParentProject.Sections[self.ID]=self
 
-    def DeleteSection(self):
+    def DeleteSection(self,RemoveReference=True):
 
         #Remove all the Tasks 
         self.DeleteAllTasks()
 
         #Remove reference from project
-        self.ParentProject.Sections.pop(self.ID)
+        #This horribleness is because I have to use Popitem in somecases
+        if RemoveReference:
+            self.ParentProject.Sections.pop(self.ID)
 
         #Decrement project_sectioncount from database
-        ExecuteCommand("UPDATE projects SET project_sectioncount=project_sectioncount-1 WHERE project_id=?",(self.ParentProject.ID))
+        ExecuteCommand("UPDATE projects SET project_sectioncount=project_sectioncount-1 WHERE project_id=?",(self.ParentProject.ID,))
 
         #Remove section from the Database
         ExecuteCommand("DELETE FROM sections WHERE section_id=?",(self.ID,))
@@ -198,7 +200,7 @@ class Section:
         #While the section still has tasks
         while self.Tasks!={}:
             #Pop and delete them one after another
-            self.Tasks.popitem()[-1].DeleteTask()          
+            self.Tasks.popitem()[-1].DeleteTask(RemoveReference=False)          
           
 
     def __str__(self):
@@ -578,7 +580,7 @@ class Task:
         ExecuteCommand(f"UPDATE sections SET section_activetaskcount=section_activetaskcount-1 WHERE section_id=?",(self.ParentSection.ID,))
         self.ReminderThread.StopCurrentThread()
 
-    def DeleteTask(self):
+    def DeleteTask(self,RemoveReference=True):
 
         self.ReminderThread.StopCurrentThread()
         #Remove all the labels
@@ -588,7 +590,8 @@ class Task:
         ExecuteCommand(f"DELETE FROM tasks WHERE task_id=?;",(self.ID,))
 
         #Pops the task from its parent section
-        self.ParentSection.Tasks.pop(self.ID)
+        if RemoveReference:
+            self.ParentSection.Tasks.pop(self.ID)
 
         #If the Task is active, remove it from the active tasks dictionary
         if self.Completed:
