@@ -19,7 +19,7 @@ class AmberWindowUI(object):
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(800, 626)
         MainWindow.setMinimumSize(QSize(800, 625))
-        MainWindow.setStyleSheet(u"background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 178, 102, 255), stop:0.55 rgba(235, 148, 61, 255), stop:0.98 rgba(0, 0, 0, 255), stop:1 rgba(0, 0, 0, 0))")
+        MainWindow.setStyleSheet(u"background: #03fccf")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout_2 = QGridLayout(self.centralwidget)
