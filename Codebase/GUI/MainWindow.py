@@ -71,6 +71,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
             #If the user hit 'ok', then create the project
             #If the input is empty, then do nothing
             if not Title.strip(): return
+            Title=Title.lstrip('_')
             Proj=cl.Project(Title)
             button=QtWidgets.QPushButton(self.ui.ProjectContents)
             button.setObjectName(f"AccessProjectButton_{Proj.ID}")

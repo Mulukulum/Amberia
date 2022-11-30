@@ -35,6 +35,7 @@ def AddSections():
         id=Section[0]
         projectid=Section[1]
         title=Section[2]
+        if title.startswith("_"): continue
         cl.Section(
             SectionProject=cl.Project.Instances[projectid],
             SectionTitle=title,
