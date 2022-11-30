@@ -183,7 +183,7 @@ class Section:
             self.ParentProject.Sections.pop(self.ID)
 
         #Decrement project_sectioncount from database
-        ExecuteCommand("UPDATE projects SET project_sectioncount=project_sectioncount-1 WHERE project_id=?",(self.ParentProject.ID))
+        ExecuteCommand("UPDATE projects SET project_sectioncount=project_sectioncount-1 WHERE project_id=?",(self.ParentProject.ID,))
 
         #Remove section from the Database
         ExecuteCommand("DELETE FROM sections WHERE section_id=?",(self.ID,))
