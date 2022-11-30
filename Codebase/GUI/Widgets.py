@@ -169,9 +169,9 @@ class ProjectWidget(QtWidgets.QWidget):
         for Section in ProjectObj.Sections.values():
             #Create the frame to add the widget
             frame=QtWidgets.QFrame(self.ui.SectionWidgetArea)
-            framelayout=QtWidgets.QGridLayout(self.ui.SectionWidgetArea)
+            framelayout=QtWidgets.QGridLayout()
             framelayout.addWidget(SectionWidget(frame,Section))
-            self.ui.LayoutToAddSections.addWidget(framelayout)
+            self.ui.LayoutToAddSections.addWidget(frame)
             #Task Widget added to section Widget now
 
 
