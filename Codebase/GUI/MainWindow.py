@@ -42,7 +42,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.show()
     
     def RetrieveFromDB(self):
-        #Function to update the UI
+        #Function to update the UI with project buttons
         for Project in cl.Project.Instances.values():
             self._AddProjectButton(Project)
     
