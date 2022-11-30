@@ -139,6 +139,8 @@ class Section:
         #Ensuring that SectionTitle's can't start with a single underscore followed by characters
         if SectionTitle[0]=="_" and DefaultSection==False :
             self.Title=(f"__{SectionTitle.strip('_')}__")   #Sets Title to __sectionname__
+        else:
+            self.Title=SectionTitle
         self.DefaultSection=DefaultSection
         
         self.ParentProject = SectionProject    #Get the Parent Project
