@@ -157,6 +157,9 @@ class ProjectWidget(QtWidgets.QWidget):
     
     def SetInformation(self, ProjectObj: cl.Project):
         
+        #Activate the buttons to do stuff
+        self.ui.AddSection.clicked.connect(self.AddSectionClicked)
+
         self.ProjectID=ProjectObj.ID
         self.setObjectName(f"ProjectWidget{self.ProjectID}")
         
@@ -172,8 +175,18 @@ class ProjectWidget(QtWidgets.QWidget):
             framelayout=QtWidgets.QGridLayout()
             framelayout.addWidget(SectionWidget(frame,Section))
             self.ui.LayoutToAddSections.addWidget(frame)
-            #Task Widget added to section Widget now
+            #Section Widget added to project Widget now
 
-
+    def AddSectionClicked(self):
+        Dialog=QtWidgets.QInputDialog(None)
+        Title,Ok=Dialog.getText(self,"Add Section","Section Name:",)
+        if Ok:
+            #If the user hit 'ok', then create the project
+            #If the input is empty, then do nothing
+            if not Title.strip(): return
+            frame=QtWidgets.QFrame(self.ui.SectionWidgetArea)
+            framelayout=QtWidgets.QGridLayout()
+            framelayout.addWidget()
+        
         
         

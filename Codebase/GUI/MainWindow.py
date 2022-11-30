@@ -36,13 +36,15 @@ class AmberMainWindow(QtWidgets.QMainWindow):
 
         #Sets the default widget
         self.ShowTasksTodayWidget()
-        
+        #Makes the buttons for the existing projects
+        self.RetrieveFromDB()
         #Show Window
         self.show()
     
     def RetrieveFromDB(self):
         #Function to update the UI
-        ...
+        for Project in cl.Project.Instances.values():
+            self._AddProjectButton(Project)
     
     def _AddProjectButton(self,Proj: cl.Project):
         button=QtWidgets.QPushButton(self.ui.ProjectContents)
