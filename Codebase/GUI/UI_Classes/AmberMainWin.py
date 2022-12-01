@@ -17,7 +17,7 @@ class AmberWindowUI(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(800, 626)
+        MainWindow.resize(1000, 800)
         MainWindow.setMinimumSize(QSize(800, 625))
         #MainWindow.setStyleSheet(u"background: #03fccf")
         self.centralwidget = QWidget(MainWindow)
