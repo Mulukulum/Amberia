@@ -14,7 +14,9 @@ def AddProjects():
         proj_id=Project[0]
         project_title=Project[1]
         project_color=Project[2]
-        cl.Project(ProjectTitle=project_title,ProjectColor=project_color,LoadedFromDB=True,ID=proj_id)
+        default_section_id=ExecuteCommand("SELECT section_id FROM sections WHERE section_parentprojectid=?",(proj_id,))[0][0]
+        #This happens when the project doesn't have a default section setup
+        cl.Project(ProjectTitle=project_title,ProjectColor=project_color,LoadedFromDB=True,ID=proj_id,DefaultSectionID=default_section_id)
     #Projects Added
 
 def AddLabels():
@@ -33,6 +35,7 @@ def AddSections():
         id=Section[0]
         projectid=Section[1]
         title=Section[2]
+        if title.startswith("_"): continue
         cl.Section(
             SectionProject=cl.Project.Instances[projectid],
             SectionTitle=title,
@@ -44,19 +47,19 @@ def AddTasks():
 
     Tasks=ExecuteCommand("""
     SELECT task_id,task_title,task_description,task_projectid,
-    task_sectionid,task_priority,task_completed,task_duedate,task_completed_date
+    task_sectionid,task_priority,task_completed,task_duedate timestamp,task_completed_date timestamp FROM tasks
     """)
-
     for Task in Tasks:
-        id=Tasks[0]
-        title=Tasks[1]
-        desc=Tasks[2]
-        # projectid=Tasks[3]
-        sectionid=Tasks[4]
-        prlevel=Tasks[5]
-        completionstate=Tasks[6]
-        duedate=Tasks[7]
-        completeddate=Tasks[8]
+
+        id=Task[0]
+        title=Task[1]
+        desc=Task[2]
+        projectid=Task[3]
+        sectionid=Task[4]
+        prlevel=Task[5]
+        completionstate=Task[6]
+        duedate=Task[7]
+        completeddate=Task[8]
         cl.Task(
             ParentSection=cl.Section.Instances[sectionid],
             TaskTitle=title,

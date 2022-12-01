@@ -19,7 +19,7 @@ class AmberWindowUI(object):
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(800, 626)
         MainWindow.setMinimumSize(QSize(800, 625))
-        MainWindow.setStyleSheet(u"background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 178, 102, 255), stop:0.55 rgba(235, 148, 61, 255), stop:0.98 rgba(0, 0, 0, 255), stop:1 rgba(0, 0, 0, 0))")
+        MainWindow.setStyleSheet(u"background: #03fccf")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout_2 = QGridLayout(self.centralwidget)
@@ -33,24 +33,24 @@ class AmberWindowUI(object):
         self.ProjectContents = QWidget()
         self.ProjectContents.setObjectName(u"ProjectContents")
         self.ProjectContents.setGeometry(QRect(0, 0, 310, 504))
-        self.gridLayout_3 = QGridLayout(self.ProjectContents)
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.ButtonList = QGridLayout(self.ProjectContents)
+        self.ButtonList.setObjectName(u"ButtonList")
         self.CreateProjectButton = QPushButton(self.ProjectContents)
         self.CreateProjectButton.setObjectName(u"CreateProjectButton")
         self.CreateProjectButton.setStyleSheet(u"background: rgb(255, 255, 127)")
 
-        self.gridLayout_3.addWidget(self.CreateProjectButton, 1, 0, 1, 1)
+        self.ButtonList.addWidget(self.CreateProjectButton, 1, 0, 1, 1)
 
         self.ProjectsLabel = QLabel(self.ProjectContents)
         self.ProjectsLabel.setObjectName(u"ProjectsLabel")
 
-        self.gridLayout_3.addWidget(self.ProjectsLabel, 4, 0, 1, 1)
+        self.ButtonList.addWidget(self.ProjectsLabel, 4, 0, 1, 1)
 
         self.TasksTodayButton = QPushButton(self.ProjectContents)
         self.TasksTodayButton.setObjectName(u"TasksTodayButton")
         self.TasksTodayButton.setStyleSheet(u"background: rgb(255, 255, 127)")
 
-        self.gridLayout_3.addWidget(self.TasksTodayButton, 0, 0, 1, 1)
+        self.ButtonList.addWidget(self.TasksTodayButton, 0, 0, 1, 1)
 
         self.ProjectScrollArea.setWidget(self.ProjectContents)
 
