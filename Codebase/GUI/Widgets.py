@@ -174,14 +174,13 @@ class SectionWidget(QtWidgets.QWidget):
             self.ui.TaskAddButton.setShortcut("ctrl+t")
         else:
             self.ui.SectionName.setText(Section.Title)
-            for Task in Section.Tasks.values():
-    
-                #Create the frame to add the widget to
-                frame=QtWidgets.QFrame(self.ui.TasksContents)
-                framelayout=QtWidgets.QGridLayout()
-                framelayout.addWidget(TaskWidget(frame,Task))
-                self.ui.VerticalLayoutForTaskWidgets.addWidget(frame)
-                #Task Widget added to section Widget now
+        for Task in Section.Tasks.values():
+            #Create the frame to add the widget to
+            frame=QtWidgets.QFrame(self.ui.TasksContents)
+            framelayout=QtWidgets.QGridLayout()
+            framelayout.addWidget(TaskWidget(frame,Task))
+            self.ui.VerticalLayoutForTaskWidgets.addWidget(frame)
+            #Task Widget added to section Widget now
 
     
     def AddTaskClicked(self):
@@ -229,8 +228,6 @@ class ProjectWidget(QtWidgets.QWidget):
         #Delete the Existing Project from the db
         (cl.Project.Instances[self.ProjectID]).DeleteProject()
         
-
-
     def SetInformation(self, ProjectObj: cl.Project):
         
         #Activate the buttons to do stuff
@@ -263,7 +260,6 @@ class ProjectWidget(QtWidgets.QWidget):
             framelayout.addWidget(SectionWidget(frame,section))
             self.ui.LayoutToAddSections.addWidget(frame)
             #Section Widget added to project Widget now
-
 class TaskEditDialog(QtWidgets.QDialog):
 
     ReturnSignal=QtCore.pyqtSignal()
