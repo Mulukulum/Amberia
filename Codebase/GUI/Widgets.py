@@ -29,8 +29,9 @@ class TodayTasksWidget(QtWidgets.QWidget):
         except:
             pass
         else:
-            for ID in TaskIDs:
-                self.AddTaskToWidget(cl.Task.Instances[ID[0]])
+            for IDTuples in TaskIDs:
+                ID=IDTuples
+                self.AddTaskToWidget(cl.Task.Instances[ID])
         self.setObjectName(u"TaskTodayWidget")
     
     def AddTaskToWidget(self,TaskObject: cl.Task):
@@ -222,9 +223,9 @@ class ProjectWidget(QtWidgets.QWidget):
     
     def DeleteProject(self):
         #Delete the Widgets parent frame
-        self.SignalDeleteProjectButton.emit(f"AccessProjectButton_{self.ProjectID}")
         parentwidget=self.parentWidget()
         parentwidget.deleteLater()
+        self.SignalDeleteProjectButton.emit(f"AccessProjectButton_{self.ProjectID}")
         #Delete the Existing Project from the db
         (cl.Project.Instances[self.ProjectID]).DeleteProject()
         
