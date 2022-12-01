@@ -26,7 +26,6 @@ class TodayTasksWidget(QtWidgets.QWidget):
         self.ui=TaskTodayUI()
         self.ui.setupUi(self)
         #Sets the name of the widget
-        
         try:
             TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0")
         except :
