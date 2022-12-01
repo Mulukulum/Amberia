@@ -490,7 +490,9 @@ class Task:
             self.Labels=[]
             for labelId in labels:
                 self.Labels.append(labelId)
-            
+        
+        if DueDate!=None:
+            self.ReminderThread.ScheduleReminder(DueDate)
 
 
     def ToggleLabel(self,Label: int):
@@ -740,12 +742,12 @@ class NotificationThread:
     
 
     def ThreadFunction(self,delta: float,title,msg):
-        
+        print('Thread Start')
         #Calculate the no of seconds to sleep for
         iterations=delta//10 ; final=delta%10
         #While the stop flag is not set and the time has not been reached
         while not self.Stop.is_set() and iterations:
-            time.sleep(10) ; iterations-=1
+            time.sleep(10) ; iterations-=1 ; print(iterations)
         #If the event flag is set, then return immediately
         if self.Stop.is_set():
             return

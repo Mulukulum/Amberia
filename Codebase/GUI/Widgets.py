@@ -23,7 +23,7 @@ class TodayTasksWidget(QtWidgets.QWidget):
         self.ui.setupUi(self)
         #Sets the name of the widget
         try:
-            TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0")[0]
+            TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate timestamp)=1 AND task_completed=0")[0]
         except:
             pass
         else:
@@ -85,6 +85,7 @@ class TaskWidget(QtWidgets.QWidget):
         #Sets the name of the object for easy identification
         self.setObjectName(f"TaskWidget{TaskObject.ID}")
         self.TaskID=TaskObject.ID
+        self.ui.DeleteTaskButton.clicked.connect(lambda: self.parentWidget().deleteLater())
         
         #Sets the Display to show priority Level
         self.ui.PriorityLevelDisplay.display(TaskObject.PriorityLevel)
@@ -111,7 +112,7 @@ class TaskWidget(QtWidgets.QWidget):
         #The Task is not completed
         elif not Completed:
             
-            DaysLeft=abs(Due-datetime.datetime.now()).days()
+            DaysLeft=abs(Due-datetime.datetime.now()).days
             Text=f"Due On {Due.strftime(f'%a, {TaskWidget.OrdinalTimeFunction(Due.day)} %b %Y')} "+Title
             self.ui.DaysLeftDisplay.display(DaysLeft)
             #Show the labels if they're meant to be shown
