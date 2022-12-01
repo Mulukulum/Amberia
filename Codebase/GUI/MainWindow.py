@@ -29,8 +29,10 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.setWindowIcon(QtGui.QIcon(os.path.dirname(__file__)+r"\\UI_Files\\Icon.png"))
         self.setWindowTitle("Amberia")
         #Mainwindow Ui Setup
-
-        #Setup of buttons
+        #Color Setup
+        with open(os.path.dirname(__file__)+r"\\StyleSheet\\DeepBox.qss") as f:
+            self.setStyleSheet(f.read())
+        #self.setStyleSheet("background-color : #1c1d21 ;")
         
         #Set the Shortcuts for the Buttons
         self.ui.TasksTodayButton.setShortcut("ctrl+h")
