@@ -30,7 +30,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("Amberia")
         #Mainwindow Ui Setup
         #Color Setup
-        with open(os.path.dirname(__file__)+r"\\StyleSheet\\DeepBox.qss") as f:
+        with open(os.path.dirname(__file__)+r"\\StyleSheet\\Amberia.qss") as f:
             self.setStyleSheet(f.read())
         #self.setStyleSheet("background-color : #1c1d21 ;")
         

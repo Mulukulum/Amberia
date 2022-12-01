@@ -1,10 +1,13 @@
 import datetime
 import sys
+import os
 import PyQt5
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
-
+path=os.path.dirname(__file__)+r'\\StyleSheet\\Amberia.qss'
+with open(path) as f:
+    StyleSheet=f.read()
 from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.TasksTodayWindow import TaskTodayUI
 from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
@@ -33,6 +36,7 @@ class TodayTasksWidget(QtWidgets.QWidget):
                 ID=IDTuples[0]
                 self.AddTaskToWidget(cl.Task.Instances[ID])
         self.setObjectName(u"TaskTodayWidget")
+        
     
     def AddTaskToWidget(self,TaskObject: cl.Task):
         
@@ -264,13 +268,14 @@ class ProjectWidget(QtWidgets.QWidget):
 class TaskEditDialog(QtWidgets.QDialog):
 
     ReturnSignal=QtCore.pyqtSignal(bool)
-
+    
     def __init__(self,TaskTitle=None,TaskDesc=None,TaskDueDate=None,ReminderState=None) -> None:
         super().__init__()
         #Set it to be a modal dialog
         self.setModal(True)
         self.ui=TaskEditUI()
         self.ui.setupUi(self)
+        self.setStyleSheet(StyleSheet)
 
         
         
