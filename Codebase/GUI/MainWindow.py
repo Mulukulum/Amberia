@@ -1,6 +1,7 @@
 #Required Imports
 import datetime
 import sys
+import os.path
 import PyQt5
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
@@ -25,7 +26,8 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.TodaysTasksShown=False
         self.WidgetFrame=QtWidgets.QFrame()
-
+        self.setWindowIcon(QtGui.QIcon(os.path.dirname(__file__)+r"\\UI_Files\\Icon.png"))
+        self.setWindowTitle("Amberia")
         #Mainwindow Ui Setup
 
         #Setup of buttons

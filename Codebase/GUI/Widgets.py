@@ -26,11 +26,11 @@ class TodayTasksWidget(QtWidgets.QWidget):
         
         try:
             TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0")
-        except:
+        except :
             pass
         else:
             for IDTuples in TaskIDs:
-                ID=IDTuples
+                ID=IDTuples[0]
                 self.AddTaskToWidget(cl.Task.Instances[ID])
         self.setObjectName(u"TaskTodayWidget")
     
