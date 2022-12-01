@@ -744,12 +744,11 @@ class NotificationThread:
     
 
     def ThreadFunction(self,delta: float,title,msg):
-        print('Thread Start')
         #Calculate the no of seconds to sleep for
         iterations=delta//5 ; final=delta%5
         #While the stop flag is not set and the time has not been reached
         while self.Stop.is_set()==False and iterations:
-            time.sleep(5) ; iterations-=1 ; print(iterations)
+            time.sleep(5) ; iterations-=1
         #If the event flag is set, then return immediately
         if self.Stop.is_set():
             return
