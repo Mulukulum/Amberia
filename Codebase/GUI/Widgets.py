@@ -11,6 +11,7 @@ from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
 from Codebase.GUI.UI_Classes.LabelEditor import LabelWidgetUI
 from Codebase.GUI.UI_Classes.ProjectWidget import ProjectWidgetUI
 from Codebase.GUI.UI_Classes.SectionWidget import SectionWidgetUI
+from Codebase.GUI.UI_Classes.TaskEdit import TaskEditUI
 from Codebase.Functions.Database import ExecuteCommand
 from Codebase.ErrorLogs.logging import ErrorLog
 from Codebase.Functions.Colors import HexFormat
@@ -87,7 +88,7 @@ class TaskWidget(QtWidgets.QWidget):
         self.setObjectName(f"TaskWidget{TaskObject.ID}")
         self.TaskID=TaskObject.ID
         self.ui.DeleteTaskButton.clicked.connect(lambda: self.parentWidget().deleteLater())
-        
+        self.ui.EditTaskButton.clicked.connect(lambda: TaskEditDialog().exec_() )
         #Sets the Display to show priority Level
         self.ui.PriorityLevelDisplay.display(TaskObject.PriorityLevel)
 
@@ -263,6 +264,16 @@ class ProjectWidget(QtWidgets.QWidget):
             self.ui.LayoutToAddSections.addWidget(frame)
             #Section Widget added to project Widget now
 
-        
+class TaskEditDialog(QtWidgets.QDialog):
+
+    ReturnSignal=QtCore.pyqtSignal()
+
+    def __init__(self) -> None:
+        super().__init__()
+        #Set it to be a modal dialog
+        self.setModal(True)
+        self.ui=TaskEditUI()
+        self.ui.setupUi(self)
+
         
         
