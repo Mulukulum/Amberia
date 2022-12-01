@@ -36,7 +36,7 @@ class TodayTasksWidget(QtWidgets.QWidget):
                 ID=IDTuples[0]
                 self.AddTaskToWidget(cl.Task.Instances[ID])
         self.setObjectName(u"TaskTodayWidget")
-        
+
     
     def AddTaskToWidget(self,TaskObject: cl.Task):
         
@@ -190,8 +190,14 @@ class SectionWidget(QtWidgets.QWidget):
     
     def AddTaskClicked(self):
         Dialog=QtWidgets.QInputDialog(self)
-        Title,Ok=Dialog.getText(self,"Add Task","Task Name:")
-        if Ok:
+        Dialog.resize(400,300)
+        Dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
+        Dialog.setWindowTitle('Create Task')
+        Dialog.setLabelText('Enter the Name of the Task')
+        Dialog.setStyleSheet(StyleSheet)
+        ok = Dialog.exec_()
+        Title = Dialog.textValue()
+        if ok:
             #If the user hit 'ok', then create the task
             #If the input is empty, then do nothing
             if not Title.strip(): return
@@ -201,7 +207,6 @@ class SectionWidget(QtWidgets.QWidget):
             framelayout.addWidget(TaskWidget(frame,task))
             self.ui.VerticalLayoutForTaskWidgets.addWidget(frame)
             #Section Widget added to project Widget now
-            
 
 
 class ProjectWidget(QtWidgets.QWidget):
