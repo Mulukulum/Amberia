@@ -23,7 +23,7 @@ class TaskEditUI(object):
             Form.setObjectName(u"Form")
         '''
         Form.resize(560, 140)
-        Form.setStyleSheet(u"background : #2c2825;")
+        #Form.setStyleSheet(u"background : #2c2825;")
         self.verticalLayout_2 = QVBoxLayout(Form)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.gridLayout_2 = QGridLayout()
@@ -33,19 +33,19 @@ class TaskEditUI(object):
         self.textEdit = QTextEdit(Form)
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setMinimumSize(QSize(560, 105))
-        self.textEdit.setStyleSheet(u"background: rgb(255, 255, 255)")
+        #self.textEdit.setStyleSheet(u"background: rgb(255, 255, 255)")
 
         self.verticalLayout.addWidget(self.textEdit)
 
         self.textEdit_2 = QTextEdit(Form)
         self.textEdit_2.setObjectName(u"textEdit_2")
-        self.textEdit_2.setStyleSheet(u"background: rgb(255, 255, 255)")
+        #self.textEdit_2.setStyleSheet(u"background: rgb(255, 255, 255)")
 
         self.verticalLayout.addWidget(self.textEdit_2)
 
         self.textEdit_3 = QTextEdit(Form)
         self.textEdit_3.setObjectName(u"textEdit_3")
-        self.textEdit_3.setStyleSheet(u"background: rgb(255, 255, 255)")
+        #self.textEdit_3.setStyleSheet(u"background: rgb(255, 255, 255)")
 
         self.verticalLayout.addWidget(self.textEdit_3)
 
@@ -55,20 +55,20 @@ class TaskEditUI(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.BackButton = QPushButton(Form)
         self.BackButton.setObjectName(u"BackButton")
-        self.BackButton.setStyleSheet(u"background: rgb(255, 85, 0)")
+        #self.BackButton.setStyleSheet(u"background: rgb(255, 85, 0)")
         self.BackButton.clicked.connect(lambda: Form.reject())
 
         self.gridLayout.addWidget(self.BackButton, 2, 0, 1, 1)
 
         self.label = QLabel(Form)
         self.label.setObjectName(u"label")
-        self.label.setStyleSheet(u"background: rgb(255, 255, 255)")
+        #self.label.setStyleSheet(u"background: rgb(255, 255, 255)")
 
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
 
         self.spinBox = QSpinBox(Form)
         self.spinBox.setObjectName(u"spinBox")
-        self.spinBox.setStyleSheet(u"background: rgb(255,255,255)")
+        #self.spinBox.setStyleSheet(u"background: rgb(255,255,255)")
         self.spinBox.setMinimum(1)
         self.spinBox.setMaximum(10)
 
@@ -76,20 +76,20 @@ class TaskEditUI(object):
 
         self.BackButton_2 = QPushButton(Form)
         self.BackButton_2.setObjectName(u"BackButton_2")
-        self.BackButton_2.setStyleSheet(u"background: rgb(255, 85, 0)")
+        #self.BackButton_2.setStyleSheet(u"background: rgb(255, 85, 0)")
         self.BackButton_2.clicked.connect(lambda: Form.accept())
 
         self.gridLayout.addWidget(self.BackButton_2, 2, 1, 1, 1)
 
         self.label_2 = QLabel(Form)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setStyleSheet(u"background: rgb(255, 255, 255)")
+        #self.label_2.setStyleSheet(u"background: rgb(255, 255, 255)")
 
         self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
 
         self.dateTimeEdit = QDateTimeEdit(Form)
         self.dateTimeEdit.setObjectName(u"dateTimeEdit")
-        self.dateTimeEdit.setStyleSheet(u"background: rgb(255, 255, 255)")
+        #self.dateTimeEdit.setStyleSheet(u"background: rgb(255, 255, 255)")
 
         self.gridLayout.addWidget(self.dateTimeEdit, 1, 1, 1, 1)
 

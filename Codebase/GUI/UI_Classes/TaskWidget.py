@@ -124,6 +124,7 @@ class TaskWidgetUI(object):
         self.retranslateUi(Form)
 
         QMetaObject.connectSlotsByName(Form)
+
     # setupUi
 
     def retranslateUi(self, Form):

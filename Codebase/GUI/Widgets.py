@@ -78,6 +78,10 @@ class TaskWidget(QtWidgets.QWidget):
         super().__init__(frame)
         self.ui=TaskWidgetUI()
         self.ui.setupUi(frame)
+        ss=frame.styleSheet()
+        frame.setStyleSheet(ss+".QFrame:hover { background-color: #7a7a7a;}")
+        self.ui.TaskFrame.setStyleSheet(ss+"QFrame:hover { background-color: #1c1d21;}")
+        
         
         if Task==None:
             ErrorLog("WARNING : TaskWidget Constructor called without providing a task")
@@ -92,6 +96,9 @@ class TaskWidget(QtWidgets.QWidget):
         self.setObjectName(f"TaskWidget{TaskObject.ID}")
         self.TaskID=TaskObject.ID
         self.ui.DeleteTaskButton.clicked.connect(lambda: self.parentWidget().deleteLater())
+        #######################################################################################
+        ##########################################################################################
+        ######################################################################################
         self.ui.EditTaskButton.clicked.connect(lambda: TaskEditDialog().exec_() )
         #Sets the Display to show priority Level
         self.ui.PriorityLevelDisplay.display(TaskObject.PriorityLevel)
@@ -181,6 +188,7 @@ class SectionWidget(QtWidgets.QWidget):
         for Task in Section.Tasks.values():
             #Create the frame to add the widget to
             frame=QtWidgets.QFrame(self.ui.TasksContents)
+            frame.setObjectName("framefortask")
             framelayout=QtWidgets.QGridLayout()
             framelayout.addWidget(TaskWidget(frame,Task))
             self.ui.VerticalLayoutForTaskWidgets.addWidget(frame)
@@ -278,8 +286,9 @@ class TaskEditDialog(QtWidgets.QDialog):
         #Set it to be a modal dialog
         self.setModal(True)
         self.ui=TaskEditUI()
-        self.ui.setupUi(self)
         self.setStyleSheet(StyleSheet)
+        self.ui.setupUi(self)
+        
 
         
         
