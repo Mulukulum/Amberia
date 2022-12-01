@@ -79,15 +79,15 @@ class TaskEditUI(object):
 
         self.gridLayout.addWidget(self.textEdit_2, 1, 0, 1, 3)
 
-        self.textEdit_3 = QTextEdit(Form)
-        self.textEdit_3.setObjectName(u"textEdit_3")
+        #self.textEdit_3 = QTextEdit(Form)
+        #self.textEdit_3.setObjectName(u"textEdit_3")
         #self.textEdit_3.setStyleSheet(u"background: rgb(255, 255, 255)")
 
-        self.gridLayout.addWidget(self.textEdit_3, 2, 0, 1, 3)
+        #self.gridLayout.addWidget(self.textEdit_3, 2, 0, 1, 3)
 
         self.label.raise_()
         self.textEdit.raise_()
-        self.textEdit_3.raise_()
+       # self.textEdit_3.raise_()
 
         self.retranslateUi(Form)
 
@@ -110,10 +110,10 @@ class TaskEditUI(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">Existing Description</span></p></body></html>", None))
-        self.textEdit_3.setHtml(QCoreApplication.translate("Form", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">Existing Labels</span></p></body></html>", None))
+       # self.textEdit_3.setHtml(QCoreApplication.translate("Form", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+#"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+#"p, li { white-space: pre-wrap; }\n"
+#"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+#"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">Existing Labels</span></p></body></html>", None))
     # retranslateUi
 

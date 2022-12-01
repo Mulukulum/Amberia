@@ -96,10 +96,8 @@ class TaskWidget(QtWidgets.QWidget):
         self.setObjectName(f"TaskWidget{TaskObject.ID}")
         self.TaskID=TaskObject.ID
         self.ui.DeleteTaskButton.clicked.connect(lambda: self.parentWidget().deleteLater())
-        #######################################################################################
-        ##########################################################################################
-        ######################################################################################
-        self.ui.EditTaskButton.clicked.connect(lambda: TaskEditDialog().exec_() )
+
+        self.ui.EditTaskButton.clicked.connect(lambda: self.TaskEditButtonClicked() )
         #Sets the Display to show priority Level
         self.ui.PriorityLevelDisplay.display(TaskObject.PriorityLevel)
 
@@ -156,6 +154,12 @@ class TaskWidget(QtWidgets.QWidget):
         layout=QtWidgets.QHBoxLayout()
         layout.addWidget(LabelWidget(frame,LabelObject))
         self.ui.LabelsHBoxLayout.addWidget(frame)
+    
+    def TaskEditButtonClicked(self):
+        #First, create the Dialog to popup
+        Task=cl.Task.Instances[self.TaskID]
+        dialog=TaskEditDialog(TaskTitle=Task.TaskTitle,TaskDesc=Task.TaskDesc,TaskDueDate=Task.DueDate,PriorityLevel=Task.PriorityLevel)
+
 
 class SectionWidget(QtWidgets.QWidget):
 
@@ -281,13 +285,22 @@ class TaskEditDialog(QtWidgets.QDialog):
 
     ReturnSignal=QtCore.pyqtSignal(bool)
     
-    def __init__(self,TaskTitle=None,TaskDesc=None,TaskDueDate=None,ReminderState=None) -> None:
+    def __init__(self,PriorityLevel,TaskTitle=None,TaskDesc=None,TaskDueDate: datetime.datetime=None) -> None:
         super().__init__()
         #Set it to be a modal dialog
         self.setModal(True)
         self.ui=TaskEditUI()
         self.setStyleSheet(StyleSheet)
         self.ui.setupUi(self)
+        #Sets the date for the datetime edit
+        if TaskDueDate==None:
+            TaskDueDate=datetime.datetime.now()
+        self.ui.dateTimeEdit.setDateTime(QtCore.QDateTime.fromString(str(TaskDueDate),"yyyy-mm-dd HH:mm:ss.zzz"))
+        self.ui.spinBox.setValue(PriorityLevel)
+        self.ui.textEdit.setText(TaskTitle)
+        self.ui.textEdit_2.setText(TaskDesc)
+
+        ok = self.exec_()
         
 
         
