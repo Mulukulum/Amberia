@@ -22,15 +22,14 @@ class TodayTasksWidget(QtWidgets.QWidget):
         self.ui=TaskTodayUI()
         self.ui.setupUi(self)
         #Sets the name of the widget
-        TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0")
+        
         try:
-            
-            print(TaskIDs)
+            TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0")
         except:
             pass
         else:
             for ID in TaskIDs:
-                self.AddTaskToWidget(cl.Task.Instances[ID])
+                self.AddTaskToWidget(cl.Task.Instances[ID[0]])
         self.setObjectName(u"TaskTodayWidget")
     
     def AddTaskToWidget(self,TaskObject: cl.Task):
