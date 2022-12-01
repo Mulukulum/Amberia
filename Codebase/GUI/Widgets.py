@@ -23,7 +23,8 @@ class TodayTasksWidget(QtWidgets.QWidget):
         self.ui.setupUi(self)
         #Sets the name of the widget
         try:
-            TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate timestamp)=1 AND task_completed=0")[0]
+            TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0")[0]
+            print(TaskIDs)
         except:
             pass
         else:
@@ -35,7 +36,7 @@ class TodayTasksWidget(QtWidgets.QWidget):
         
         frame=QtWidgets.QFrame(self.ui.ScrollAreaContentsForTaskWidgets)
         framelayout=QtWidgets.QGridLayout(frame)
-        framelayout.addWidget(TaskWidget(TaskObject))
+        framelayout.addWidget(TaskWidget(frame,TaskObject))
         self.ui.VLayoutForTaskWidgets.addWidget(frame)
 
 class LabelWidget(QtWidgets.QWidget):
