@@ -546,7 +546,7 @@ class Task:
         if DueDate!=None:
             self.DueDate=DueDate                        #Changes the due date to a newly provided due date
                   
-        if Reminder==1:       
+        if Reminder:       
             self.ReminderThread.ScheduleReminder(self.DueDate,title,msg)
         else:
             self.ReminderThread.StopCurrentThread()
@@ -713,6 +713,7 @@ class NotificationThread:
     def __init__(self,Task: Task) -> None:
         self.Task=Task
         self.Stop=threading.Event()
+        self.Stop.clear()
 
     def StopCurrentThread(self):
         #Sets the stop flag
@@ -728,6 +729,7 @@ class NotificationThread:
     
     def ShowReminder(self,Date: datetime.datetime,title=None,msg=None):
         #If the date is less than the current time then just return
+        self.Stop.clear()
         now=datetime.datetime.now()
         if now+datetime.timedelta(0,3) >= Date:
             ErrorLog(f"WARNING: Show Reminder called on {self.Task.ID} for an event in the past")
@@ -744,10 +746,10 @@ class NotificationThread:
     def ThreadFunction(self,delta: float,title,msg):
         print('Thread Start')
         #Calculate the no of seconds to sleep for
-        iterations=delta//10 ; final=delta%10
+        iterations=delta//5 ; final=delta%5
         #While the stop flag is not set and the time has not been reached
-        while not self.Stop.is_set() and iterations:
-            time.sleep(10) ; iterations-=1 ; print(iterations)
+        while self.Stop.is_set()==False and iterations:
+            time.sleep(5) ; iterations-=1 ; print(iterations)
         #If the event flag is set, then return immediately
         if self.Stop.is_set():
             return
