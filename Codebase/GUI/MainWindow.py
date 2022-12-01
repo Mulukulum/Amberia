@@ -49,6 +49,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         button=self.findChildren(QtWidgets.QPushButton,ObjectName)[0]
         button.deleteLater()
         self.ShowTasksTodayWidget()
+        self.ui.TasksTodayButton.click()
     
     def RetrieveFromDB(self):
         #Function to update the UI with project buttons

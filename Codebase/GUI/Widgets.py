@@ -11,6 +11,7 @@ from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
 from Codebase.GUI.UI_Classes.LabelEditor import LabelWidgetUI
 from Codebase.GUI.UI_Classes.ProjectWidget import ProjectWidgetUI
 from Codebase.GUI.UI_Classes.SectionWidget import SectionWidgetUI
+from Codebase.GUI.UI_Classes.TaskEdit import TaskEditUI
 from Codebase.Functions.Database import ExecuteCommand
 from Codebase.ErrorLogs.logging import ErrorLog
 from Codebase.Functions.Colors import HexFormat
@@ -22,15 +23,14 @@ class TodayTasksWidget(QtWidgets.QWidget):
         self.ui=TaskTodayUI()
         self.ui.setupUi(self)
         #Sets the name of the widget
-        TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0")
+        
         try:
-            
-            print(TaskIDs)
+            TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0")
         except:
             pass
         else:
             for ID in TaskIDs:
-                self.AddTaskToWidget(cl.Task.Instances[ID])
+                self.AddTaskToWidget(cl.Task.Instances[ID[0]])
         self.setObjectName(u"TaskTodayWidget")
     
     def AddTaskToWidget(self,TaskObject: cl.Task):
@@ -88,7 +88,7 @@ class TaskWidget(QtWidgets.QWidget):
         self.setObjectName(f"TaskWidget{TaskObject.ID}")
         self.TaskID=TaskObject.ID
         self.ui.DeleteTaskButton.clicked.connect(lambda: self.parentWidget().deleteLater())
-        
+        self.ui.EditTaskButton.clicked.connect(lambda: TaskEditDialog().exec_() )
         #Sets the Display to show priority Level
         self.ui.PriorityLevelDisplay.display(TaskObject.PriorityLevel)
 
@@ -174,14 +174,13 @@ class SectionWidget(QtWidgets.QWidget):
             self.ui.TaskAddButton.setShortcut("ctrl+t")
         else:
             self.ui.SectionName.setText(Section.Title)
-            for Task in Section.Tasks.values():
-    
-                #Create the frame to add the widget to
-                frame=QtWidgets.QFrame(self.ui.TasksContents)
-                framelayout=QtWidgets.QGridLayout()
-                framelayout.addWidget(TaskWidget(frame,Task))
-                self.ui.VerticalLayoutForTaskWidgets.addWidget(frame)
-                #Task Widget added to section Widget now
+        for Task in Section.Tasks.values():
+            #Create the frame to add the widget to
+            frame=QtWidgets.QFrame(self.ui.TasksContents)
+            framelayout=QtWidgets.QGridLayout()
+            framelayout.addWidget(TaskWidget(frame,Task))
+            self.ui.VerticalLayoutForTaskWidgets.addWidget(frame)
+            #Task Widget added to section Widget now
 
     
     def AddTaskClicked(self):
@@ -229,8 +228,6 @@ class ProjectWidget(QtWidgets.QWidget):
         #Delete the Existing Project from the db
         (cl.Project.Instances[self.ProjectID]).DeleteProject()
         
-
-
     def SetInformation(self, ProjectObj: cl.Project):
         
         #Activate the buttons to do stuff
@@ -263,7 +260,16 @@ class ProjectWidget(QtWidgets.QWidget):
             framelayout.addWidget(SectionWidget(frame,section))
             self.ui.LayoutToAddSections.addWidget(frame)
             #Section Widget added to project Widget now
+class TaskEditDialog(QtWidgets.QDialog):
 
-        
+    ReturnSignal=QtCore.pyqtSignal()
+
+    def __init__(self) -> None:
+        super().__init__()
+        #Set it to be a modal dialog
+        self.setModal(True)
+        self.ui=TaskEditUI()
+        self.ui.setupUi(self)
+
         
         
