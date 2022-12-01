@@ -608,14 +608,19 @@ class Task:
             ExecuteCommand("UPDATE tasks SET task_showreminder=? WHERE task_id=?",(self.ShowReminder,self.ID))
             #If reminder is to be set
             if State:
+                self.ReminderThread.Stop()
+                self.ReminderThread=NotificationThread()
                 self.ReminderThread.ScheduleReminder(self.DueDate,Title,msg)
             else: 
-                self.ReminderThread.StopCurrentThread()
+                self.ReminderThread.Stop()
 
     def ChangeDueDate(self, NewDueDate: datetime.datetime):
         self.DueDate=NewDueDate                         #Accepts a new due date
         ExecuteCommand(f"UPDATE tasks SET task_duedate=? WHERE task_id=?",(NewDueDate,self.ID))
         if self.ShowReminder:
+            #Sets the prev thread to stop
+            self.ReminderThread.Stop.set()
+            self.ReminderThread=NotificationThread()
             self.ReminderThread.ScheduleReminder(NewDue=NewDueDate)
     
     #Update the PriorityLevel of the Task
