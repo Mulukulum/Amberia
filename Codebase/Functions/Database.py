@@ -18,6 +18,7 @@ def HexFormat(number: int) -> str:
     return "#"+hexcode
 
 def CheckIfToday(Date:datetime.datetime):
+    print(type(Date))
     if type(Date)==str:
         Date=datetime.datetime.strptime(Date,"%Y-%m-%d %X.%f")
     if datetime.date.today()==Date.date():
