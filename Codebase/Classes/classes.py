@@ -533,6 +533,7 @@ class Task:
         self.Labels.remove(LabelID)
 
     def SignalReminder(self,Title=None,msg=None):
+        self.ShowReminder=1
         self.ReminderThread.ScheduleReminder(self.DueDate,Title,msg)
 
     def ReConfigureTask(self, TaskTitle: str=None, TaskDesc: str=None, PriorityLevel: int=None, Reminder: int=None, DueDate: datetime.datetime=None, Labels: list=None,title=None,msg=None):
@@ -545,12 +546,17 @@ class Task:
 
         if DueDate!=None:
             self.DueDate=DueDate                        #Changes the due date to a newly provided due date
-                  
-        if Reminder:       
-            self.ReminderThread.ScheduleReminder(self.DueDate,title,msg)
-        else:
-            self.ReminderThread.StopCurrentThread()
-        self.ShowReminder=Reminder
+
+        if Reminder==None:
+            Reminder=0
+        else:        
+            if Reminder: 
+                Reminder=1      
+                self.ReminderThread.ScheduleReminder(self.DueDate,title,msg)
+            else:
+                Reminder=0
+                self.ReminderThread.StopCurrentThread()
+        
         
         
         if Priority.IsValid(PriorityLevel):          #Checks if the incoming argument is a valid priority level
@@ -565,7 +571,7 @@ class Task:
         
         ExecuteCommand(f"""
         UPDATE tasks SET task_title=?,task_description=?,task_priority=?, 
-        task_duedate=?,task_showreminder=? WHERE taskid=?""",(
+        task_duedate=?,task_showreminder=? WHERE task_id=?""",(
             self.TaskTitle,
             self.TaskDesc,
             self.PriorityLevel,
@@ -608,11 +614,11 @@ class Task:
             ExecuteCommand("UPDATE tasks SET task_showreminder=? WHERE task_id=?",(self.ShowReminder,self.ID))
             #If reminder is to be set
             if State:
-                self.ReminderThread.Stop()
+                self.ReminderThread.StopCurrentThread()
                 self.ReminderThread=NotificationThread()
                 self.ReminderThread.ScheduleReminder(self.DueDate,Title,msg)
             else: 
-                self.ReminderThread.Stop()
+                self.ReminderThread.StopCurrentThread()
 
     def ChangeDueDate(self, NewDueDate: datetime.datetime):
         self.DueDate=NewDueDate                         #Accepts a new due date

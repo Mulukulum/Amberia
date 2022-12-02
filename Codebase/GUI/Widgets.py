@@ -44,6 +44,7 @@ class TodayTasksWidget(QtWidgets.QWidget):
         framelayout.addWidget(TaskWidget(frame,TaskObject))
         self.ui.VLayoutForTaskWidgets.addWidget(frame)
 
+'''
 class LabelWidget(QtWidgets.QWidget):
 
     def __init__(self,frame,Label=None) -> None:
@@ -67,7 +68,7 @@ class LabelWidget(QtWidgets.QWidget):
             self.ui.ChangeNameButton.setEnabled()
         else:
             self.ui.ChangeNameButton.setDisabled()
-
+'''
 
 class TaskWidget(QtWidgets.QWidget):
 
@@ -81,7 +82,7 @@ class TaskWidget(QtWidgets.QWidget):
         ss=frame.styleSheet()
         frame.setStyleSheet(ss+".QFrame:hover { background-color: #7a7a7a;}")
         self.ui.TaskFrame.setStyleSheet(ss+"QFrame:hover { background-color: #1c1d21;}")
-        
+        self.ui.ReminderBox.stateChanged.connect(lambda: self.ReminderStateChanged(self.ui.ReminderBox.isChecked()) )
         
         if Task==None:
             ErrorLog("WARNING : TaskWidget Constructor called without providing a task")
@@ -89,6 +90,14 @@ class TaskWidget(QtWidgets.QWidget):
         else:
             self.SetInformation(Task)
     
+    def ReminderStateChanged(self,ShowReminder: bool):
+        Task=cl.Task.Instances[self.TaskID]
+        if ShowReminder:
+            Task.SignalReminder()
+        else:
+            Task.SetReminderState(0)
+            
+
     #Set Information is basically reconfiguring the label
     def SetInformation(self,TaskObject: cl.Task):
         
@@ -139,8 +148,12 @@ class TaskWidget(QtWidgets.QWidget):
         
         #Set the Title text
         self.ui.TaskTitle_label.setText(Text)
-
+        if TaskObject.ShowReminder:
+            self.ui.ReminderBox.setChecked(True)
+        else:
+            self.ui.ReminderBox.setChecked(False)
         #Adds the Label Widget
+        '''
         for Label in TaskObject.Labels:
             
             frame=QtWidgets.QFrame(self.ui.LabelsViewScrollContents)
@@ -154,11 +167,12 @@ class TaskWidget(QtWidgets.QWidget):
         layout=QtWidgets.QHBoxLayout()
         layout.addWidget(LabelWidget(frame,LabelObject))
         self.ui.LabelsHBoxLayout.addWidget(frame)
-    
+    '''
     def TaskEditButtonClicked(self):
         #First, create the Dialog to popup
         Task=cl.Task.Instances[self.TaskID]
-        dialog=TaskEditDialog(TaskTitle=Task.TaskTitle,TaskDesc=Task.TaskDesc,TaskDueDate=Task.DueDate,PriorityLevel=Task.PriorityLevel)
+        dialog=TaskEditDialog(Task=Task,TaskTitle=Task.TaskTitle,TaskDesc=Task.TaskDesc,TaskDueDate=Task.DueDate,PriorityLevel=Task.PriorityLevel)
+        self.SetInformation(Task)
 
 
 class SectionWidget(QtWidgets.QWidget):
@@ -212,7 +226,7 @@ class SectionWidget(QtWidgets.QWidget):
             #If the user hit 'ok', then create the task
             #If the input is empty, then do nothing
             if not Title.strip(): return
-            task=cl.Task(ParentSection=cl.Section.Instances[self.SectionID],TaskTitle=Title,DueDate=datetime.datetime.now()+datetime.timedelta(0,15))
+            task=cl.Task(ParentSection=cl.Section.Instances[self.SectionID],TaskTitle=Title)
             frame=QtWidgets.QFrame(self.ui.TasksContents)
             framelayout=QtWidgets.QGridLayout()
             framelayout.addWidget(TaskWidget(frame,task))
@@ -285,7 +299,7 @@ class TaskEditDialog(QtWidgets.QDialog):
 
     ReturnSignal=QtCore.pyqtSignal(bool)
     
-    def __init__(self,PriorityLevel,TaskTitle=None,TaskDesc=None,TaskDueDate: datetime.datetime=None) -> None:
+    def __init__(self,Task: cl.Task,PriorityLevel,TaskTitle=None,TaskDesc=None,TaskDueDate: datetime.datetime=None) -> None:
         super().__init__()
         #Set it to be a modal dialog
         self.setModal(True)
@@ -295,12 +309,20 @@ class TaskEditDialog(QtWidgets.QDialog):
         #Sets the date for the datetime edit
         if TaskDueDate==None:
             TaskDueDate=datetime.datetime.now()
-        self.ui.dateTimeEdit.setDateTime(QtCore.QDateTime.fromString(str(TaskDueDate),"yyyy-mm-dd HH:mm:ss.zzz"))
+        self.ui.dateTimeEdit.setDisplayFormat("dd-MM-yyyy HH:mm:ss")
+        self.ui.dateTimeEdit.setDateTime(QtCore.QDateTime.fromString(str(TaskDueDate)[0:19],"yyyy-MM-dd HH:mm:ss"))
         self.ui.spinBox.setValue(PriorityLevel)
         self.ui.textEdit.setText(TaskTitle)
         self.ui.textEdit_2.setText(TaskDesc)
-
         ok = self.exec_()
+        if ok:
+            newpr=self.ui.spinBox.value()
+            newtitle=self.ui.textEdit.toPlainText()
+            newdesc=self.ui.textEdit_2.toPlainText()
+            newduedate=self.ui.dateTimeEdit.dateTime()
+            newduedate=newduedate.toPyDateTime()
+            Task.ReConfigureTask(newtitle,newdesc,newpr,DueDate=newduedate)
+    
         
 
         
