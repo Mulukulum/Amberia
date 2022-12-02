@@ -218,6 +218,7 @@ class SectionWidget(QtWidgets.QWidget):
         super().__init__(frame)
         self.ui=SectionWidgetUI()
         self.ui.setupUi(frame)
+        self.ui.SectionDeleteButton.clicked.connect(lambda: self.parentWidget().deleteLater())
 
         if Section==None:
             self.SectionID=-1
