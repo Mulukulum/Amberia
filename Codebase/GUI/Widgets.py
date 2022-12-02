@@ -114,7 +114,8 @@ class TaskWidget(QtWidgets.QWidget):
         self.ui.TaskFrame.setStyleSheet(ss+"QFrame:hover { background-color: #1c1d21;}")
         self.ui.TaskDescription.textChanged.connect(lambda: self.TaskDescChanged(self.ui.TaskDescription.toPlainText()) )
         self.ui.ReminderBox.stateChanged.connect(lambda: self.ReminderStateChanged(self.ui.ReminderBox.isChecked()) )
-        
+        self.ui.TaskDescription.setStyleSheet("color: #c9c15f")
+        self.ui.ReminderBox.setStyleSheet("color: #c9c15f")
         if Task==None:
             ErrorLog("WARNING : TaskWidget Constructor called without providing a task")
             self.TaskID=-1
@@ -366,6 +367,10 @@ class TaskEditDialog(QtWidgets.QDialog):
         self.ui.spinBox.setValue(PriorityLevel)
         self.ui.textEdit.setText(TaskTitle)
         self.ui.textEdit_2.setText(TaskDesc)
+        self.ui.dateTimeEdit.setStyleSheet("color: #c9c15f")
+        self.ui.spinBox.setStyleSheet("color: #c9c15f")
+        self.ui.textEdit.setStyleSheet("color: #c9c15f")
+        self.ui.textEdit_2.setStyleSheet("color: #c9c15f")
         ok = self.exec_()
         if ok:
             newpr=self.ui.spinBox.value()
