@@ -237,7 +237,7 @@ class SectionWidget(QtWidgets.QWidget):
 
         #If the section is a default section, hide the buttons to 
         #Delete and Show the Name of the Section
-        if Section.DefaultSection==True:
+        if Section.IsDefaultSection==True:
             self.ui.SectionDeleteButton.hide()
             self.ui.SectionName.hide()
             self.ui.TaskAddButton.setShortcut("ctrl+t")

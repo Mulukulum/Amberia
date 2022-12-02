@@ -32,7 +32,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.RefreshButton.clicked.connect(lambda: self.ShowTasksTodayWidget())
         self.TodaysTasksShown=False
         self.WidgetFrame=QtWidgets.QFrame()
-        self.setWindowIcon(QtGui.QIcon(os.path.dirname(__file__)+r"\\UI_Files\\Icon.png"))
+        self.setWindowIcon(QtGui.QIcon(os.path.dirname(__file__)+r"\\UI_Files\\App.ico"))
         self.setWindowTitle("Amberia")
         #Mainwindow Ui Setup
         #Color Setup
