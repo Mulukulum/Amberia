@@ -112,7 +112,7 @@ class TaskWidget(QtWidgets.QWidget):
         self.ui.setupUi(frame)
         ss=frame.styleSheet()
         frame.setStyleSheet(ss+".QFrame:hover { background-color: #7a7a7a;}")
-        self.ui.TaskFrame.setStyleSheet(ss+"QFrame:hover { background-color: #1c1d21;}")
+        #self.ui.TaskFrame.setStyleSheet(ss+"QFrame:hover { background-color: #1c1d21;}")
         self.ui.TaskDescription.textChanged.connect(lambda: self.TaskDescChanged(self.ui.TaskDescription.toPlainText()) )
         self.ui.ReminderBox.stateChanged.connect(lambda: self.ReminderStateChanged(self.ui.ReminderBox.isChecked()) )
         self.ui.TaskDescription.setStyleSheet("color: #c9c15f")
