@@ -24,6 +24,8 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         super(AmberMainWindow,self).__init__()
         self.ui=AmberWindowUI()
         self.ui.setupUi(self)
+        self.ui.RefreshButton.setStyleSheet("background-color: #2a3364 ; ")
+        self.ui.RefreshButton.clicked.connect(lambda: self.ShowTasksTodayWidget())
         self.TodaysTasksShown=False
         self.WidgetFrame=QtWidgets.QFrame()
         self.setWindowIcon(QtGui.QIcon(os.path.dirname(__file__)+r"\\UI_Files\\Icon.png"))
@@ -54,6 +56,10 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         button.deleteLater()
         self.ShowTasksTodayWidget()
         self.ui.TasksTodayButton.click()
+    
+    def EditProjectButtonName(self,ObjectName: str,Title: str):
+        button=self.findChildren(QtWidgets.QPushButton,ObjectName)[0]
+        button.setText(Title)
     
     def RetrieveFromDB(self):
         #Function to update the UI with project buttons
@@ -94,6 +100,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Connect the signals and slots
         ProjWid=ProjectWidget(frame=FrameForMainWidget, Project=ProjectObj)
         ProjWid.SignalDeleteProjectButton.connect(lambda objname: self.RemoveProjectButton(objname))
+        ProjWid.SignalEditProjectButton.connect(lambda Objname,Title: self.EditProjectButtonName(Objname,Title))
 
         framelayout.addWidget(ProjWid)
         layout=self.ui.VLayoutForMainWidget

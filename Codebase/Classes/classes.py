@@ -558,7 +558,6 @@ class Task:
                 self.ReminderThread.StopCurrentThread()
         
         
-        
         if Priority.IsValid(PriorityLevel):          #Checks if the incoming argument is a valid priority level
             self.PriorityLevel=PriorityLevel            #If so, then give the task its new priority
 
@@ -579,6 +578,11 @@ class Task:
             self.ShowReminder,
             self.ID
             ))
+
+    def UpdateTaskDesc(self,Desc):
+        self.TaskDesc=Desc
+        ExecuteCommand("""UPDATE tasks SET task_description=? WHERE task_id=?""",(self.TaskDesc,self.ID))
+
 
     def CompleteTask(self):
 
@@ -742,6 +746,8 @@ class NotificationThread:
         #If the date is less than the current time then just return
         self.Stop.clear()
         now=datetime.datetime.now()
+        if Date==None:
+            return
         if now+datetime.timedelta(0,3) >= Date:
             ErrorLog(f"WARNING: Show Reminder called on {self.Task.ID} for an event in the past")
             return

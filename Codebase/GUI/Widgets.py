@@ -21,22 +21,52 @@ from Codebase.Functions.Colors import HexFormat
 
 class TodayTasksWidget(QtWidgets.QWidget):
 
+    Signal=QtCore.pyqtSignal(int)
+
     def __init__(self,frame) -> None:
         super().__init__(frame)
         self.ui=TaskTodayUI()
+        self.frame=frame
         self.ui.setupUi(self)
+        self.ui.SortNameButton.hide()
+        self.ui.SortPriorityButton.hide()
+        self.ui.SortProjectButton.hide()
+        #self.ui.SortNameButton.clicked.connect(self.SortByName)
+        #self.ui.SortPriorityButton.clicked.connect(self.SortByPriority)
+        #self.ui.SortProjectButton.clicked.connect(self.SortByProject)
         #Sets the name of the widget
         try:
             TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0")
         except :
-            pass
+            ErrorLog("CRITICAL: TODAY TASK(S) LOOKUP FAILED. Likely Error due to issue with UDF in Functions\Database.py")
         else:
             for IDTuples in TaskIDs:
                 ID=IDTuples[0]
                 self.AddTaskToWidget(cl.Task.Instances[ID])
         self.setObjectName(u"TaskTodayWidget")
 
+    def SortByProject(self):
+        TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_projectid")
+        self=TodayTasksWidget(self.frame)
+        for IDTuples in TaskIDs:
+                ID=IDTuples[0]
+                self.AddTaskToWidget(cl.Task.Instances[ID])
     
+    def SortByPriority(self):
+        TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_priority")
+        self=TodayTasksWidget(self.frame)
+        for IDTuples in TaskIDs:
+                ID=IDTuples[0]
+                self.AddTaskToWidget(cl.Task.Instances[ID])
+    
+    def SortByName(self):
+        TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_title")
+        self=TodayTasksWidget(self.frame)
+        for IDTuples in TaskIDs:
+                ID=IDTuples[0]
+                self.AddTaskToWidget(cl.Task.Instances[ID])
+
+
     def AddTaskToWidget(self,TaskObject: cl.Task):
         
         frame=QtWidgets.QFrame(self.ui.ScrollAreaContentsForTaskWidgets)
@@ -82,6 +112,7 @@ class TaskWidget(QtWidgets.QWidget):
         ss=frame.styleSheet()
         frame.setStyleSheet(ss+".QFrame:hover { background-color: #7a7a7a;}")
         self.ui.TaskFrame.setStyleSheet(ss+"QFrame:hover { background-color: #1c1d21;}")
+        self.ui.TaskDescription.textChanged.connect(lambda: self.TaskDescChanged(self.ui.TaskDescription.toPlainText()) )
         self.ui.ReminderBox.stateChanged.connect(lambda: self.ReminderStateChanged(self.ui.ReminderBox.isChecked()) )
         
         if Task==None:
@@ -96,7 +127,11 @@ class TaskWidget(QtWidgets.QWidget):
             Task.SignalReminder()
         else:
             Task.SetReminderState(0)
-            
+    
+    def TaskDescChanged(self,Text: str):
+        Task=cl.Task.Instances[self.TaskID]
+        Task.UpdateTaskDesc(Text)
+        
 
     #Set Information is basically reconfiguring the label
     def SetInformation(self,TaskObject: cl.Task):
@@ -173,6 +208,8 @@ class TaskWidget(QtWidgets.QWidget):
         Task=cl.Task.Instances[self.TaskID]
         dialog=TaskEditDialog(Task=Task,TaskTitle=Task.TaskTitle,TaskDesc=Task.TaskDesc,TaskDueDate=Task.DueDate,PriorityLevel=Task.PriorityLevel)
         self.SetInformation(Task)
+    
+
 
 
 class SectionWidget(QtWidgets.QWidget):
@@ -237,6 +274,7 @@ class SectionWidget(QtWidgets.QWidget):
 class ProjectWidget(QtWidgets.QWidget):
     
     SignalDeleteProjectButton=QtCore.pyqtSignal(str)
+    SignalEditProjectButton=QtCore.pyqtSignal(str,str)
     
     def __init__(self,frame,Project=None) -> None:
         super().__init__(frame)
@@ -252,6 +290,7 @@ class ProjectWidget(QtWidgets.QWidget):
         #Setup buttons
         self.ui.DeleteProject.setShortcut('Delete')
         self.ui.DeleteProject.clicked.connect(lambda: self.DeleteProject())
+        self.ui.EditDetails.clicked.connect(lambda: self.EditButtonClick())
 
         self.ui.AddSection.setShortcut('ctrl+s')
     
@@ -281,6 +320,18 @@ class ProjectWidget(QtWidgets.QWidget):
             framelayout.addWidget(SectionWidget(frame,Section))
             self.ui.LayoutToAddSections.addWidget(frame)
             #Section Widget added to project Widget now
+    
+    def EditButtonClick(self):
+        Dialog=QtWidgets.QInputDialog(self)
+        Title,Ok=Dialog.getText(self,"Project","Enter Project Name",)
+        if Ok:
+            #If the user hit 'ok', then create the project
+            #If the input is empty, then do nothing
+            if not Title.strip(): return
+            Proj=cl.Project.Instances[self.ProjectID]
+            Proj.SetName(Title.strip())
+            self.ui.ProjectName.setText(Title.strip())
+            self.SignalEditProjectButton.emit(f"AccessProjectButton_{self.ProjectID}",Title.strip())
 
     def AddSectionClicked(self):
         Dialog=QtWidgets.QInputDialog(self)
