@@ -61,14 +61,15 @@ class TaskWidgetUI(object):
 
         self.gridLayout.addWidget(self.PriorityLevelDisplay, 0, 6, 1, 1)
 
-        self.TaskFrame = QFrame(Form)
-        self.TaskFrame.setObjectName(u"TaskFrame")
-        self.TaskFrame.setFrameShape(QFrame.StyledPanel)
-        self.TaskFrame.setFrameShadow(QFrame.Raised)
-        self.horizontalLayout_2 = QHBoxLayout(self.TaskFrame)
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
 
-        self.gridLayout.addWidget(self.TaskFrame, 3, 0, 1, 7)
+        #self.TaskFrame = QFrame(Form)
+        #self.TaskFrame.setObjectName(u"TaskFrame")
+        #self.TaskFrame.setFrameShape(QFrame.StyledPanel)
+        #self.TaskFrame.setFrameShadow(QFrame.Raised)
+        #self.horizontalLayout_2 = QHBoxLayout(self.TaskFrame)
+        #self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+
+        #self.gridLayout.addWidget(self.TaskFrame, 3, 0, 1, 7)
 
         self.TaskTitle_label = QLabel(Form)
         self.TaskTitle_label.setObjectName(u"TaskTitle_label")

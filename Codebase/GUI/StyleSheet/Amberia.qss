@@ -33,7 +33,7 @@ QWidget
 QLabel
 {
 	background-color: #2A3364;
-	color: #d69e28;
+	color: #f3ab11;
 
 }
 
@@ -73,8 +73,8 @@ QPushButton::pressed
 /*-----QLineEdit-----*/
 QLineEdit
 {
-	background-color: #b4656f;
-	color: #16df19;
+	background-color: #2f4183;
+	color: #c9a91a;
 	border-style: double;
 	border-width: 6px;
 	border-color: #2a3364;

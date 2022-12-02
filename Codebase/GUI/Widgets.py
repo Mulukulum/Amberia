@@ -30,7 +30,8 @@ class TodayTasksWidget(QtWidgets.QWidget):
         self.ui.setupUi(self)
         self.ui.SortNameButton.hide()
         self.ui.SortPriorityButton.hide()
-        self.ui.SortProjectButton.hide()
+        self.ui.SortProjectButton.setDisabled(True)
+        self.ui.SortProjectButton.setText("Task(s) Today")
         #self.ui.SortNameButton.clicked.connect(self.SortByName)
         #self.ui.SortPriorityButton.clicked.connect(self.SortByPriority)
         #self.ui.SortProjectButton.clicked.connect(self.SortByProject)
@@ -111,7 +112,7 @@ class TaskWidget(QtWidgets.QWidget):
         self.ui.setupUi(frame)
         ss=frame.styleSheet()
         frame.setStyleSheet(ss+".QFrame:hover { background-color: #7a7a7a;}")
-        self.ui.TaskFrame.setStyleSheet(ss+"QFrame:hover { background-color: #1c1d21;}")
+        #self.ui.TaskFrame.setStyleSheet(ss+"QFrame:hover { background-color: #1c1d21;}")
         self.ui.TaskDescription.textChanged.connect(lambda: self.TaskDescChanged(self.ui.TaskDescription.toPlainText()) )
         self.ui.ReminderBox.stateChanged.connect(lambda: self.ReminderStateChanged(self.ui.ReminderBox.isChecked()) )
         self.ui.TaskDescription.setStyleSheet("color: #c9c15f")
@@ -207,7 +208,7 @@ class TaskWidget(QtWidgets.QWidget):
     def TaskEditButtonClicked(self):
         #First, create the Dialog to popup
         Task=cl.Task.Instances[self.TaskID]
-        dialog=TaskEditDialog(Task=Task,TaskTitle=Task.TaskTitle,TaskDesc=Task.TaskDesc,TaskDueDate=Task.DueDate,PriorityLevel=Task.PriorityLevel)
+        TaskEditDialog(Task=Task,TaskTitle=Task.TaskTitle,TaskDesc=Task.TaskDesc,TaskDueDate=Task.DueDate,PriorityLevel=Task.PriorityLevel)
         self.SetInformation(Task)
     
 
