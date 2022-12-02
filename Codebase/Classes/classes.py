@@ -630,19 +630,19 @@ class TaskBuilder:
 
 #Class for sending notifs using threads
 class NotificationThread:
-    
+
     def __init__(self,Task: Task) -> None:
         self.Task=Task
-        self.Stop=threading.Event()
-        self.Stop.clear()
+        self.StopFlag=threading.Event()
+        self.StopFlag.clear()
 
     def StopCurrentThread(self):
         #Sets the stop flag
-        self.Stop.set()
+        self.StopFlag.set()
         
     def ScheduleReminder(self,NewDue: datetime.datetime,Title=None,Message=None):
         #If stop is set, then show the reminder
-        if self.Stop.is_set():
+        if self.StopFlag.is_set():
             self.ShowReminder(NewDue,Title,Message)
         else:
             self.StopCurrentThread()
@@ -650,7 +650,7 @@ class NotificationThread:
     
     def ShowReminder(self,Date: datetime.datetime,title=None,msg=None):
         #If the date is less than the current time then just return
-        self.Stop.clear()
+        self.StopFlag.clear()
         now=datetime.datetime.now()
         if Date==None:
             return
@@ -670,10 +670,10 @@ class NotificationThread:
         #Calculate the no of seconds to sleep for
         iterations=delta//5 ; final=delta%5
         #While the stop flag is not set and the time has not been reached
-        while self.Stop.is_set()==False and iterations:
+        while self.StopFlag.is_set()==False and iterations:
             time.sleep(5) ; iterations-=1
         #If the event flag is set, then return immediately
-        if self.Stop.is_set():
+        if self.StopFlag.is_set():
             return
         time.sleep(final)
         #Task Notifications 
