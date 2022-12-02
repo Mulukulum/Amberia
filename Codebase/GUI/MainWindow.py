@@ -24,6 +24,10 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         super(AmberMainWindow,self).__init__()
         self.ui=AmberWindowUI()
         self.ui.setupUi(self)
+        self.ui.CurrentWidgetTitleLabel.setStyleSheet(self.ui.CurrentWidgetTitleLabel.styleSheet()+"; font-size: 24px")
+        self.ui.ProjectsLabel.setStyleSheet(self.ui.ProjectsLabel.styleSheet()+"font-size: 20px")
+        self.ui.ProjectsLabel.setMaximumHeight(200)
+        self.ui.ProjectsLabel.setMinimumHeight(40)
         self.ui.RefreshButton.setStyleSheet("background-color: #2a3364 ; ")
         self.ui.RefreshButton.clicked.connect(lambda: self.ShowTasksTodayWidget())
         self.TodaysTasksShown=False
@@ -39,8 +43,14 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Set the Shortcuts for the Buttons
         self.ui.TasksTodayButton.setShortcut("ctrl+h")
         self.ui.CreateProjectButton.setShortcut("ctrl+n")
+        self.ui.TasksTodayButton.setMinimumHeight(40)
+        self.ui.CreateProjectButton.setMinimumHeight(40)
+        self.ui.TasksTodayButton.setMaximumHeight(300)
+        self.ui.CreateProjectButton.setMaximumHeight(300)
 
         #Set the connections of the buttons
+        self.ui.TasksTodayButton.setStyleSheet(self.ui.TasksTodayButton.styleSheet()+" ; font-size: 24px ;")
+        self.ui.CreateProjectButton.setStyleSheet(self.ui.CreateProjectButton.styleSheet()+"; font-size: 24px ;")
         self.ui.TasksTodayButton.clicked.connect(self.ShowTasksTodayWidget)
         self.ui.CreateProjectButton.clicked.connect(self.AddProjectButtonClicked)
 
@@ -49,13 +59,13 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Makes the buttons for the existing projects
         self.RetrieveFromDB()
         #Show Window
-        self.show()
+        self.showMaximized()
     
     def RemoveProjectButton(self,ObjectName: str):
         button=self.findChildren(QtWidgets.QPushButton,ObjectName)[0]
         button.deleteLater()
         self.ShowTasksTodayWidget()
-        self.ui.TasksTodayButton.click()
+        self.ui.RefreshButton.click()
     
     def EditProjectButtonName(self,ObjectName: str,Title: str):
         button=self.findChildren(QtWidgets.QPushButton,ObjectName)[0]
@@ -70,14 +80,20 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         button=QtWidgets.QPushButton(self.ui.ProjectContents)
         button.setObjectName(f"AccessProjectButton_{Proj.ID}")
         button.setText(Proj.Title)
-        button.setStyleSheet(f"background-color: {HexFormat(Proj.Color)} ; ")
+        button.setStyleSheet(f"background-color: {HexFormat(Proj.Color)} ; font-size: 20px ; ")
         self.ui.ButtonList.addWidget(button)
         button.clicked.connect(lambda: self.ShowProjectWidget(Proj))
 
     def AddProjectButtonClicked(self):
         #Popup the dialog
-        Dialog=QtWidgets.QInputDialog(None)
-        Title,Ok=Dialog.getText(self,"Add Project","Project Name:",)
+        Dialog=QtWidgets.QInputDialog(self)
+        Dialog.resize(400,300)
+        Dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
+        Dialog.setWindowTitle('Add Project')
+        Dialog.setLabelText('Enter Project Name')
+        Dialog.setStyleSheet(Dialog.styleSheet()+"; font-size:16px")
+        Ok = Dialog.exec_()
+        Title = Dialog.textValue()
         if Ok:
             #If the user hit 'ok', then create the project
             #If the input is empty, then do nothing
@@ -87,7 +103,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
             button=QtWidgets.QPushButton(self.ui.ProjectContents)
             button.setObjectName(f"AccessProjectButton_{Proj.ID}")
             button.setText(Proj.Title)
-            button.setStyleSheet(f"background-color: {HexFormat(Proj.Color)} ; ")
+            button.setStyleSheet(f"background-color: {HexFormat(Proj.Color)} ; font-size: 20px ; ")
             self.ui.ButtonList.addWidget(button)
             button.clicked.connect(lambda: self.ShowProjectWidget(Proj))
             button.click()

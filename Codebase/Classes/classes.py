@@ -11,6 +11,9 @@ from Codebase.Functions.Colors import GetRandomColor
 #Importing notification fnctions
 from plyer import notification
 
+from os.path import dirname
+path=dirname(dirname(__file__))
+
 import threading
 
 import sys,time
@@ -648,6 +651,7 @@ class Task:
         notification.notify(
             title=Title,
             message=Message,
+            app_icon=path+r'\\GUI\\UI_Files\\AppIcon.ico',
             timeout=10
             )
 
