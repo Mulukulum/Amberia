@@ -14,9 +14,7 @@ from Codebase.GUI.Widgets import (
     TodayTasksWidget, ProjectWidget
     )
 
-
 class AmberMainWindow(QtWidgets.QMainWindow):
-
 
     def __init__(self) -> None:
         
