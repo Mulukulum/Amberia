@@ -206,11 +206,13 @@ class TaskWidget(QtWidgets.QWidget):
         self.parentWidget().deleteLater()
 
 class SectionWidget(QtWidgets.QWidget):
+    MinimumSectionHeight=400
 
     def __init__(self,frame,Section: cl.Section=None) -> None:
         super().__init__(frame)
         self.ui=SectionWidgetUI()
         self.ui.setupUi(frame)
+        frame.setMinimumHeight(self.MinimumSectionHeight)
         #Main setup completed
         #StyleSheets
         frame.setStyleSheet(frame.styleSheet()+".QFrame:hover {background-color: #2a3364}")
@@ -218,7 +220,7 @@ class SectionWidget(QtWidgets.QWidget):
         self.ui.TaskAddButton.setStyleSheet(self.ui.TaskAddButton.styleSheet()+f"; font-size: 14px ; ")
         self.ui.SectionDeleteButton.setStyleSheet(self.ui.SectionDeleteButton.styleSheet()+f"; font-size: 14px ; ")
         #Button shortcuts
-        self.ui.TaskAddButton.setShortcut("ctrl+t")
+        if Section.IsDefaultSection : self.ui.TaskAddButton.setShortcut("ctrl+t")
         #Signals and slots
         self.ui.SectionDeleteButton.clicked.connect(lambda: self.parentWidget().deleteLater())
         self.ui.TaskAddButton.clicked.connect(lambda: self.AddTaskClicked())
@@ -249,6 +251,7 @@ class SectionWidget(QtWidgets.QWidget):
     def AddTaskClicked(self):
         Dialog=QtWidgets.QInputDialog(self)
         Dialog.resize(400,300)
+        Dialog.setStyleSheet("font-size: 16px")
         Dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
         Dialog.setWindowTitle('Create Task')
         Dialog.setLabelText('Enter the Name of the Task')

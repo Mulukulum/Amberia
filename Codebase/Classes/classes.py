@@ -676,7 +676,7 @@ class NotificationThread:
         #if msg==None : self.msg=f"Priority {self.Task.PriorityLevel} in Project {self.Task.ParentSection.ParentProject.Title[0:20]}..."
         self.timediff=Date-datetime.datetime.now()
         #Create a daemon thread
-        self.CurrentThread=threading.Thread(target=self.ThreadFunction,args=(self.timediff.total_seconds(),self.title,self.msg),daemon=True)
+        self.CurrentThread=threading.Thread(target=self.ThreadFunction,args=(self.timediff.total_seconds(),title,msg),daemon=True)
         #Starts the thread
         self.CurrentThread.start()
     
