@@ -59,7 +59,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.showMaximized()
     
     def resizeEvent(self, Event: QtGui.QResizeEvent) -> None:
-        self.ui.ProjectScrollArea.setMinimumWidth(Event.size().width()//4.25)
+        self.ui.ProjectScrollArea.setMinimumWidth(int(Event.size().width()//4.25))
         return super().resizeEvent(Event)
     
     def RemoveProjectButton(self,ObjectName: str):

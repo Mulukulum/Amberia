@@ -112,7 +112,7 @@ class TaskWidget(QtWidgets.QWidget):
         self.ui.DaysLeftDisplay.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
 
         #Set Signals and slots
-        self.ui.ReminderBox.stateChanged.connect(lambda: self.ReminderStateChanged(self.ui.ReminderBox.isChecked()) )
+        self.ui.ReminderBox.stateChanged.connect(self.ReminderStateChanged)
         self.ui.DeleteTaskButton.clicked.connect(lambda: self.TaskDeleteButtonClicked(Task))
         self.ui.EditTaskButton.clicked.connect(lambda: self.TaskEditButtonClicked())
         #Set task information
@@ -122,7 +122,7 @@ class TaskWidget(QtWidgets.QWidget):
         else:
             self.SetInformation(Task)
     
-    def ReminderStateChanged(self,ShowReminder: bool):
+    def ReminderStateChanged(self,ShowReminder: int):
         Task=cl.Task.Instances[self.TaskID]
         if ShowReminder: Task.SetReminderState(1)
         else: Task.SetReminderState(0)
@@ -174,6 +174,7 @@ class TaskWidget(QtWidgets.QWidget):
         self.ui.TaskTitle_label.setText(Text)
         if TaskObject.ShowReminder:
             self.ui.ReminderBox.setChecked(True)
+            TaskObject.SetReminderState(1)
         else:
             self.ui.ReminderBox.setChecked(False)
         #Adds the Label Widget

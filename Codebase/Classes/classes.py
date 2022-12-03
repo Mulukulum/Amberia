@@ -537,28 +537,25 @@ class Task:
         Task.Instances.pop(self.ID)
 
     def SetReminderState(self,State:int,Title=None,msg=None):
-        if State==self.ShowReminder: 
-            return
-        else:
-            if Title==None:
-                if len(self.TaskTitle)>20:
-                    Title=f"{self.TaskTitle[0:20]}... is Due"
-                else:
-                    Title=f"{self.TaskTitle} is Due"
-            if msg==None:
-                TaskDesc="" if self.TaskDesc==None else self.TaskDesc
-                msg=f"Priority {self.PriorityLevel} in {self.ParentSection.ParentProject.Title[0:20]}\n {TaskDesc[0:31]}"
-            self.ShowReminder=State
-            ExecuteCommand("UPDATE tasks SET task_showreminder=? WHERE task_id=?",(self.ShowReminder,self.ID))
-            #If reminder is to be set
-            if State:
-                self.ReminderThread.StopCurrentThread()
-                self.ReminderThread=NotificationThread(self)
-                self.ReminderThread.ScheduleReminder(self.DueDate,Title,msg)
-            else: 
-                self.ReminderThread.StopCurrentThread()
-
-    def ChangeDueDate(self, NewDueDate: datetime.datetime):
+        if Title==None:
+            if len(self.TaskTitle)>20:
+                Title=f"{self.TaskTitle[0:20]}... is Due"
+            else:
+                Title=f"{self.TaskTitle} is Due"
+        if msg==None:
+            TaskDesc="" if self.TaskDesc==None else self.TaskDesc
+            msg=f"Priority {self.PriorityLevel} in {self.ParentSection.ParentProject.Title[0:20]}\n {TaskDesc[0:31]}"
+        self.ShowReminder=State
+        ExecuteCommand("UPDATE tasks SET task_showreminder=? WHERE task_id=?",(self.ShowReminder,self.ID))
+        #If reminder is to be set
+        if State:
+            self.ReminderThread.StopCurrentThread()
+            self.ReminderThread=NotificationThread(self)
+            self.ReminderThread.ScheduleReminder(self.DueDate,Title,msg)
+        else: 
+            self.ReminderThread.StopCurrentThread()
+            
+    def ChageDueDate(self, NewDueDate: datetime.datetime):
         self.DueDate=NewDueDate                         #Accepts a new due date
         ExecuteCommand(f"UPDATE tasks SET task_duedate=? WHERE task_id=?",(NewDueDate,self.ID))
         if self.ShowReminder:
