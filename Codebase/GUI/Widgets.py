@@ -380,14 +380,14 @@ class TaskEditDialog(QtWidgets.QDialog):
         if TaskDesc!=None: self.ui.TaskDescEdit.setText(TaskDesc)
 
         #Stylesheets
-        self.ui.DueDateEdit.setStyleSheet("color: #c9c15f; font-size: 16px ; ")
-        self.ui.PriorityLevelEdit.setStyleSheet("color: #c9c15f; font-size: 16px ; ")
-        self.ui.TaskTitleEdit.setStyleSheet("color: #c9c15f; font-size: 16px ; ")
-        self.ui.TaskDescEdit.setStyleSheet("color: #c9c15f; font-size: 16px ; ")
-        self.ui.TaskDueLabel.setStyleSheet("color: #c9c15f; font-size: 16px ; ")
-        self.ui.PriorityLabel.setStyleSheet("color: #c9c15f; font-size: 16px ; ")
-        self.ui.CancelButton.setStyleSheet("color: #c9c15f; font-size: 16px ; ")
-        self.ui.SubmitButton.setStyleSheet("color: #c9c15f; font-size: 16px ; ")
+        self.ui.DueDateEdit.setStyleSheet(" font-size: 16px ; ")
+        self.ui.PriorityLevelEdit.setStyleSheet(" font-size: 16px ; ")
+        self.ui.TaskTitleEdit.setStyleSheet(" font-size: 16px ; ")
+        self.ui.TaskDescEdit.setStyleSheet( "font-size: 16px ; ")
+        self.ui.TaskDueLabel.setStyleSheet(" font-size: 16px ; ")
+        self.ui.PriorityLabel.setStyleSheet(" font-size: 16px ; ")
+        self.ui.CancelButton.setStyleSheet(" font-size: 16px ; ")
+        self.ui.SubmitButton.setStyleSheet(" font-size: 16px ; ")
         Ok = self.exec_()
         if Ok:
             newpr=self.ui.PriorityLevelEdit.value()
