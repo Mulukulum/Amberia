@@ -142,7 +142,7 @@ class TaskWidget(QtWidgets.QWidget):
         if TaskObject.TaskDesc!=None:
             self.ui.TaskDescription.setText(TaskObject.TaskDesc)
         else:
-            self.ui.TaskDescription.setPlaceholderText(u'Enter Description Here') 
+            self.ui.TaskDescription.setPlaceholderText(u'Describe Your Task or Add Notes Here') 
         #Get the Title of the Task
         Title=TaskObject.TaskTitle
         Due=TaskObject.DueDate
@@ -367,29 +367,29 @@ class TaskEditDialog(QtWidgets.QDialog):
         self.ui=TaskEditUI()
         self.setStyleSheet(StyleSheet)
         self.ui.setupUi(self)
-
+        self.setWindowTitle("Edit Task")
+        self.resize(500,300)
         #Sets the date for the datetime edit
         if TaskDueDate==None:
             TaskDueDate=datetime.datetime.now()
-        
         #Setting the displays
-        self.ui.dateTimeEdit.setDisplayFormat("dd-MM-yyyy HH:mm:ss")
-        self.ui.dateTimeEdit.setDateTime(QtCore.QDateTime.fromString(str(TaskDueDate)[0:19],"yyyy-MM-dd HH:mm:ss"))
-        self.ui.spinBox.setValue(PriorityLevel)
-        self.ui.textEdit.setText(TaskTitle)
-        self.ui.textEdit_2.setText(TaskDesc)
+        self.ui.DueDateEdit.setDisplayFormat("dd-MM-yyyy HH:mm:ss")
+        self.ui.DueDateEdit.setDateTime(QtCore.QDateTime.fromString(str(TaskDueDate)[0:19],"yyyy-MM-dd HH:mm:ss"))
+        self.ui.PriorityLevelEdit.setValue(PriorityLevel)
+        self.ui.TaskTitleEdit.setText(TaskTitle)
+        if TaskDesc!=None: self.ui.TaskDescEdit.setText(TaskDesc)
 
         #Stylesheets
-        self.ui.dateTimeEdit.setStyleSheet("color: #c9c15f")
-        self.ui.spinBox.setStyleSheet("color: #c9c15f")
-        self.ui.textEdit.setStyleSheet("color: #c9c15f")
-        self.ui.textEdit_2.setStyleSheet("color: #c9c15f")
+        self.ui.DueDateEdit.setStyleSheet("color: #c9c15f")
+        self.ui.PriorityLevelEdit.setStyleSheet("color: #c9c15f")
+        self.ui.TaskTitleEdit.setStyleSheet("color: #c9c15f")
+        self.ui.TaskDescEdit.setStyleSheet("color: #c9c15f")
         Ok = self.exec_()
         if Ok:
-            newpr=self.ui.spinBox.value()
-            newtitle=self.ui.textEdit.toPlainText()
-            newdesc=self.ui.textEdit_2.toPlainText()
-            newduedate=self.ui.dateTimeEdit.dateTime()
+            newpr=self.ui.PriorityLevelEdit.value()
+            newtitle=self.ui.TaskTitleEdit.text()
+            newdesc=self.ui.TaskDescEdit.toPlainText()
+            newduedate=self.ui.DueDateEdit.dateTime()
             newduedate=newduedate.toPyDateTime()
             Task.ReConfigureTask(newtitle,newdesc,newpr,DueDate=newduedate)
 
