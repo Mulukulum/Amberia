@@ -263,8 +263,8 @@ class ProjectWidget(QtWidgets.QWidget):
         #Emit the signal to delete the project button
         self.SignalDeleteProjectButton.emit(f"AccessProjectButton_{self.ProjectID}")
         #Delete the Widgets parent frame
-        parentwidget=self.parentWidget()
-        parentwidget.deleteLater()
+        #parentwidget=self.parentWidget()
+        #parentwidget.deleteLater()
         #Delete the Existing Project from the db
         (cl.Project.Instances[self.ProjectID]).DeleteProject()
         
@@ -318,7 +318,7 @@ class ProjectWidget(QtWidgets.QWidget):
             self.ui.LayoutToAddSections.addWidget(frame)
             #Section Widget added to project Widget now
 class TaskEditDialog(QtWidgets.QDialog):
-    
+
     ReturnSignal=QtCore.pyqtSignal(bool)
 
     def __init__(self,Task: cl.Task,PriorityLevel,TaskTitle=None,TaskDesc=None,TaskDueDate: datetime.datetime=None) -> None:
