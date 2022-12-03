@@ -239,21 +239,19 @@ class SectionWidget(QtWidgets.QWidget):
             #Section Widget added to project Widget now
 
 class ProjectWidget(QtWidgets.QWidget):
-    
+
     SignalDeleteProjectButton=QtCore.pyqtSignal(str)
     SignalEditProjectButton=QtCore.pyqtSignal(str,str)
-    
+
     def __init__(self,frame,Project=None) -> None:
         super().__init__(frame)
         self.ui=ProjectWidgetUI()
         self.ui.setupUi(frame)
-
         if Project==None:
             ErrorLog("WARNING : ProjectWidget Constructor called without providing a project")
             self.ProjectID=-1
         else:
             self.SetInformation(Project)
-        
         #Setup buttons
         self.ui.DeleteProject.clicked.connect(lambda: self.DeleteProject())
         self.ui.EditDetails.clicked.connect(lambda: self.EditButtonClick())
@@ -288,10 +286,15 @@ class ProjectWidget(QtWidgets.QWidget):
             framelayout.addWidget(SectionWidget(frame,Section))
             self.ui.LayoutToAddSections.addWidget(frame)
             #Section Widget added to project Widget now
-    
     def EditButtonClick(self):
         Dialog=QtWidgets.QInputDialog(self)
-        Title,Ok=Dialog.getText(self,"Project","Enter Project Name",)
+        Dialog.resize(400,300)
+        Dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
+        Dialog.setWindowTitle('Edit Project Title')
+        Dialog.setLabelText('Enter Project Name :')
+        Dialog.setStyleSheet(StyleSheet)
+        Ok = Dialog.exec_()
+        Title = Dialog.textValue()
         if Ok:
             #If the user hit 'ok', then create the project
             #If the input is empty, then do nothing
@@ -317,7 +320,6 @@ class ProjectWidget(QtWidgets.QWidget):
 class TaskEditDialog(QtWidgets.QDialog):
 
     ReturnSignal=QtCore.pyqtSignal(bool)
-    
     def __init__(self,Task: cl.Task,PriorityLevel,TaskTitle=None,TaskDesc=None,TaskDueDate: datetime.datetime=None) -> None:
         super().__init__()
         #Set it to be a modal dialog
