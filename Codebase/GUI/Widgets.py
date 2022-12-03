@@ -32,6 +32,9 @@ class TodayTasksWidget(QtWidgets.QWidget):
         self.ui.SortNameButton.clicked.connect(lambda: self.SortSignal.emit(0))
         self.ui.SortProjectButton.clicked.connect(lambda : self.SortSignal.emit(1))
         self.ui.SortPriorityButton.clicked.connect(lambda : self.SortSignal.emit(2))
+        self.ui.SortNameButton.setStyleSheet(self.ui.SortNameButton.styleSheet()+"; font-size: 14px ; ")
+        self.ui.SortProjectButton.setStyleSheet(self.ui.SortProjectButton.styleSheet()+"; font-size: 14px ; ")
+        self.ui.SortPriorityButton.setStyleSheet(self.ui.SortPriorityButton.styleSheet()+"; font-size: 14px ; ")
         #Sets the SQL Queries
         NameSort="SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_title"
         ProjectSort="SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_projectid"
@@ -82,19 +85,28 @@ class TaskWidget(QtWidgets.QWidget):
     OrdinalTimeFunction=lambda n : str(n) + {1:'st',2:'nd',3:'rd'}.get(abs(n)%10,'th')
     MinimumTaskHeight=275
 
-    def __init__(self,frame,Task=None) -> None:
+    def __init__(self,frame,Task: cl.Task=None) -> None:
         super().__init__(frame)
         self.ui=TaskWidgetUI()
         self.ui.setupUi(frame)
         frame.setMinimumHeight(self.MinimumTaskHeight)
         #install event filter for taskdesc edit
         self.ui.TaskDescription.installEventFilter(self)
+
         #Set StyleSheets
         frame.setStyleSheet(frame.styleSheet()+".QFrame:hover { background-color: #7a7a7a;}")
         self.ui.TaskDescription.setStyleSheet("color: #c9c15f ; font-size: 16px ;")
         self.ui.ReminderBox.setStyleSheet("color: #c9c15f ; ")
         self.ui.PriorityLevelDisplay.setStyleSheet("color : #c9c15f ; ")
         self.ui.DaysLeftDisplay.setStyleSheet("color : #c9c15f ; ")
+        self.ui.EditTaskButton.setStyleSheet(self.ui.EditTaskButton.styleSheet()+"; font-size: 16px ; ")
+        self.ui.ReminderBox.setStyleSheet(self.ui.ReminderBox.styleSheet()+"; font-size: 16px ; ")
+        self.ui.DeleteTaskButton.setStyleSheet(self.ui.DeleteTaskButton.styleSheet()+"; font-size: 16px ; ")
+        #Labels have their bg colors tied to priority level so its important to set that in the reconfigure function
+        self.ui.TaskTitle_label.setStyleSheet(self.ui.TaskTitle_label.styleSheet()+f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(Task.PriorityLevel))} ")
+        self.ui.DaysLeftLabel.setStyleSheet(self.ui.DaysLeftLabel.styleSheet()+f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(Task.PriorityLevel))}")
+        self.ui.PriorityLabel.setStyleSheet(self.ui.PriorityLabel.styleSheet()+f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(Task.PriorityLevel))}")
+        
         #Set the style of the LCD Screens
         self.ui.PriorityLevelDisplay.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
         self.ui.DaysLeftDisplay.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
@@ -135,6 +147,9 @@ class TaskWidget(QtWidgets.QWidget):
         Title=TaskObject.TaskTitle
         Due=TaskObject.DueDate
         Completed=TaskObject.Completed
+        self.ui.TaskTitle_label.setStyleSheet(self.ui.TaskTitle_label.styleSheet()+f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(TaskObject.PriorityLevel))} ")
+        self.ui.DaysLeftLabel.setStyleSheet(self.ui.DaysLeftLabel.styleSheet()+f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(TaskObject.PriorityLevel))}")
+        self.ui.PriorityLabel.setStyleSheet(self.ui.PriorityLabel.styleSheet()+f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(TaskObject.PriorityLevel))}")
         #If the task is not given a duedate
         if Due==None:
             #Then Hide the days left part
@@ -192,11 +207,16 @@ class TaskWidget(QtWidgets.QWidget):
 
 class SectionWidget(QtWidgets.QWidget):
 
-    def __init__(self,frame,Section=None) -> None:
+    def __init__(self,frame,Section: cl.Section=None) -> None:
         super().__init__(frame)
         self.ui=SectionWidgetUI()
         self.ui.setupUi(frame)
         #Main setup completed
+        #StyleSheets
+        frame.setStyleSheet(frame.styleSheet()+".QFrame:hover {background-color: #2a3364}")
+        self.ui.SectionName.setStyleSheet(self.ui.SectionName.styleSheet()+f"; font-size: 14px ; background-color: {HexFormat(Section.ParentProject.Color)}")
+        self.ui.TaskAddButton.setStyleSheet(self.ui.TaskAddButton.styleSheet()+f"; font-size: 14px ; ")
+        self.ui.SectionDeleteButton.setStyleSheet(self.ui.SectionDeleteButton.styleSheet()+f"; font-size: 14px ; ")
         #Button shortcuts
         self.ui.TaskAddButton.setShortcut("ctrl+t")
         #Signals and slots
@@ -233,9 +253,9 @@ class SectionWidget(QtWidgets.QWidget):
         Dialog.setWindowTitle('Create Task')
         Dialog.setLabelText('Enter the Name of the Task')
         Dialog.setStyleSheet(StyleSheet)
-        ok = Dialog.exec_()
+        Ok = Dialog.exec_()
         Title = Dialog.textValue()
-        if ok:
+        if Ok:
             #If the user hit 'ok', then create the task
             #If the input is empty, then do nothing
             if not Title.strip(): return
@@ -260,6 +280,11 @@ class ProjectWidget(QtWidgets.QWidget):
             self.ProjectID=-1
         else:
             self.SetInformation(Project)
+        #Stylesheets
+        self.ui.ProjectName.setStyleSheet(self.ui.ProjectName.styleSheet()+"; font-size: 14px")
+        self.ui.EditDetails.setStyleSheet(self.ui.EditDetails.styleSheet()+"; font-size: 14px")
+        self.ui.AddSection.setStyleSheet(self.ui.AddSection.styleSheet()+"; font-size: 14px")
+        self.ui.DeleteProject.setStyleSheet(self.ui.DeleteProject.styleSheet()+"; font-size: 14px")
         #Setup buttons
         self.ui.DeleteProject.clicked.connect(lambda: self.DeleteProject())
         self.ui.EditDetails.clicked.connect(lambda: self.EditButtonClick())
@@ -355,8 +380,8 @@ class TaskEditDialog(QtWidgets.QDialog):
         self.ui.spinBox.setStyleSheet("color: #c9c15f")
         self.ui.textEdit.setStyleSheet("color: #c9c15f")
         self.ui.textEdit_2.setStyleSheet("color: #c9c15f")
-        ok = self.exec_()
-        if ok:
+        Ok = self.exec_()
+        if Ok:
             newpr=self.ui.spinBox.value()
             newtitle=self.ui.textEdit.toPlainText()
             newdesc=self.ui.textEdit_2.toPlainText()
