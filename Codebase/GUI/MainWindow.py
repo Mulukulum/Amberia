@@ -167,7 +167,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Show the tasks widget
         FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
         framelayout=QtWidgets.QGridLayout(FrameForMainWidget)
-        SettWidget=SettingsWidget(FrameForMainWidget)
+        SettWidget=SettingsWidget(FrameForMainWidget,self)
         SettWidget.RestartSignal.connect(lambda SortOrder: self.ShowTasksTodayWidget(SortOrder))
         framelayout.addWidget(SettWidget)
         layout=self.ui.VLayoutForMainWidget

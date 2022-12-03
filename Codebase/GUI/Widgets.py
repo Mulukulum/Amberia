@@ -413,11 +413,66 @@ class TaskEditDialog(QtWidgets.QDialog):
 class SettingsWidget(QtWidgets.QWidget):
 
     RestartSignal=QtCore.pyqtSignal()
+    ThemesDictionary={
+        "DefaultTheme":"Amberia.qss",
+        "DayTheme":"Day.qss",
+        "Phantasmagoric":"Amberia.qss",
+        "TwilightTheme":"Amberia.qss",
+        }
 
-    def __init__(self,frame) -> None:
+    def __init__(self,frame,MainWindow) -> None:
         super().__init__(frame)
         self.ui=SettingsUI()
         self.frame=frame
         self.setStyleSheet(StyleSheet)
         self.ui.setupUi(self)
+
+        #Setup the Constants
+        self.SelectedTheme=None
+        self.ResetDispValues=False
+        self.ResetPrValues=False
+        self.ResetTheme=False
+
+        #Signals and slots setup
+        self.ui.SaveChangesRestart.clicked.connect(self.SaveChangesRestart)
+        self.ui.SaveChanges.clicked.connect(self.SaveChanges)
+        self.ui.CancelChanges.clicked.connect(MainWindow.ShowTasksTodayWidget)
+        self.ui.ResetButton.clicked.connect(self.ResetDisplayBehaviours)
+
+        #Set the values into the corresponding displays
+        if duedatebehaviour:
+            self.ui.NewTaskDueBehaviour.setChecked(True)
+        else:
+            self.ui.NewTaskDueBehaviour.setChecked(False)
+
+    def ResetDisplayBehaviours(self):
+        self.ResetDispValues=True
+        #Disable the button
+        self.ui.ResetButton.setStyleSheet("; background-color: #000000")
+        self.ui.ResetButton.setDisabled(True)
+        
+
+    def SaveChangesRestart(self):
+        #Get all the values
+        TaskDispHt=self.ui.TaskDispHeight.value()
+        SectionDispHt=self.ui.SecDispHeight.value()
+        ProjButtonHt=self.ui.ProjButtonHeight.value()
+        SidebarScale=self.ui.SidebarScaleFactor.value()
+        duebehaviour=self.ui.NewTaskDueBehaviour.isChecked()
+        if self.SelectedTheme!=None: 
+            StyleSheet=self.ThemesDictionary.get(self.SelectedTheme.objectName())
+        else: 
+            StyleSheet=Stylesheet
+        ExecuteCommand("""UPDATE settings SET stylesheet=?,
+        mintaskdispheight=? , minsecdispheight=? , projectminheight=? ,
+        sidebarfactor=? , setduedatetoday=? WHERE def=1 """,
+        (StyleSheet, TaskDispHt, SectionDispHt,ProjButtonHt,SidebarScale,duebehaviour))
+
+    def SaveChanges(self):
+        #Get all the values
+        TaskDispHt=self.ui.TaskDispHeight
+        SectionDispHt=self.ui.SecDispHeight
+        ProjButtonHt=self.ui.ProjButtonHeight
+        SidebarScale=self.ui.SidebarScaleFactor
+        duebehaviour=self.ui.NewTaskDueBehaviour
 
