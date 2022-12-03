@@ -23,9 +23,8 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui=AmberWindowUI()
         self.ui.setupUi(self)
         self.setStyleSheet(StyleSheet)
-        self.setWindowIcon(QtGui.QIcon(os.path.dirname(__file__)+r"\\UI_Files\\App.ico"))
+        self.setWindowIcon(QtGui.QIcon(os.path.dirname(__file__)+r"\\UI_Files\\AppIcon.ico"))
         self.setWindowTitle("Amberia")
-        self.TodaysTasksShown=False
         self.WidgetFrame=QtWidgets.QFrame()
         #Basic UI Setup Done
         #Set the Shortcuts for the Buttons
@@ -33,7 +32,6 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.CreateProjectButton.setShortcut("ctrl+n")
         self.ui.RefreshButton.setShortcut("ctrl+h")
         
-        width=self.size().width()
         #Set Minimum Sizes for the widgets
         self.ui.ProjectsLabel.setMaximumHeight(200)
         self.ui.ProjectsLabel.setMinimumHeight(40)

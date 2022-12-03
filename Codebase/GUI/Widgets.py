@@ -80,17 +80,25 @@ class LabelWidget(QtWidgets.QWidget):
 class TaskWidget(QtWidgets.QWidget):
     #Lambda Function because python somehow doesn't have a method for this
     OrdinalTimeFunction=lambda n : str(n) + {1:'st',2:'nd',3:'rd'}.get(abs(n)%10,'th')
+    MinimumTaskHeight=275
 
     def __init__(self,frame,Task=None) -> None:
         super().__init__(frame)
         self.ui=TaskWidgetUI()
         self.ui.setupUi(frame)
+        frame.setMinimumHeight(self.MinimumTaskHeight)
         #install event filter for taskdesc edit
         self.ui.TaskDescription.installEventFilter(self)
         #Set StyleSheets
         frame.setStyleSheet(frame.styleSheet()+".QFrame:hover { background-color: #7a7a7a;}")
         self.ui.TaskDescription.setStyleSheet("color: #c9c15f ; font-size: 16px ;")
-        self.ui.ReminderBox.setStyleSheet("color: #c9c15f")
+        self.ui.ReminderBox.setStyleSheet("color: #c9c15f ; ")
+        self.ui.PriorityLevelDisplay.setStyleSheet("color : #c9c15f ; ")
+        self.ui.DaysLeftDisplay.setStyleSheet("color : #c9c15f ; ")
+        #Set the style of the LCD Screens
+        self.ui.PriorityLevelDisplay.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+        self.ui.DaysLeftDisplay.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+
         #Set Signals and slots
         self.ui.ReminderBox.stateChanged.connect(lambda: self.ReminderStateChanged(self.ui.ReminderBox.isChecked()) )
         self.ui.DeleteTaskButton.clicked.connect(lambda: self.TaskDeleteButtonClicked(Task))
@@ -330,14 +338,19 @@ class TaskEditDialog(QtWidgets.QDialog):
         self.ui=TaskEditUI()
         self.setStyleSheet(StyleSheet)
         self.ui.setupUi(self)
+
         #Sets the date for the datetime edit
         if TaskDueDate==None:
             TaskDueDate=datetime.datetime.now()
+        
+        #Setting the displays
         self.ui.dateTimeEdit.setDisplayFormat("dd-MM-yyyy HH:mm:ss")
         self.ui.dateTimeEdit.setDateTime(QtCore.QDateTime.fromString(str(TaskDueDate)[0:19],"yyyy-MM-dd HH:mm:ss"))
         self.ui.spinBox.setValue(PriorityLevel)
         self.ui.textEdit.setText(TaskTitle)
         self.ui.textEdit_2.setText(TaskDesc)
+
+        #Stylesheets
         self.ui.dateTimeEdit.setStyleSheet("color: #c9c15f")
         self.ui.spinBox.setStyleSheet("color: #c9c15f")
         self.ui.textEdit.setStyleSheet("color: #c9c15f")
