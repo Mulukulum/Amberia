@@ -5,7 +5,8 @@ import PyQt5
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
-path=dirname(__file__)+r'\\StyleSheet\\Amberia.qss'
+FilePath=r'\\StyleSheet\\Amberia.qss'
+path=dirname(__file__)+FilePath
 with open(path) as f:
     StyleSheet=f.read()
 from Codebase.Classes import classes as cl
@@ -401,6 +402,8 @@ class TaskEditDialog(QtWidgets.QDialog):
             newduedate=self.ui.DueDateEdit.dateTime()
             newduedate=newduedate.toPyDateTime()
             Task.ReConfigureTask(newtitle,newdesc,newpr,DueDate=newduedate)
+
+
 
 
         

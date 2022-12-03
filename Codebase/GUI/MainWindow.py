@@ -11,12 +11,13 @@ from Codebase.Functions.Colors import HexFormat
 from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.AmberMainWin import AmberWindowUI
 from Codebase.GUI.Widgets import (
-    TodayTasksWidget, ProjectWidget, StyleSheet
+    TodayTasksWidget, ProjectWidget, StyleSheet , 
     )
 
 class AmberMainWindow(QtWidgets.QMainWindow):
 
-    MinimumButtonHeight=65
+    ProjectButtonMinimumHeight=65
+    SideBarScaleFactor=0.235
 
     def __init__(self) -> None:
         #Sets up the mainwindow class
@@ -61,7 +62,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.showMaximized()
     
     def resizeEvent(self, Event: QtGui.QResizeEvent) -> None:
-        self.ui.ProjectScrollArea.setMinimumWidth(int(Event.size().width()//4.25))
+        self.ui.ProjectScrollArea.setMinimumWidth(int(Event.size().width()*self.SideBarScaleFactor))
         return super().resizeEvent(Event)
     
     def RemoveProjectButton(self,ObjectName: str):
@@ -83,7 +84,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         button=QtWidgets.QPushButton(self.ui.ProjectContents)
         button.setObjectName(f"AccessProjectButton_{Proj.ID}")
         button.setText(Proj.Title)
-        button.setMinimumHeight(self.MinimumButtonHeight)
+        button.setMinimumHeight(self.ProjectButtonMinimumHeight)
         button.setStyleSheet(f"background-color: {HexFormat(Proj.Color)} ; font-size: 20px ; ")
         button.clicked.connect(lambda: self.ShowProjectWidget(Proj))
         #Show the button
@@ -108,7 +109,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
             button=QtWidgets.QPushButton(self.ui.ProjectContents)
             button.setObjectName(f"AccessProjectButton_{Proj.ID}")
             button.setText(Proj.Title)
-            button.setMinimumHeight(self.MinimumButtonHeight)
+            button.setMinimumHeight(self.ProjectButtonMinimumHeight)
             button.setStyleSheet(f"background-color: {HexFormat(Proj.Color)} ; font-size: 20px ; ")
             self.ui.ButtonList.addWidget(button)
             button.clicked.connect(lambda: self.ShowProjectWidget(Proj))
