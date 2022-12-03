@@ -11,7 +11,7 @@ from Codebase.Functions.Colors import HexFormat
 from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.AmberMainWin import AmberWindowUI
 from Codebase.GUI.Widgets import (
-    TodayTasksWidget, ProjectWidget
+    TodayTasksWidget, ProjectWidget,StyleSheet
     )
 
 class AmberMainWindow(QtWidgets.QMainWindow):
@@ -33,22 +33,26 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.setWindowIcon(QtGui.QIcon(os.path.dirname(__file__)+r"\\UI_Files\\App.ico"))
         self.setWindowTitle("Amberia")
         #Mainwindow Ui Setup
+
         #Color Setup
-        with open(os.path.dirname(__file__)+r"\\StyleSheet\\Amberia.qss") as f:
-            self.setStyleSheet(f.read())
+        self.setStyleSheet(StyleSheet)
         #self.setStyleSheet("background-color : #1c1d21 ;")
         
         #Set the Shortcuts for the Buttons
         self.ui.TasksTodayButton.setShortcut("ctrl+h")
         self.ui.CreateProjectButton.setShortcut("ctrl+n")
+
+        #Set Minimum Sizes for the Buttons
         self.ui.TasksTodayButton.setMinimumHeight(40)
         self.ui.CreateProjectButton.setMinimumHeight(40)
         self.ui.TasksTodayButton.setMaximumHeight(300)
         self.ui.CreateProjectButton.setMaximumHeight(300)
 
-        #Set the connections of the buttons
+        #Set the stylesheets
         self.ui.TasksTodayButton.setStyleSheet(self.ui.TasksTodayButton.styleSheet()+" ; font-size: 24px ;")
         self.ui.CreateProjectButton.setStyleSheet(self.ui.CreateProjectButton.styleSheet()+"; font-size: 24px ;")
+        
+        #Set the connections of the buttons
         self.ui.TasksTodayButton.clicked.connect(self.ShowTasksTodayWidget)
         self.ui.CreateProjectButton.clicked.connect(self.AddProjectButtonClicked)
 

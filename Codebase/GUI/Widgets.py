@@ -1,11 +1,11 @@
 import datetime
 import sys
-import os
+from os.path import dirname
 import PyQt5
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
-path=os.path.dirname(__file__)+r'\\StyleSheet\\Amberia.qss'
+path=dirname(__file__)+r'\\StyleSheet\\Amberia.qss'
 with open(path) as f:
     StyleSheet=f.read()
 from Codebase.Classes import classes as cl

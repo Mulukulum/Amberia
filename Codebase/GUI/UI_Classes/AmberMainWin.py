@@ -14,12 +14,16 @@ from PyQt5.QtWidgets import *
 
 
 class AmberWindowUI(object):
+
     def setupUi(self, MainWindow):
+        
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
+
+        #Set the Minimum Size   
         MainWindow.resize(1000, 800)
         MainWindow.setMinimumSize(QSize(800, 625))
-        #MainWindow.setStyleSheet(u"background: #03fccf")
+
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout_2 = QGridLayout(self.centralwidget)
@@ -35,25 +39,22 @@ class AmberWindowUI(object):
         self.ProjectContents.setGeometry(QRect(0, 0, 310, 504))
         self.ButtonList = QGridLayout(self.ProjectContents)
         self.ButtonList.setObjectName(u"ButtonList")
+
+        #Creates the CreateProjectButton and TasksTodayButton and sets the colors
         self.CreateProjectButton = QPushButton(self.ProjectContents)
         self.CreateProjectButton.setObjectName(u"CreateProjectButton")
         self.CreateProjectButton.setStyleSheet(u"background: #2a3364")
-
         self.ButtonList.addWidget(self.CreateProjectButton, 1, 0, 1, 1)
-
-        self.ProjectsLabel = QLabel(self.ProjectContents)
-        self.ProjectsLabel.setObjectName(u"ProjectsLabel")
-
-        self.ButtonList.addWidget(self.ProjectsLabel, 4, 0, 1, 1)
-
         self.TasksTodayButton = QPushButton(self.ProjectContents)
         self.TasksTodayButton.setObjectName(u"TasksTodayButton")
         self.TasksTodayButton.setStyleSheet(u"background: #2a3364")
-
         self.ButtonList.addWidget(self.TasksTodayButton, 0, 0, 1, 1)
+        
+        self.ProjectsLabel = QLabel(self.ProjectContents)
+        self.ProjectsLabel.setObjectName(u"ProjectsLabel")
+        self.ButtonList.addWidget(self.ProjectsLabel, 4, 0, 1, 1)
 
         self.ProjectScrollArea.setWidget(self.ProjectContents)
-
         self.gridLayout.addWidget(self.ProjectScrollArea, 4, 0, 1, 2)
 
         self.MainWidgetFrame = QFrame(self.centralwidget)
