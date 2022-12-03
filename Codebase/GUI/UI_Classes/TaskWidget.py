@@ -107,7 +107,7 @@ class TaskWidgetUI(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
-        self.TaskDescription.setPlaceholderText(QCoreApplication.translate("Form", u"Enter Description Here", None))
+        self.TaskDescription.setPlaceholderText(QCoreApplication.translate("Form", u"Describe Your Task or Add Notes Here", None))
         self.PriorityLabel.setText(QCoreApplication.translate("Form", u"Priority Level :", None))
         self.TaskTitle_label.setText(QCoreApplication.translate("Form", u"TaskName", None))
         self.EditTaskButton.setText(QCoreApplication.translate("Form", u"Edit Task", None))

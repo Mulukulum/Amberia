@@ -380,10 +380,14 @@ class TaskEditDialog(QtWidgets.QDialog):
         if TaskDesc!=None: self.ui.TaskDescEdit.setText(TaskDesc)
 
         #Stylesheets
-        self.ui.DueDateEdit.setStyleSheet("color: #c9c15f")
-        self.ui.PriorityLevelEdit.setStyleSheet("color: #c9c15f")
-        self.ui.TaskTitleEdit.setStyleSheet("color: #c9c15f")
-        self.ui.TaskDescEdit.setStyleSheet("color: #c9c15f")
+        self.ui.DueDateEdit.setStyleSheet("color: #c9c15f; font-size: 16px ; ")
+        self.ui.PriorityLevelEdit.setStyleSheet("color: #c9c15f; font-size: 16px ; ")
+        self.ui.TaskTitleEdit.setStyleSheet("color: #c9c15f; font-size: 16px ; ")
+        self.ui.TaskDescEdit.setStyleSheet("color: #c9c15f; font-size: 16px ; ")
+        self.ui.TaskDueLabel.setStyleSheet("color: #c9c15f; font-size: 16px ; ")
+        self.ui.PriorityLabel.setStyleSheet("color: #c9c15f; font-size: 16px ; ")
+        self.ui.CancelButton.setStyleSheet("color: #c9c15f; font-size: 16px ; ")
+        self.ui.SubmitButton.setStyleSheet("color: #c9c15f; font-size: 16px ; ")
         Ok = self.exec_()
         if Ok:
             newpr=self.ui.PriorityLevelEdit.value()
