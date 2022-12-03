@@ -28,12 +28,12 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.TodaysTasksShown=False
         self.WidgetFrame=QtWidgets.QFrame()
         #Basic UI Setup Done
-
         #Set the Shortcuts for the Buttons
         self.ui.TasksTodayButton.setShortcut("ctrl+r")
         self.ui.CreateProjectButton.setShortcut("ctrl+n")
         self.ui.RefreshButton.setShortcut("ctrl+h")
 
+        width=self.size().width()
         #Set Minimum Sizes for the widgets
         self.ui.ProjectsLabel.setMaximumHeight(200)
         self.ui.ProjectsLabel.setMinimumHeight(40)
@@ -41,6 +41,8 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.TasksTodayButton.setMinimumHeight(40)
         self.ui.CreateProjectButton.setMaximumHeight(300)
         self.ui.CreateProjectButton.setMinimumHeight(40)
+        #self.ui.ProjectContents.setMaximumWidth(width//4)
+        #self.ui.ProjectScrollArea.setMaximumWidth(width//4)
 
         #Set the stylesheets
         self.ui.CurrentWidgetTitleLabel.setStyleSheet(self.ui.CurrentWidgetTitleLabel.styleSheet()+"; font-size: 24px")
