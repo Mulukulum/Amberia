@@ -87,16 +87,15 @@ class TaskWidget(QtWidgets.QWidget):
         self.ui.setupUi(frame)
         #install event filter for taskdesc edit
         self.ui.TaskDescription.installEventFilter(self)
-
         #Set StyleSheets
         frame.setStyleSheet(frame.styleSheet()+".QFrame:hover { background-color: #7a7a7a;}")
         self.ui.TaskDescription.setStyleSheet("color: #c9c15f ; font-size: 16px ;")
         self.ui.ReminderBox.setStyleSheet("color: #c9c15f")
-        
         #Set Signals and slots
-        #self.ui.TaskDescription.textChanged.connect(lambda: self.TaskDescChanged(self.ui.TaskDescription.toPlainText()) )
-
         self.ui.ReminderBox.stateChanged.connect(lambda: self.ReminderStateChanged(self.ui.ReminderBox.isChecked()) )
+        self.ui.DeleteTaskButton.clicked.connect(lambda: self.TaskDeleteButtonClicked(Task))
+        self.ui.EditTaskButton.clicked.connect(lambda: self.TaskEditButtonClicked())
+        #Set task information
         if Task==None:
             ErrorLog("WARNING : TaskWidget Constructor called without providing a task")
             self.TaskID=-1
@@ -112,34 +111,28 @@ class TaskWidget(QtWidgets.QWidget):
         Task=cl.Task.Instances[self.TaskID]
         Task.UpdateTaskDesc(Text)
 
-    #Set Information is basically reconfiguring the label
+    #Set Information is basically reconfiguring the taskui
     def SetInformation(self,TaskObject: cl.Task):
         #Sets the name of the object for easy identification
         self.setObjectName(f"TaskWidget{TaskObject.ID}")
         self.TaskID=TaskObject.ID
-        self.ui.DeleteTaskButton.clicked.connect(lambda: self.TaskDeleteButtonClicked(TaskObject))
-        self.ui.EditTaskButton.clicked.connect(lambda: self.TaskEditButtonClicked() )
         #Sets the Display to show priority Level
         self.ui.PriorityLevelDisplay.display(TaskObject.PriorityLevel)
-
         #Sets the Description to the Description of the Task
         if TaskObject.TaskDesc!=None:
             self.ui.TaskDescription.setText(TaskObject.TaskDesc)
         else:
-            self.ui.TaskDescription.setPlaceholderText(u'Enter Description Here')
-        
+            self.ui.TaskDescription.setPlaceholderText(u'Enter Description Here') 
         #Get the Title of the Task
         Title=TaskObject.TaskTitle
         Due=TaskObject.DueDate
         Completed=TaskObject.Completed
-
         #If the task is not given a duedate
         if Due==None:
             #Then Hide the days left part
             self.ui.DaysLeftDisplay.hide()
             self.ui.DaysLeftLabel.hide()
             Text=Title
-        
         #If the Task is not completed
         elif not Completed:
             DaysLeft=abs(Due-datetime.datetime.now()).days
@@ -148,14 +141,12 @@ class TaskWidget(QtWidgets.QWidget):
             #Show the labels if they're meant to be shown
             self.ui.DaysLeftDisplay.show()
             self.ui.DaysLeftLabel.show()
-            
         #If the Task is complete
         else:
             Text=f"Finished at {TaskObject.CompletedDate.strftime('%c')}"+Title
             #We can hide these labels since there's no need for a days left counter
             self.ui.DaysLeftDisplay.hide()
             self.ui.DaysLeftLabel.hide()
-        
         #Set the Title text
         self.ui.TaskTitle_label.setText(Text)
         if TaskObject.ShowReminder:
@@ -163,7 +154,6 @@ class TaskWidget(QtWidgets.QWidget):
         else:
             self.ui.ReminderBox.setChecked(False)
         #Adds the Label Widget
-    
         for Label in TaskObject.Labels:
             frame=QtWidgets.QFrame(self.ui.LabelsViewScrollContents)
             layout=QtWidgets.QHBoxLayout()
@@ -192,35 +182,31 @@ class TaskWidget(QtWidgets.QWidget):
         Task.DeleteTask()
         self.parentWidget().deleteLater()
 
-
-
 class SectionWidget(QtWidgets.QWidget):
 
     def __init__(self,frame,Section=None) -> None:
         super().__init__(frame)
         self.ui=SectionWidgetUI()
         self.ui.setupUi(frame)
+        #Main setup completed
+        #Button shortcuts
+        self.ui.TaskAddButton.setShortcut("ctrl+t")
+        #Signals and slots
         self.ui.SectionDeleteButton.clicked.connect(lambda: self.parentWidget().deleteLater())
-
+        self.ui.TaskAddButton.clicked.connect(lambda: self.AddTaskClicked())
         if Section==None:
             self.SectionID=-1
         else:
             self.SetInformation(Section)
     
     def SetInformation(self,Section: cl.Section):
-
         self.SectionID=Section.ID
         self.setObjectName(f"SectionWidget{self.SectionID}")
-
-        #Button Widget
-        self.ui.TaskAddButton.clicked.connect(lambda: self.AddTaskClicked())
-
         #If the section is a default section, hide the buttons to 
         #Delete and Show the Name of the Section
         if Section.IsDefaultSection==True:
             self.ui.SectionDeleteButton.hide()
             self.ui.SectionName.hide()
-            self.ui.TaskAddButton.setShortcut("ctrl+t")
         else:
             self.ui.SectionName.setText(Section.Title)
         for Task in Section.Tasks.values():
@@ -232,7 +218,6 @@ class SectionWidget(QtWidgets.QWidget):
             self.ui.VerticalLayoutForTaskWidgets.addWidget(frame)
             #Task Widget added to section Widget now
 
-    
     def AddTaskClicked(self):
         Dialog=QtWidgets.QInputDialog(self)
         Dialog.resize(400,300)
@@ -246,13 +231,12 @@ class SectionWidget(QtWidgets.QWidget):
             #If the user hit 'ok', then create the task
             #If the input is empty, then do nothing
             if not Title.strip(): return
-            task=cl.Task(ParentSection=cl.Section.Instances[self.SectionID],TaskTitle=Title)
+            task=cl.Task(ParentSection=cl.Section.Instances[self.SectionID],TaskTitle=Title,DueDate=datetime.datetime.today())
             frame=QtWidgets.QFrame(self.ui.TasksContents)
             framelayout=QtWidgets.QGridLayout()
             framelayout.addWidget(TaskWidget(frame,task))
             self.ui.VerticalLayoutForTaskWidgets.addWidget(frame)
             #Section Widget added to project Widget now
-
 
 class ProjectWidget(QtWidgets.QWidget):
     
@@ -271,10 +255,10 @@ class ProjectWidget(QtWidgets.QWidget):
             self.SetInformation(Project)
         
         #Setup buttons
-        self.ui.DeleteProject.setShortcut('Delete')
         self.ui.DeleteProject.clicked.connect(lambda: self.DeleteProject())
         self.ui.EditDetails.clicked.connect(lambda: self.EditButtonClick())
-
+        #Shortcuts
+        self.ui.DeleteProject.setShortcut('Delete')
         self.ui.AddSection.setShortcut('ctrl+s')
     
     def DeleteProject(self):
