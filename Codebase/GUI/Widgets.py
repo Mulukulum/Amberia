@@ -306,7 +306,13 @@ class ProjectWidget(QtWidgets.QWidget):
 
     def AddSectionClicked(self):
         Dialog=QtWidgets.QInputDialog(self)
-        Title,Ok=Dialog.getText(self,"Add Section","Section Name:",)
+        Dialog.resize(400,300)
+        Dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
+        Dialog.setWindowTitle('Create Section')
+        Dialog.setLabelText('Enter the Name of the Section')
+        Dialog.setStyleSheet(StyleSheet)
+        Ok = Dialog.exec_()
+        Title = Dialog.textValue()
         if Ok:
             #If the user hit 'ok', then create the project
             #If the input is empty, then do nothing

@@ -126,6 +126,8 @@ class Section:
         else:
             if SectionTitle==f"_{SectionProject.Title}":    #If the section title's name is the same as the default section
                 self.Title=(f"_{SectionTitle}")   #Sets Title to __sectionname
+            else:
+                self.Title=SectionTitle
         self.IsDefaultSection=IsDefaultSection
         self.ParentProject = SectionProject    #Get the Parent Project
         self.Tasks=dict()                   #Set the dict of Tasks (TaskId:TaskObject)
