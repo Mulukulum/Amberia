@@ -258,14 +258,10 @@ class ProjectWidget(QtWidgets.QWidget):
         #Shortcuts
         self.ui.DeleteProject.setShortcut('Delete')
         self.ui.AddSection.setShortcut('ctrl+s')
-    
+
     def DeleteProject(self):
         #Emit the signal to delete the project button
         self.SignalDeleteProjectButton.emit(f"AccessProjectButton_{self.ProjectID}")
-        #Delete the Widgets parent frame
-        #parentwidget=self.parentWidget()
-        #parentwidget.deleteLater()
-        #Delete the Existing Project from the db
         (cl.Project.Instances[self.ProjectID]).DeleteProject()
         
     def SetInformation(self, ProjectObj: cl.Project):
@@ -354,8 +350,7 @@ class TaskEditDialog(QtWidgets.QDialog):
             newduedate=self.ui.dateTimeEdit.dateTime()
             newduedate=newduedate.toPyDateTime()
             Task.ReConfigureTask(newtitle,newdesc,newpr,DueDate=newduedate)
-    
-        
+
 
         
         
