@@ -32,7 +32,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.TasksTodayButton.setShortcut("ctrl+r")
         self.ui.CreateProjectButton.setShortcut("ctrl+n")
         self.ui.RefreshButton.setShortcut("ctrl+h")
-
+        
         width=self.size().width()
         #Set Minimum Sizes for the widgets
         self.ui.ProjectsLabel.setMaximumHeight(200)
@@ -41,8 +41,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.TasksTodayButton.setMinimumHeight(40)
         self.ui.CreateProjectButton.setMaximumHeight(300)
         self.ui.CreateProjectButton.setMinimumHeight(40)
-        #self.ui.ProjectContents.setMaximumWidth(width//4)
-        #self.ui.ProjectScrollArea.setMaximumWidth(width//4)
+        self.ui.ProjectScrollArea.setMinimumWidth(400)
 
         #Set the stylesheets
         self.ui.CurrentWidgetTitleLabel.setStyleSheet(self.ui.CurrentWidgetTitleLabel.styleSheet()+"; font-size: 24px")
@@ -61,6 +60,10 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.RetrieveFromDB()
         #Show Window
         self.showMaximized()
+    
+    def resizeEvent(self, Event: QtGui.QResizeEvent) -> None:
+        self.ui.ProjectScrollArea.setMinimumWidth(Event.size().width()//4.25)
+        return super().resizeEvent(Event)
     
     def RemoveProjectButton(self,ObjectName: str):
         button=self.findChildren(QtWidgets.QPushButton,ObjectName)[0]
