@@ -1,6 +1,6 @@
 #Required imports
 #Importing all the log functions
-from Codebase.ErrorLogs.logging import ErrorLog,Log,DBLog,DBOnlyLog
+from Codebase.ErrorLogs.logging import ErrorLog,Log
 
 #Importing functions to interface with the database
 from Codebase.Functions.Database import ExecuteCommand,ExecuteScript            
@@ -12,7 +12,7 @@ from Codebase.Functions.Colors import GetRandomColor
 from plyer import notification
 
 from os.path import dirname
-path=dirname(dirname(__file__))
+PathOfCodebase=dirname(dirname(__file__))
 
 import threading
 
@@ -26,15 +26,14 @@ class Project:
     Instances=dict()
 
     def __init__(self, ProjectTitle: str, ProjectColor: int=678452056,LoadedFromDB: bool=False,ID: int=-1,DefaultSectionID: int=-1):
-
-        self.Title = ProjectTitle                 #Initialize name of project
-        
+        #Initialize name of project
+        self.Title = ProjectTitle            
         #Set a random color if No Color was specified or the Color is Invalid
         if ProjectColor>=16777215:
             self.Color=GetRandomColor()
         else:
             self.Color=ProjectColor
-
+        #Sets the ID of the project
         self.ID=ID
         #Add the Project to the Database
         if LoadedFromDB==False: self.ID=ExecuteCommand(
@@ -53,32 +52,23 @@ class Project:
         0
         )
         )[0][0]         #The [0][0] part escapes the list giving us the id alone
-        
         #Add the project to the dictionary of instances
         Project.Instances[self.ID]=self
-
         #Setting up the Default Section of the Project: 
         self.Sections=dict()
-
         #Create and Set the DefaultSection
-        self.DefaultSection = Section(SectionProject=self , SectionTitle=f"_{self.Title}",DefaultSection=True,LoadedFromDB=LoadedFromDB,ID=DefaultSectionID)
-
+        self.DefaultSection = Section(SectionProject=self , SectionTitle=f"_{self.Title}",IsDefaultSection=True,LoadedFromDB=LoadedFromDB,ID=DefaultSectionID)
 
     def DeleteProject(self):
         #Remove all Sections from the Project
         self.RemoveAllSections()
-
-
-    def RemoveAllSections(self):
-        #Uses a while loop and does this pop item horribleness
-        while self.Sections!={}:
-            self.Sections.popitem()[-1].DeleteSection(RemoveReference=False)
         ExecuteCommand(f"DELETE FROM projects WHERE project_id=?",(self.ID,))
         Project.Instances.pop(self.ID)
 
-
-    
-
+    def RemoveAllSections(self):
+        #Uses a while loop to clear the dictionary
+        while self.Sections!={}:
+            self.Sections.popitem()[-1].DeleteSection()
 
     #Method to set a New name for the Project
     def SetName(self, NewName: str):                 
@@ -99,24 +89,18 @@ class Project:
         ExecuteCommand("UPDATE projects SET project_color=? WHERE project_id=?",
                         (self.Color,self.ID))
 
-
     #Method to add a new section to a project
     def AddSection(self,SectionTitle: str): #Takes the Name of the Section as input
-        
         Section(SectionProject=self,SectionTitle=SectionTitle)
         #Update the sectioncount attribute
         ExecuteCommand("UPDATE projects SET project_sectioncount=project_sectioncount+1 WHERE project_id=?",(self.ID,))
 
     def RemoveSection(self, SectionID: int):
-        
         if SectionID not in self.Sections:
             if SectionID not in Section.Instances:
-                ErrorLog("WARNING: Section Delete Request Issued for Non-Existent Section")
-                return
+                return ErrorLog("WARNING: Section Delete Request Issued for Non-Existent Section")
             return ErrorLog("WARNING: Section Delete Request Issued for Invalid Section")
-        
-        self.Sections[SectionID]
-    
+        self.Sections[SectionID].DeleteSection()
 
     def __str__(self):
         return  f"""
@@ -128,27 +112,25 @@ class Project:
             {[s.Title for s in list(self.Sections.values())]}
         """
 
-
-
 class Section:
     
     #Dictionary to store the instances of all available Section objects
     Instances=dict()
 
-    def __init__(self,SectionProject: Project, SectionTitle: str, DefaultSection=False,LoadedFromDB: bool=False,ID: int=-1):
+    def __init__(self,SectionProject: Project, SectionTitle: str, IsDefaultSection=False,LoadedFromDB: bool=False,ID: int=-1):
 
         #Check Validity of The section Title
         #Ensuring that SectionTitle's can't start with a single underscore followed by characters
-        if SectionTitle[0]=="_" and DefaultSection==False :
-            self.Title=(f"__{SectionTitle.strip('_')}__")   #Sets Title to __sectionname__
-        else:
+        if IsDefaultSection==True :
             self.Title=SectionTitle
-        self.DefaultSection=DefaultSection
-        
+        else:
+            if SectionTitle==f"_{SectionProject.Title}":    #If the section title's name is the same as the default section
+                self.Title=(f"_{SectionTitle}")   #Sets Title to __sectionname
+        self.IsDefaultSection=IsDefaultSection
         self.ParentProject = SectionProject    #Get the Parent Project
-        self.Tasks=dict()                    #Set the dict of Tasks (TaskId:TaskObject)
-        self.ActiveTasks=dict()              #Set the dict with incomplete tasks
-        self.TextTasks=dict()
+        self.Tasks=dict()                   #Set the dict of Tasks (TaskId:TaskObject)
+        self.ActiveTasks=dict()            #Set the dict with incomplete tasks (unused feature)
+        self.TextTasks=dict()              #Unused feature               
 
         self.ID=ID
         #Add the Section to the Database
@@ -168,44 +150,34 @@ class Section:
         self.Title,       #Title of the Section
         0,0,0                 #New section so no tasks added
         ))[0][0]             
-        
         #Add the section to the dictionary of instances
         Section.Instances[self.ID]=self
-
         #Add the Section to the dictionary of Sections in the Project
         self.ParentProject.Sections[self.ID]=self
 
-    def DeleteSection(self,RemoveReference=True):
+    def DeleteSection(self):
 
         #Remove all the Tasks 
         self.DeleteAllTasks()
-
         #Remove reference from project
-        #This horribleness is because I have to use Popitem in somecases
-        if RemoveReference:
-            self.ParentProject.Sections.pop(self.ID)
+        self.ParentProject.Sections.pop(self.ID,None)
 
         #Decrement project_sectioncount from database
         ExecuteCommand("UPDATE projects SET project_sectioncount=project_sectioncount-1 WHERE project_id=?",(self.ParentProject.ID,))
-
         #Remove section from the Database
-        ExecuteCommand("DELETE FROM sections WHERE section_id=?",(self.ID,))
-
-        del self    
+        ExecuteCommand("DELETE FROM sections WHERE section_id=?",(self.ID,)) 
 
     def AddTask(self, Title: str, Description: str, Priority: int, DueDate:datetime.datetime=None,Labels: list=None):         #Add a new task to the section        
         Task(ParentSection=self, TaskTitle=Title, TaskDesc=Description, PriorityLevel=Priority, DueDate=DueDate, labels=Labels)
 
     def DeleteAllTasks(self):
-
         #Clears the Dictionary with active tasks
-        self.ActiveTasks.clear()
+        #self.ActiveTasks.clear()
         #While the section still has tasks
         while self.Tasks!={}:
             #Pop and delete them one after another
-            self.Tasks.popitem()[-1].DeleteTask(RemoveReference=False)          
+            self.Tasks.popitem()[-1].DeleteTask()          
           
-
     def __str__(self):
         #fstring returns the string representation
         return f"""
@@ -214,9 +186,8 @@ class Section:
         {self.ID=}
         {self.ParentProject.ID=}
         Task Count : {len(self.Tasks)}
-        Task Active : {len(self.ActiveTasks)}
-        """       
-        
+        """
+        #Task Active : {len(self.ActiveTasks)}
 
 class Label:
 
@@ -317,8 +288,6 @@ class Label:
     def __str__(self) -> str:
         return f'Label {self.Title} Color {self.Color} ID {self.ID}'
 
-
-
 #This Class defines a Priority Object
 #Each task contains one of these, each object has a prioritylevel and a color associated with it
 #There can be a maximum of 10 priority levels, where 10 is the lowest and 1 in the highest
@@ -351,76 +320,54 @@ class Priority:
     INSERT INTO prcolors (level,clrvalue) VALUES {f'{list(DefaultPriorityColors.items())}'.strip('[]')} ;
     END;
     """
-
     ColorCache=dict()                                           #Creates the Dictionary used for Cacheing
     Resultant=ExecuteCommand("""SELECT * FROM prcolors;""")     #Gets the current values from the Database
-
     if Resultant==[]:                                           #If the database is empty
-
         #Imports the necessary script and Priority colors
         ExecuteScript(ScriptSetDefaultColors)           #Runs the script to set the default colors
         ColorCache=DefaultPriorityColors.copy()         #Updates the Cache
-    
     ColorCache.update(Resultant)
     del Resultant                                       #Deletes the resultant list because its not needed
 
-    
-    #Class method that ensures priority level call is valid
-    
+    #Class method that ensures priority level call is valid    
     @classmethod
-    def IsValid(cls,PrLevel: int) -> bool :      
-
-        if PrLevel in cls.ValidPriorites:    return True
-        else:                            return False
+    def IsValid(cls,PrLevel: int) -> bool:      
+        if PrLevel in cls.ValidPriorites: return True
+        else: return False
 
     #Method to get the Color of a Priority Level
     @classmethod
     def ColorOfLevel(cls,PrLevel: int) -> str :
-
         #If Priority is invalid, return None
         if cls.IsValid(PrLevel)==False:          
             ErrorLog(f"Unable to get Priority Color due to Invalid Priority Level input {PrLevel}")
             return None
-
         #If the ""cache"" already has this,
         if PrLevel in cls.ColorCache:
-
             #then return the cached value
             return cls.ColorCache[PrLevel]      
-        
         #If its not in the cache then something has gone wrong somewhere,hence the TRIVIAL WARNING
         ErrorLog(f"TRIVIAL WARNING: NoValueInCache for Priority Level {PrLevel}")
         ResultantList=ExecuteCommand("""SELECT clrvalue FROM prcolors where level=?;""",(PrLevel,))
         return ResultantList[0][0]  #The [0][0] part escapes the list and the tuple to give only the integer
-    
-
-    #Forcibly updates the current color values into cache
-    @classmethod
-    def FlushToCache(cls) -> None:      #Forcibly updates the current color values into cache
-        Resultant=ExecuteCommand("SELECT * FROM prcolors;")
-        cls.ColorCache.update(Resultant)
 
     @classmethod
     def UpdateColor(cls,PrLevel: int,NewColor: int) -> bool:
-        
         if cls.IsValid(PrLevel)==False:
             return False
-
         NewColor=abs(NewColor)          #Optional Line to ensure negatives don't mess stuff up
         cls.ColorCache[PrLevel]=NewColor        #Updates the Cache with the new value
-        
         ExecuteCommand("UPDATE prcolors SET clrvalue=? WHERE level=?;",(NewColor,PrLevel)) #Updates the database with the new values
         return True
 
-
 class Task:
-
     Instances=dict()
-
-    def __init__(self, ParentSection: Section, TaskTitle: str, TaskDesc: str=None, PriorityLevel: int=Priority.UpperBound, 
-                DueDate: datetime.datetime=None,labels: list=None, LoadedFromDB: bool=False,
-                CompletionState: int=0, ReminderState: int=0, CompletionDate: datetime.datetime=None, ID: int=-1
-                ): #Initializes the class
+    def __init__(self, 
+    ParentSection: Section, TaskTitle: str, TaskDesc: str=None, 
+    PriorityLevel: int=Priority.UpperBound, ReminderState: int=0, 
+    DueDate: datetime.datetime=None, CompletionDate: datetime.datetime=None,
+    labels: list=None, CompletionState: int=0,
+    LoadedFromDB: bool=False, ID: int=-1): #Initializes the class
 
         #Sets the Title and Description for the task
         self.TaskTitle=TaskTitle
@@ -430,21 +377,18 @@ class Task:
         if labels==None:
             labels=[]
         self.DueDate=DueDate
-        self.Completed=CompletionState                                #sets completed to False, sql doesn't have bool so I'm using 0 and 1
-        self.CompletedDate=CompletionDate                                       #makes the object for completed date
+        self.Completed=CompletionState                              #sets completed to False, sql doesn't have bool so I'm using 0 and 1
+        self.CompletedDate=CompletionDate                                      #makes the object for completed date
 
         #Priority Level of Task
-
         if Priority.IsValid(PriorityLevel):          #Checks if the incoming argument is a valid priority level
             self.PriorityLevel=PriorityLevel         #If so, then give the task its priority level
         else:
             self.PriorityLevel=Priority.UpperBound   #If not, then set it to a default upperbound value
-            Log(f"Task {self.TaskTitle} given no priority. Default Value {self.PriorityLevel} Assigned")
+            ErrorLog(f"Task {self.TaskTitle} given no priority. Default Value {self.PriorityLevel} Assigned")
 
         self.Color=Priority.ColorOfLevel(PriorityLevel)     #And assign the color as well
-
-        self.ReminderThread=NotificationThread(self)
-        
+        self.ReminderThread=NotificationThread(self)        #Assign the thread class
         #ID of Task
         self.ID=ID
         if LoadedFromDB==False: self.ID=ExecuteCommand(f"""
@@ -470,19 +414,16 @@ class Task:
         self.ShowReminder,
         )
         )[0][0]
-
         #Add the task to the dictionary of instances
         Task.Instances[self.ID]=self
-        
         #Add a reference to this task in sections
         self.ParentSection.Tasks[self.ID]=self
-        self.ParentSection.ActiveTasks[self.ID]=self
-
-        if LoadedFromDB==False: ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount+1,section_activetaskcount=section_activetaskcount+1 WHERE section_id=?",(self.ParentSection.ID,))
+        #self.ParentSection.ActiveTasks[self.ID]=self
+        if LoadedFromDB==False: 
+            ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount+1,section_activetaskcount=section_activetaskcount+1 WHERE section_id=?",(self.ParentSection.ID,))
 
         #Makes the List of labels assigned to the task
         if LoadedFromDB==False:
-            
             self.Labels=[]  # list <int>
             #Note that Label is an int, and Labels is a list of ints
             for labelId in labels:
@@ -499,14 +440,10 @@ class Task:
 
 
     def ToggleLabel(self,Label: int):
-
         if Label in self.Labels:
-
             #Remove the label from the task
             self.RemoveLabel(LabelID=Label)
-        
         else:
-
             #Add the Label to the task
             self.AddLabel(Label)
 
@@ -535,27 +472,19 @@ class Task:
         Label.LabelInstances[LabelID].Tasks.remove(self.ID)
         self.Labels.remove(LabelID)
 
-    def SignalReminder(self,Title=None,msg=None):
-        self.ShowReminder=1
-        self.ReminderThread.ScheduleReminder(self.DueDate,Title,msg)
-
-    def ReConfigureTask(self, TaskTitle: str=None, TaskDesc: str=None, PriorityLevel: int=None, Reminder: int=None, DueDate: datetime.datetime=None, Labels: list=None,title=None,msg=None):
-        
+    def ReConfigureTask(self, TaskTitle: str=None, TaskDesc: str=None, PriorityLevel: int=None, Reminder: int=None, DueDate: datetime.datetime=None, Labels: list=None,Remindertitle=None,Remindermsg=None):
         if TaskTitle!=None:
             self.TaskTitle=TaskTitle                    #Changes the title to a newly provided title, if not provided stays the same
-        
         if TaskDesc!=None:
             self.TaskDesc=TaskDesc                      #Changes the desc to a newly provided desc
-
         if DueDate!=None:
             self.DueDate=DueDate                        #Changes the due date to a newly provided due date
-
         if Reminder==None:
             Reminder=0
         else:        
             if Reminder: 
                 Reminder=1      
-                self.ReminderThread.ScheduleReminder(self.DueDate,title,msg)
+                self.ReminderThread.ScheduleReminder(self.DueDate,Remindertitle,Remindermsg)
             else:
                 Reminder=0
                 self.ReminderThread.StopCurrentThread()
@@ -586,43 +515,43 @@ class Task:
         self.TaskDesc=Desc
         ExecuteCommand("""UPDATE tasks SET task_description=? WHERE task_id=?""",(self.TaskDesc,self.ID))
 
-
     def CompleteTask(self):
-
         self.Completed=1                                #Completes the task
         self.CompletedDate=datetime.datetime.now()      #records the completed time
-        self.ParentSection.ActiveTasks.pop(self.ID)
+        #self.ParentSection.ActiveTasks.pop(self.ID)
         ExecuteCommand(f"UPDATE tasks SET task_completed=?, task_completed_date=? WHERE task_id=?",(1,self.CompletedDate,self.ID))
         ExecuteCommand(f"UPDATE sections SET section_activetaskcount=section_activetaskcount-1 WHERE section_id=?",(self.ParentSection.ID,))
         self.ReminderThread.StopCurrentThread()
 
-    def DeleteTask(self,RemoveReference=True):
+    def DeleteTask(self):
         self.ReminderThread.StopCurrentThread()
         #Remove all the labels
         self.RemoveAllLabels()
-
         ExecuteCommand("UPDATE sections SET section_taskcount=section_taskcount-1 WHERE section_id=?",(self.ParentSection.ID,))
         ExecuteCommand(f"DELETE FROM tasks WHERE task_id=?;",(self.ID,))
-
         #Pops the task from its parent section
-        if RemoveReference:
-            self.ParentSection.Tasks.pop(self.ID)
-
+        self.ParentSection.Tasks.pop(self.ID,None)
         #Pops the item from the dictionary of instances
         Task.Instances.pop(self.ID)
-
-        del self
 
     def SetReminderState(self,State:int,Title=None,msg=None):
         if State==self.ShowReminder: 
             return
         else:
+            if Title==None:
+                if len(self.TaskTitle)>20:
+                    Title=f"{self.TaskTitle[0:20]}... is Due"
+                else:
+                    Title=f"{self.TaskTitle} is Due"
+            if msg==None:
+                TaskDesc="" if self.TaskDesc==None else self.TaskDesc
+                msg=f"Priority {self.PriorityLevel} in {self.ParentSection.ParentProject.Title[0:20]}\n {TaskDesc[0:31]}"
             self.ShowReminder=State
             ExecuteCommand("UPDATE tasks SET task_showreminder=? WHERE task_id=?",(self.ShowReminder,self.ID))
             #If reminder is to be set
             if State:
                 self.ReminderThread.StopCurrentThread()
-                self.ReminderThread=NotificationThread()
+                self.ReminderThread=NotificationThread(self)
                 self.ReminderThread.ScheduleReminder(self.DueDate,Title,msg)
             else: 
                 self.ReminderThread.StopCurrentThread()
@@ -632,8 +561,8 @@ class Task:
         ExecuteCommand(f"UPDATE tasks SET task_duedate=? WHERE task_id=?",(NewDueDate,self.ID))
         if self.ShowReminder:
             #Sets the prev thread to stop
-            self.ReminderThread.Stop.set()
-            self.ReminderThread=NotificationThread()
+            self.ReminderThread.StopCurrentThread()
+            self.ReminderThread=NotificationThread(self)
             self.ReminderThread.ScheduleReminder(NewDue=NewDueDate)
     
     #Update the PriorityLevel of the Task
@@ -642,7 +571,6 @@ class Task:
             self.PriorityLevel=Priority(priority)           #If so, then give the task its new priority
             self.Color=Priority.ColorOfLevel(priority)      #Give the task its new color
             ExecuteCommand(f"UPDATE tasks SET task_priority=? WHERE task_id=?",(self.PriorityLevel,self.ID))
-
         else:
             ErrorLog(f"WARNING : NO-OP DUE TO Invalid Argument for Priority : {priority}")
 
@@ -651,35 +579,26 @@ class Task:
         notification.notify(
             title=Title,
             message=Message,
-            app_icon=path+r'\\GUI\\UI_Files\\AppIcon.ico',
-            timeout=10
+            app_name='Amberia',
+            app_icon=PathOfCodebase+r'\\GUI\\UI_Files\\AppIcon.ico',
+            timeout=5
             )
 
 class TextTask:
-
-    def __init__(self, TaskTitle, priority=None, DueDate=None):
-        self.TaskTitle=TaskTitle
-        self.DueDate=DueDate
-        if Priority.IsValidPriority(priority):          #Checks if the incoming argument is a valid priority level
-            self.priority=Priority(priority)            #If so, then give the task its priority
-        else:
-            self.priority=Priority(10)                  #If not, then set it to a default value of 10
-            Log(f"Task {self.TaskTitle} given no priority. Default Value Assigned")
         
     @classmethod
     def Notify(cls, Title: str, Message: str):
         notification.notify(
             title=Title,
             message=Message,
-            timeout=10
+            app_name='Amberia',
+            app_icon=PathOfCodebase+r'\\GUI\\UI_Files\\AppIcon.ico',
+            timeout=5
             )
-
-
+    
     Instances=dict()
     
     def __init__(self,ParentSection: Section , TaskText: str,LoadedFromDB: bool=False,ID: int=-1) -> None:
-        
-        
         self.TaskText=TaskText
         self.ParentSection=ParentSection
         self.ParentProject=ParentSection.ParentProject
@@ -695,14 +614,11 @@ class TextTask:
         TextTask.Instances[self.ID]=self
     
     def DeleteTextTask(self):
-        
         #Remove the TextTask from the Section and Instances dict
         self.ParentSection.TextTasks.pop(self.ID)
         TextTask.Instances.pop(self.ID)
-
         ExecuteCommand("UPDATE sections SET section_texttaskcount=section_texttaskcount-1 WHERE section_id=?",(self.ParentSection.ID,))
         ExecuteCommand(f"DELETE FROM texttasks WHERE task_id=?;",(self.ID,))
-        del self
 
     def UpdateText(self,NewText: str):
         self.TaskText=NewText
@@ -728,35 +644,34 @@ class TaskBuilder:
 
 #Class for sending notifs using threads
 class NotificationThread:
-    
+
     def __init__(self,Task: Task) -> None:
         self.Task=Task
-        self.Stop=threading.Event()
-        self.Stop.clear()
+        self.StopFlag=threading.Event()
+        self.StopFlag.clear()
 
     def StopCurrentThread(self):
         #Sets the stop flag
-        self.Stop.set()
+        self.StopFlag.set()
         
     def ScheduleReminder(self,NewDue: datetime.datetime,Title=None,Message=None):
         #If stop is set, then show the reminder
-        if self.Stop.is_set():
-            self.ShowReminder(NewDue,Title,Message)
+        if self.StopFlag.is_set():
+            self._ShowReminder(NewDue,Title,Message)
         else:
             self.StopCurrentThread()
-            self.ShowReminder(NewDue,Title,Message)
+            self._ShowReminder(NewDue,Title,Message)
     
-    def ShowReminder(self,Date: datetime.datetime,title=None,msg=None):
+    def _ShowReminder(self,Date: datetime.datetime,title=None,msg=None):
         #If the date is less than the current time then just return
-        self.Stop.clear()
+        self.StopFlag.clear()
         now=datetime.datetime.now()
         if Date==None:
             return
         if now+datetime.timedelta(0,3) >= Date:
-            ErrorLog(f"WARNING: Show Reminder called on {self.Task.ID} for an event in the past")
             return
-        if title==None: self.title=f"Task {self.Task.TaskTitle[0:20]}... is due"
-        if msg==None : self.msg=f"Priority {self.Task.PriorityLevel} in Project {self.Task.ParentSection.ParentProject.Title[0:20]}..."
+        #if title==None: self.title=f"Task {self.Task.TaskTitle[0:20]}... is due"
+        #if msg==None : self.msg=f"Priority {self.Task.PriorityLevel} in Project {self.Task.ParentSection.ParentProject.Title[0:20]}..."
         self.timediff=Date-datetime.datetime.now()
         #Create a daemon thread
         self.CurrentThread=threading.Thread(target=self.ThreadFunction,args=(self.timediff.total_seconds(),self.title,self.msg),daemon=True)
@@ -765,17 +680,19 @@ class NotificationThread:
     
 
     def ThreadFunction(self,delta: float,title,msg):
-        #Calculate the no of seconds to sleep for
-        iterations=delta//5 ; final=delta%5
+        TimeConst=0.5
+        #Calculate the number of iterations to perform
+        iterations=delta//TimeConst 
+        final=delta%TimeConst
         #While the stop flag is not set and the time has not been reached
-        while self.Stop.is_set()==False and iterations:
-            time.sleep(5) ; iterations-=1
-        #If the event flag is set, then return immediately
-        if self.Stop.is_set():
+        while self.StopFlag.is_set()==False and iterations:
+            time.sleep(TimeConst)
+            iterations-=1
+        #If the stop flag is set, then return immediately
+        if self.StopFlag.is_set():
             return
         time.sleep(final)
         #Task Notifications 
         self.Task.Notify(Title=title,Message=msg)
-        return
             
             

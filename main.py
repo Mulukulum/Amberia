@@ -7,7 +7,11 @@ from Codebase.Classes import classes as cl
 from Codebase.GUI.MainWindow import AmberMainWindow
 #To retrieve data from a save, this file retrieves everything
 from Codebase.Classes import RetrieveFromDB
+from Codebase.Functions import Database
 
 AmberApp=QtWidgets.QApplication(sys.argv)
 win=AmberMainWindow()
-sys.exit(AmberApp.exec_())
+code=AmberApp.exec_()
+
+Database.CloseConnection()
+sys.exit(code)

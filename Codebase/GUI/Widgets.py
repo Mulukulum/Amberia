@@ -1,11 +1,11 @@
 import datetime
 import sys
-import os
+from os.path import dirname
 import PyQt5
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
-path=os.path.dirname(__file__)+r'\\StyleSheet\\Amberia.qss'
+path=dirname(__file__)+r'\\StyleSheet\\Amberia.qss'
 with open(path) as f:
     StyleSheet=f.read()
 from Codebase.Classes import classes as cl
@@ -20,25 +20,26 @@ from Codebase.ErrorLogs.logging import ErrorLog
 from Codebase.Functions.Colors import HexFormat
 
 class TodayTasksWidget(QtWidgets.QWidget):
+    #Signal to make a new instance of the widget
+    SortSignal=QtCore.pyqtSignal(int)
 
-    Signal=QtCore.pyqtSignal(int)
-
-    def __init__(self,frame) -> None:
+    def __init__(self,frame,SortBy) -> None:
         super().__init__(frame)
         self.ui=TaskTodayUI()
         self.frame=frame
         self.ui.setupUi(self)
-        self.ui.SortNameButton.hide()
-        self.ui.SortPriorityButton.hide()
-        self.ui.SortProjectButton.setDisabled(True)
-        self.ui.SortProjectButton.setText("Task(s) Today")
-        #self.ui.SortNameButton.clicked.connect(self.SortByName)
-        #self.ui.SortPriorityButton.clicked.connect(self.SortByPriority)
-        #self.ui.SortProjectButton.clicked.connect(self.SortByProject)
-        #Sets the name of the widget
+        #Button Setup
+        self.ui.SortNameButton.clicked.connect(lambda: self.SortSignal.emit(0))
+        self.ui.SortProjectButton.clicked.connect(lambda : self.SortSignal.emit(1))
+        self.ui.SortPriorityButton.clicked.connect(lambda : self.SortSignal.emit(2))
+        #Sets the SQL Queries
+        NameSort="SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_title"
+        ProjectSort="SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_projectid"
+        PrioritySort="SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_priority"
+        Queries=(NameSort,ProjectSort,PrioritySort)
         try:
-            TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0")
-        except :
+            TaskIDs=ExecuteCommand(Queries[SortBy])
+        except:
             ErrorLog("CRITICAL: TODAY TASK(S) LOOKUP FAILED. Likely Error due to issue with UDF in Functions\Database.py")
         else:
             for IDTuples in TaskIDs:
@@ -46,36 +47,12 @@ class TodayTasksWidget(QtWidgets.QWidget):
                 self.AddTaskToWidget(cl.Task.Instances[ID])
         self.setObjectName(u"TaskTodayWidget")
 
-    def SortByProject(self):
-        TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_projectid")
-        self=TodayTasksWidget(self.frame)
-        for IDTuples in TaskIDs:
-                ID=IDTuples[0]
-                self.AddTaskToWidget(cl.Task.Instances[ID])
-    
-    def SortByPriority(self):
-        TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_priority")
-        self=TodayTasksWidget(self.frame)
-        for IDTuples in TaskIDs:
-                ID=IDTuples[0]
-                self.AddTaskToWidget(cl.Task.Instances[ID])
-    
-    def SortByName(self):
-        TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_title")
-        self=TodayTasksWidget(self.frame)
-        for IDTuples in TaskIDs:
-                ID=IDTuples[0]
-                self.AddTaskToWidget(cl.Task.Instances[ID])
-
-
     def AddTaskToWidget(self,TaskObject: cl.Task):
-        
         frame=QtWidgets.QFrame(self.ui.ScrollAreaContentsForTaskWidgets)
         framelayout=QtWidgets.QGridLayout()
         framelayout.addWidget(TaskWidget(frame,TaskObject))
         self.ui.VLayoutForTaskWidgets.addWidget(frame)
 
-'''
 class LabelWidget(QtWidgets.QWidget):
 
     def __init__(self,frame,Label=None) -> None:
@@ -99,10 +76,8 @@ class LabelWidget(QtWidgets.QWidget):
             self.ui.ChangeNameButton.setEnabled()
         else:
             self.ui.ChangeNameButton.setDisabled()
-'''
 
 class TaskWidget(QtWidgets.QWidget):
-
     #Lambda Function because python somehow doesn't have a method for this
     OrdinalTimeFunction=lambda n : str(n) + {1:'st',2:'nd',3:'rd'}.get(abs(n)%10,'th')
 
@@ -110,13 +85,17 @@ class TaskWidget(QtWidgets.QWidget):
         super().__init__(frame)
         self.ui=TaskWidgetUI()
         self.ui.setupUi(frame)
-        ss=frame.styleSheet()
-        frame.setStyleSheet(ss+".QFrame:hover { background-color: #7a7a7a;}")
-        #self.ui.TaskFrame.setStyleSheet(ss+"QFrame:hover { background-color: #1c1d21;}")
-        self.ui.TaskDescription.textChanged.connect(lambda: self.TaskDescChanged(self.ui.TaskDescription.toPlainText()) )
-        self.ui.ReminderBox.stateChanged.connect(lambda: self.ReminderStateChanged(self.ui.ReminderBox.isChecked()) )
-        self.ui.TaskDescription.setStyleSheet("color: #c9c15f")
+        #install event filter for taskdesc edit
+        self.ui.TaskDescription.installEventFilter(self)
+        #Set StyleSheets
+        frame.setStyleSheet(frame.styleSheet()+".QFrame:hover { background-color: #7a7a7a;}")
+        self.ui.TaskDescription.setStyleSheet("color: #c9c15f ; font-size: 16px ;")
         self.ui.ReminderBox.setStyleSheet("color: #c9c15f")
+        #Set Signals and slots
+        self.ui.ReminderBox.stateChanged.connect(lambda: self.ReminderStateChanged(self.ui.ReminderBox.isChecked()) )
+        self.ui.DeleteTaskButton.clicked.connect(lambda: self.TaskDeleteButtonClicked(Task))
+        self.ui.EditTaskButton.clicked.connect(lambda: self.TaskEditButtonClicked())
+        #Set task information
         if Task==None:
             ErrorLog("WARNING : TaskWidget Constructor called without providing a task")
             self.TaskID=-1
@@ -125,64 +104,49 @@ class TaskWidget(QtWidgets.QWidget):
     
     def ReminderStateChanged(self,ShowReminder: bool):
         Task=cl.Task.Instances[self.TaskID]
-        if ShowReminder:
-            Task.SignalReminder()
-        else:
-            Task.SetReminderState(0)
+        if ShowReminder: Task.SetReminderState(1)
+        else: Task.SetReminderState(0)
     
     def TaskDescChanged(self,Text: str):
         Task=cl.Task.Instances[self.TaskID]
         Task.UpdateTaskDesc(Text)
-        
 
-    #Set Information is basically reconfiguring the label
+    #Set Information is basically reconfiguring the taskui
     def SetInformation(self,TaskObject: cl.Task):
-        
         #Sets the name of the object for easy identification
         self.setObjectName(f"TaskWidget{TaskObject.ID}")
         self.TaskID=TaskObject.ID
-        self.ui.DeleteTaskButton.clicked.connect(lambda: self.parentWidget().deleteLater())
-
-        self.ui.EditTaskButton.clicked.connect(lambda: self.TaskEditButtonClicked() )
         #Sets the Display to show priority Level
         self.ui.PriorityLevelDisplay.display(TaskObject.PriorityLevel)
-
         #Sets the Description to the Description of the Task
         if TaskObject.TaskDesc!=None:
             self.ui.TaskDescription.setText(TaskObject.TaskDesc)
         else:
-            self.ui.TaskDescription.setPlaceholderText(u'Enter Description Here')
-        
+            self.ui.TaskDescription.setPlaceholderText(u'Enter Description Here') 
         #Get the Title of the Task
         Title=TaskObject.TaskTitle
         Due=TaskObject.DueDate
         Completed=TaskObject.Completed
-
         #If the task is not given a duedate
         if Due==None:
-
             #Then Hide the days left part
             self.ui.DaysLeftDisplay.hide()
             self.ui.DaysLeftLabel.hide()
             Text=Title
-        
-        #The Task is not completed
+        #If the Task is not completed
         elif not Completed:
-            
             DaysLeft=abs(Due-datetime.datetime.now()).days
             Text=f"Due On {Due.strftime(f'%a, {TaskWidget.OrdinalTimeFunction(Due.day)} %b %Y')} "+Title
             self.ui.DaysLeftDisplay.display(DaysLeft)
             #Show the labels if they're meant to be shown
             self.ui.DaysLeftDisplay.show()
             self.ui.DaysLeftLabel.show()
-            
-        #The Task is complete
+        #If the Task is complete
         else:
             Text=f"Finished at {TaskObject.CompletedDate.strftime('%c')}"+Title
             #We can hide these labels since there's no need for a days left counter
             self.ui.DaysLeftDisplay.hide()
             self.ui.DaysLeftLabel.hide()
-        
         #Set the Title text
         self.ui.TaskTitle_label.setText(Text)
         if TaskObject.ShowReminder:
@@ -190,9 +154,7 @@ class TaskWidget(QtWidgets.QWidget):
         else:
             self.ui.ReminderBox.setChecked(False)
         #Adds the Label Widget
-        '''
         for Label in TaskObject.Labels:
-            
             frame=QtWidgets.QFrame(self.ui.LabelsViewScrollContents)
             layout=QtWidgets.QHBoxLayout()
             layout.addWidget(LabelWidget(frame,Label))
@@ -204,15 +166,21 @@ class TaskWidget(QtWidgets.QWidget):
         layout=QtWidgets.QHBoxLayout()
         layout.addWidget(LabelWidget(frame,LabelObject))
         self.ui.LabelsHBoxLayout.addWidget(frame)
-    '''
+
+    def eventFilter(self, TaskDescObj: QtWidgets.QTextBrowser, Event: QtCore.QEvent) -> bool:        
+        if TaskDescObj==self.ui.TaskDescription and Event.type()==QtCore.QEvent.FocusOut:
+            self.TaskDescChanged(self.ui.TaskDescription.toPlainText())
+        return super().eventFilter(TaskDescObj,Event)
+
     def TaskEditButtonClicked(self):
         #First, create the Dialog to popup
         Task=cl.Task.Instances[self.TaskID]
         TaskEditDialog(Task=Task,TaskTitle=Task.TaskTitle,TaskDesc=Task.TaskDesc,TaskDueDate=Task.DueDate,PriorityLevel=Task.PriorityLevel)
         self.SetInformation(Task)
     
-
-
+    def TaskDeleteButtonClicked(self,Task: cl.Task):
+        Task.DeleteTask()
+        self.parentWidget().deleteLater()
 
 class SectionWidget(QtWidgets.QWidget):
 
@@ -220,27 +188,25 @@ class SectionWidget(QtWidgets.QWidget):
         super().__init__(frame)
         self.ui=SectionWidgetUI()
         self.ui.setupUi(frame)
+        #Main setup completed
+        #Button shortcuts
+        self.ui.TaskAddButton.setShortcut("ctrl+t")
+        #Signals and slots
         self.ui.SectionDeleteButton.clicked.connect(lambda: self.parentWidget().deleteLater())
-
+        self.ui.TaskAddButton.clicked.connect(lambda: self.AddTaskClicked())
         if Section==None:
             self.SectionID=-1
         else:
             self.SetInformation(Section)
     
     def SetInformation(self,Section: cl.Section):
-
         self.SectionID=Section.ID
         self.setObjectName(f"SectionWidget{self.SectionID}")
-
-        #Button Widget
-        self.ui.TaskAddButton.clicked.connect(lambda: self.AddTaskClicked())
-
         #If the section is a default section, hide the buttons to 
         #Delete and Show the Name of the Section
-        if Section.DefaultSection==True:
+        if Section.IsDefaultSection==True:
             self.ui.SectionDeleteButton.hide()
             self.ui.SectionName.hide()
-            self.ui.TaskAddButton.setShortcut("ctrl+t")
         else:
             self.ui.SectionName.setText(Section.Title)
         for Task in Section.Tasks.values():
@@ -252,7 +218,6 @@ class SectionWidget(QtWidgets.QWidget):
             self.ui.VerticalLayoutForTaskWidgets.addWidget(frame)
             #Task Widget added to section Widget now
 
-    
     def AddTaskClicked(self):
         Dialog=QtWidgets.QInputDialog(self)
         Dialog.resize(400,300)
@@ -266,42 +231,40 @@ class SectionWidget(QtWidgets.QWidget):
             #If the user hit 'ok', then create the task
             #If the input is empty, then do nothing
             if not Title.strip(): return
-            task=cl.Task(ParentSection=cl.Section.Instances[self.SectionID],TaskTitle=Title)
+            task=cl.Task(ParentSection=cl.Section.Instances[self.SectionID],TaskTitle=Title,DueDate=datetime.datetime.today())
             frame=QtWidgets.QFrame(self.ui.TasksContents)
             framelayout=QtWidgets.QGridLayout()
             framelayout.addWidget(TaskWidget(frame,task))
             self.ui.VerticalLayoutForTaskWidgets.addWidget(frame)
             #Section Widget added to project Widget now
 
-
 class ProjectWidget(QtWidgets.QWidget):
-    
+
     SignalDeleteProjectButton=QtCore.pyqtSignal(str)
     SignalEditProjectButton=QtCore.pyqtSignal(str,str)
-    
+
     def __init__(self,frame,Project=None) -> None:
         super().__init__(frame)
         self.ui=ProjectWidgetUI()
         self.ui.setupUi(frame)
-
         if Project==None:
             ErrorLog("WARNING : ProjectWidget Constructor called without providing a project")
             self.ProjectID=-1
         else:
             self.SetInformation(Project)
-        
         #Setup buttons
-        self.ui.DeleteProject.setShortcut('Delete')
         self.ui.DeleteProject.clicked.connect(lambda: self.DeleteProject())
         self.ui.EditDetails.clicked.connect(lambda: self.EditButtonClick())
-
+        #Shortcuts
+        self.ui.DeleteProject.setShortcut('Delete')
         self.ui.AddSection.setShortcut('ctrl+s')
     
     def DeleteProject(self):
-        #Delete the Widgets parent frame
-        parentwidget=self.parentWidget()
-        parentwidget.deleteLater()
+        #Emit the signal to delete the project button
         self.SignalDeleteProjectButton.emit(f"AccessProjectButton_{self.ProjectID}")
+        #Delete the Widgets parent frame
+        #parentwidget=self.parentWidget()
+        #parentwidget.deleteLater()
         #Delete the Existing Project from the db
         (cl.Project.Instances[self.ProjectID]).DeleteProject()
         
@@ -323,10 +286,15 @@ class ProjectWidget(QtWidgets.QWidget):
             framelayout.addWidget(SectionWidget(frame,Section))
             self.ui.LayoutToAddSections.addWidget(frame)
             #Section Widget added to project Widget now
-    
     def EditButtonClick(self):
         Dialog=QtWidgets.QInputDialog(self)
-        Title,Ok=Dialog.getText(self,"Project","Enter Project Name",)
+        Dialog.resize(400,300)
+        Dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
+        Dialog.setWindowTitle('Edit Project Title')
+        Dialog.setLabelText('Enter Project Name :')
+        Dialog.setStyleSheet(StyleSheet)
+        Ok = Dialog.exec_()
+        Title = Dialog.textValue()
         if Ok:
             #If the user hit 'ok', then create the project
             #If the input is empty, then do nothing
@@ -352,7 +320,7 @@ class ProjectWidget(QtWidgets.QWidget):
 class TaskEditDialog(QtWidgets.QDialog):
 
     ReturnSignal=QtCore.pyqtSignal(bool)
-    
+
     def __init__(self,Task: cl.Task,PriorityLevel,TaskTitle=None,TaskDesc=None,TaskDueDate: datetime.datetime=None) -> None:
         super().__init__()
         #Set it to be a modal dialog

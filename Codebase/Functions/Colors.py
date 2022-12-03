@@ -1,16 +1,17 @@
 from random import choice
-Colors=[1921186, 
-        5646127, 
-        8069048, 
-        9201120, 
-        2768197, 
-        5177211,
-        432432, 
-        13419293, 
-        16729344, 
-        16249827]
+Colors=(1921186, #1D50A2 (YInMn Blue)
+        9508395, #56272F (Crimson Red)
+        6047167, #5C45BF (Plump Purple)
+        1533050, #17647A (Blue Sapphire)
+        2648656, #4B8970 (Bottle Green)
+        7887204, #785964 (Deep Taupe)
+        11745549, #B3390D (Rust)
+        4719445, #480355 (Russian Violet)
+)
+
 def GetRandomColor():
     return choice(Colors)       #Returns a random Color from the list
+
 def HexFormat(number: int) -> str:
     number=abs(number)          #Line to ensure someone that negative values don't mess stuff up
     if number>=16777214:        #If the number is too big just return White
