@@ -6,7 +6,7 @@ from Codebase.ErrorLogs.logging import ErrorLog,Log
 from Codebase.Functions.Database import ExecuteCommand,ExecuteScript            
 
 #Importing The Required Colors for Labels
-from Codebase.Functions.Colors import GetRandomColor,Colors
+from Codebase.Functions.Colors import GetRandomColor
 
 #Importing notification fnctions
 from plyer import notification
@@ -298,7 +298,18 @@ class Priority:
     ValidPriorites=tuple(range(1,UpperBound+1))     
     #Sets a tuple containing the valid priority Levels
     #Tuple contains integers from 1 to Upperbound (1 to 10)
-    DefaultPriorityColors=dict(zip(ValidPriorites,Colors))
+    DefaultPriorityColors={
+        1:16399941,
+        2:16070549,
+        3:8069048,
+        4:9201120,
+        5:2287801,
+        6:5177211,
+        7:432432,
+        8:13419293,
+        9:16729344,
+        10:16249827,
+    }
     ScriptSetDefaultColors=f"""
     -- The Following Commands sets the Default Colors again
     BEGIN;
@@ -311,7 +322,6 @@ class Priority:
     """
     ColorCache=dict()                                           #Creates the Dictionary used for Cacheing
     Resultant=ExecuteCommand("""SELECT * FROM prcolors;""")     #Gets the current values from the Database
-
     if Resultant==[]:                                           #If the database is empty
         #Imports the necessary script and Priority colors
         ExecuteScript(ScriptSetDefaultColors)           #Runs the script to set the default colors

@@ -21,51 +21,34 @@ from Codebase.Functions.Colors import HexFormat
 
 class TodayTasksWidget(QtWidgets.QWidget):
 
-    Signal=QtCore.pyqtSignal(int)
+    #Signal to make a new instance of the widget
+    SortSignal=QtCore.pyqtSignal(int)
+    
 
-    def __init__(self,frame) -> None:
+    def __init__(self,frame,SortBy) -> None:
         super().__init__(frame)
         self.ui=TaskTodayUI()
         self.frame=frame
         self.ui.setupUi(self)
-        self.ui.SortNameButton.hide()
-        self.ui.SortPriorityButton.hide()
-        self.ui.SortProjectButton.setDisabled(True)
-        self.ui.SortProjectButton.setText("Task(s) Today")
-        #self.ui.SortNameButton.clicked.connect(self.SortByName)
-        #self.ui.SortPriorityButton.clicked.connect(self.SortByPriority)
-        #self.ui.SortProjectButton.clicked.connect(self.SortByProject)
-        #Sets the name of the widget
+        #Button Setup
+        self.ui.SortNameButton.clicked.connect(lambda: self.SortSignal.emit(0))
+        self.ui.SortProjectButton.clicked.connect(lambda : self.SortSignal.emit(1))
+        self.ui.SortPriorityButton.clicked.connect(lambda : self.SortSignal.emit(2))
+        
+        #Sets the SQL Queries
+        NameSort="SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_title"
+        ProjectSort="SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_projectid"
+        PrioritySort="SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_priority"
+        Queries=(NameSort,ProjectSort,PrioritySort)
         try:
-            TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0")
-        except :
+            TaskIDs=ExecuteCommand(Queries[SortBy])
+        except:
             ErrorLog("CRITICAL: TODAY TASK(S) LOOKUP FAILED. Likely Error due to issue with UDF in Functions\Database.py")
         else:
             for IDTuples in TaskIDs:
                 ID=IDTuples[0]
                 self.AddTaskToWidget(cl.Task.Instances[ID])
         self.setObjectName(u"TaskTodayWidget")
-
-    def SortByProject(self):
-        TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_projectid")
-        self=TodayTasksWidget(self.frame)
-        for IDTuples in TaskIDs:
-                ID=IDTuples[0]
-                self.AddTaskToWidget(cl.Task.Instances[ID])
-    
-    def SortByPriority(self):
-        TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_priority")
-        self=TodayTasksWidget(self.frame)
-        for IDTuples in TaskIDs:
-                ID=IDTuples[0]
-                self.AddTaskToWidget(cl.Task.Instances[ID])
-    
-    def SortByName(self):
-        TaskIDs=ExecuteCommand("SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_title")
-        self=TodayTasksWidget(self.frame)
-        for IDTuples in TaskIDs:
-                ID=IDTuples[0]
-                self.AddTaskToWidget(cl.Task.Instances[ID])
 
 
     def AddTaskToWidget(self,TaskObject: cl.Task):

@@ -11,48 +11,45 @@ from Codebase.Functions.Colors import HexFormat
 from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.AmberMainWin import AmberWindowUI
 from Codebase.GUI.Widgets import (
-    TodayTasksWidget, ProjectWidget,StyleSheet
+    TodayTasksWidget, ProjectWidget, StyleSheet
     )
 
 class AmberMainWindow(QtWidgets.QMainWindow):
 
     def __init__(self) -> None:
-        
         #Sets up the mainwindow class
         super(AmberMainWindow,self).__init__()
+        #Mainwindow Ui Setup
         self.ui=AmberWindowUI()
         self.ui.setupUi(self)
-        self.ui.CurrentWidgetTitleLabel.setStyleSheet(self.ui.CurrentWidgetTitleLabel.styleSheet()+"; font-size: 24px")
-        self.ui.ProjectsLabel.setStyleSheet(self.ui.ProjectsLabel.styleSheet()+"font-size: 20px")
-        self.ui.ProjectsLabel.setMaximumHeight(200)
-        self.ui.ProjectsLabel.setMinimumHeight(40)
-        self.ui.RefreshButton.setStyleSheet("background-color: #2a3364 ; ")
-        self.ui.RefreshButton.clicked.connect(lambda: self.ShowTasksTodayWidget())
-        self.TodaysTasksShown=False
-        self.WidgetFrame=QtWidgets.QFrame()
+        self.setStyleSheet(StyleSheet)
         self.setWindowIcon(QtGui.QIcon(os.path.dirname(__file__)+r"\\UI_Files\\App.ico"))
         self.setWindowTitle("Amberia")
-        #Mainwindow Ui Setup
+        self.TodaysTasksShown=False
+        self.WidgetFrame=QtWidgets.QFrame()
+        #Basic UI Setup Done
 
-        #Color Setup
-        self.setStyleSheet(StyleSheet)
-        #self.setStyleSheet("background-color : #1c1d21 ;")
-        
         #Set the Shortcuts for the Buttons
-        self.ui.TasksTodayButton.setShortcut("ctrl+h")
+        self.ui.TasksTodayButton.setShortcut("ctrl+r")
         self.ui.CreateProjectButton.setShortcut("ctrl+n")
+        self.ui.RefreshButton.setShortcut("ctrl+h")
 
-        #Set Minimum Sizes for the Buttons
-        self.ui.TasksTodayButton.setMinimumHeight(40)
-        self.ui.CreateProjectButton.setMinimumHeight(40)
+        #Set Minimum Sizes for the widgets
+        self.ui.ProjectsLabel.setMaximumHeight(200)
+        self.ui.ProjectsLabel.setMinimumHeight(40)
         self.ui.TasksTodayButton.setMaximumHeight(300)
+        self.ui.TasksTodayButton.setMinimumHeight(40)
         self.ui.CreateProjectButton.setMaximumHeight(300)
+        self.ui.CreateProjectButton.setMinimumHeight(40)
 
         #Set the stylesheets
+        self.ui.CurrentWidgetTitleLabel.setStyleSheet(self.ui.CurrentWidgetTitleLabel.styleSheet()+"; font-size: 24px")
+        self.ui.ProjectsLabel.setStyleSheet(self.ui.ProjectsLabel.styleSheet()+"font-size: 20px")
         self.ui.TasksTodayButton.setStyleSheet(self.ui.TasksTodayButton.styleSheet()+" ; font-size: 24px ;")
         self.ui.CreateProjectButton.setStyleSheet(self.ui.CreateProjectButton.styleSheet()+"; font-size: 24px ;")
         
         #Set the connections of the buttons
+        self.ui.RefreshButton.clicked.connect(lambda: self.ShowTasksTodayWidget())
         self.ui.TasksTodayButton.clicked.connect(self.ShowTasksTodayWidget)
         self.ui.CreateProjectButton.clicked.connect(self.AddProjectButtonClicked)
 
@@ -67,7 +64,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         button=self.findChildren(QtWidgets.QPushButton,ObjectName)[0]
         button.deleteLater()
         self.ShowTasksTodayWidget()
-        self.ui.RefreshButton.click()
+        self.ui.TasksTodayButton.click()
     
     def EditProjectButtonName(self,ObjectName: str,Title: str):
         button=self.findChildren(QtWidgets.QPushButton,ObjectName)[0]
@@ -79,12 +76,14 @@ class AmberMainWindow(QtWidgets.QMainWindow):
             self._AddProjectFromDB(Project)
     
     def _AddProjectFromDB(self,Proj: cl.Project):
+        #Create the button
         button=QtWidgets.QPushButton(self.ui.ProjectContents)
         button.setObjectName(f"AccessProjectButton_{Proj.ID}")
         button.setText(Proj.Title)
         button.setStyleSheet(f"background-color: {HexFormat(Proj.Color)} ; font-size: 20px ; ")
-        self.ui.ButtonList.addWidget(button)
         button.clicked.connect(lambda: self.ShowProjectWidget(Proj))
+        #Show the button
+        self.ui.ButtonList.addWidget(button)
 
     def AddProjectButtonClicked(self):
         #Popup the dialog
@@ -126,26 +125,27 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.WidgetFrame=FrameForMainWidget
 
     def SetTasksTodayWidgetTitle(self):
-        
         date=datetime.date.today().strftime("%A %B %d %Y")
         text=f"Today : {date}" 
         self.ui.CurrentWidgetTitleLabel.setText(text)
         self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
 
-    def ShowTasksTodayWidget(self):
-        
+    def ShowTasksTodayWidget(self,SortOrder:int=0):
         #Deletes the current widget frame
         self.WidgetFrame.deleteLater()
         #Sets the Title
         self.SetTasksTodayWidgetTitle()
+
         #Show the tasks widget
         FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
         framelayout=QtWidgets.QGridLayout(FrameForMainWidget)
-        framelayout.addWidget(TodayTasksWidget(FrameForMainWidget))
+        TaskTodayWidget=TodayTasksWidget(FrameForMainWidget,SortOrder)
+        TaskTodayWidget.SortSignal.connect(lambda SortOrder: self.ShowTasksTodayWidget(SortOrder))
+        framelayout.addWidget(TaskTodayWidget)
         layout=self.ui.VLayoutForMainWidget
         layout.addWidget(FrameForMainWidget)
         self.WidgetFrame=FrameForMainWidget
-        
+
 
 if __name__=='__main__':
     AmberApp=QtWidgets.QApplication(sys.argv)
