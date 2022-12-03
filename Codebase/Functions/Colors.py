@@ -1,14 +1,13 @@
 from random import choice
-Colors=(1921186, #1D50A2
-        5646127, #56272F
-        8069048, #7B1FB8
-        9201120, #8C65E0
-        2768197, #2A3D45
-        5177211, #4EFF7B
-        432432, #069930
-        13419293, #CCC31D
-        16729344, #FF4500
-        16249827) #F7F3E3
+Colors=(1921186, #1D50A2 (YInMn Blue)
+        9508395, #56272F (Crimson Red)
+        6047167, #5C45BF (Plump Purple)
+        1533050, #17647A (Blue Sapphire)
+        2648656, #4B8970 (Bottle Green)
+        7887204, #785964 (Deep Taupe)
+        11745549, #B3390D (Rust)
+        4719445, #480355 (Russian Violet)
+)
 
 def GetRandomColor():
     return choice(Colors)       #Returns a random Color from the list

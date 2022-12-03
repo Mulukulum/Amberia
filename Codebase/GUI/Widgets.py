@@ -126,23 +126,20 @@ class TaskWidget(QtWidgets.QWidget):
     def ReminderStateChanged(self,ShowReminder: bool):
         Task=cl.Task.Instances[self.TaskID]
         if ShowReminder:
-            Task.SignalReminder()
+            Task.SetReminderState(1)
         else:
             Task.SetReminderState(0)
     
     def TaskDescChanged(self,Text: str):
         Task=cl.Task.Instances[self.TaskID]
         Task.UpdateTaskDesc(Text)
-        
 
     #Set Information is basically reconfiguring the label
     def SetInformation(self,TaskObject: cl.Task):
-        
         #Sets the name of the object for easy identification
         self.setObjectName(f"TaskWidget{TaskObject.ID}")
         self.TaskID=TaskObject.ID
         self.ui.DeleteTaskButton.clicked.connect(lambda: self.parentWidget().deleteLater())
-
         self.ui.EditTaskButton.clicked.connect(lambda: self.TaskEditButtonClicked() )
         #Sets the Display to show priority Level
         self.ui.PriorityLevelDisplay.display(TaskObject.PriorityLevel)
@@ -298,10 +295,11 @@ class ProjectWidget(QtWidgets.QWidget):
         self.ui.AddSection.setShortcut('ctrl+s')
     
     def DeleteProject(self):
+        #Emit the signal to delete the project button
+        self.SignalDeleteProjectButton.emit(f"AccessProjectButton_{self.ProjectID}")
         #Delete the Widgets parent frame
         parentwidget=self.parentWidget()
         parentwidget.deleteLater()
-        self.SignalDeleteProjectButton.emit(f"AccessProjectButton_{self.ProjectID}")
         #Delete the Existing Project from the db
         (cl.Project.Instances[self.ProjectID]).DeleteProject()
         
