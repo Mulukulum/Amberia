@@ -41,7 +41,6 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.TasksTodayButton.setMinimumHeight(40)
         self.ui.CreateProjectButton.setMaximumHeight(300)
         self.ui.CreateProjectButton.setMinimumHeight(40)
-        self.ui.ProjectScrollArea.setMinimumWidth(400)
 
         #Set the stylesheets
         self.ui.CurrentWidgetTitleLabel.setStyleSheet(self.ui.CurrentWidgetTitleLabel.styleSheet()+"; font-size: 24px")
