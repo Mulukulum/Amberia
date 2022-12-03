@@ -66,17 +66,17 @@ class AmberWindowUI(object):
         self.VLayoutForMainWidget = QVBoxLayout(self.MainWidgetFrame)
         self.VLayoutForMainWidget.setObjectName(u"VLayoutForMainWidget")
 
-        self.gridLayout.addWidget(self.MainWidgetFrame, 3, 2, 2, 3)
+        self.gridLayout.addWidget(self.MainWidgetFrame, 3, 2, 2, -1)
 
         self.CurrentWidgetTitleLabel = QLabel(self.centralwidget)
         self.CurrentWidgetTitleLabel.setObjectName(u"CurrentWidgetTitleLabel")
 
-        self.gridLayout.addWidget(self.CurrentWidgetTitleLabel, 2, 2, 1, 3)
+        self.gridLayout.addWidget(self.CurrentWidgetTitleLabel, 2, 2, 1, -1)
 
         self.ProjectTitleLabel = QLabel(self.centralwidget)
         self.ProjectTitleLabel.setObjectName(u"ProjectTitleLabel")
 
-        self.gridLayout.addWidget(self.ProjectTitleLabel, 0, 0, 1, 5)
+        self.gridLayout.addWidget(self.ProjectTitleLabel, 0, 0, 1, -1)
 
         self.RefreshButton = QPushButton(self.centralwidget)
         self.RefreshButton.setObjectName(u"SettingsButton")
