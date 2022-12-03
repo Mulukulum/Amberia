@@ -11,13 +11,16 @@ from Codebase.Functions.Colors import HexFormat
 from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.AmberMainWin import AmberWindowUI
 from Codebase.GUI.Widgets import (
-    TodayTasksWidget, ProjectWidget, StyleSheet , 
+    TodayTasksWidget, ProjectWidget,SettingsWidget, StyleSheet , sidebarfactor, ProjMinHt
     )
 
 class AmberMainWindow(QtWidgets.QMainWindow):
 
-    ProjectButtonMinimumHeight=65
-    SideBarScaleFactor=0.235
+    ProjectButtonMinimumHeight=ProjMinHt
+    SideBarScaleFactor=sidebarfactor
+    #Constant that is modified when needed
+    # 0 implies quit and 678452056 implies that user has requested a restart
+    EXITCODE=0
 
     def __init__(self) -> None:
         #Sets up the mainwindow class
@@ -33,7 +36,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Set the Shortcuts for the Buttons
         self.ui.TasksTodayButton.setShortcut("ctrl+r")
         self.ui.CreateProjectButton.setShortcut("ctrl+n")
-        self.ui.RefreshButton.setShortcut("ctrl+h")
+        self.ui.SettingsButton.setShortcut("ctrl+h")
         
         #Set Minimum Sizes for the widgets
         self.ui.ProjectsLabel.setMaximumHeight(200)
@@ -50,7 +53,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.CreateProjectButton.setStyleSheet(self.ui.CreateProjectButton.styleSheet()+"; font-size: 24px ;")
         
         #Set the connections of the buttons
-        #self.ui.RefreshButton.clicked.connect(lambda: self.ShowTasksTodayWidget())
+        self.ui.SettingsButton.clicked.connect(self.ShowSettingsWidget)
         self.ui.TasksTodayButton.clicked.connect(self.ShowTasksTodayWidget)
         self.ui.CreateProjectButton.clicked.connect(self.AddProjectButtonClicked)
 
@@ -68,7 +71,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
     def RemoveProjectButton(self,ObjectName: str):
         button=self.findChildren(QtWidgets.QPushButton,ObjectName)[0]
         button.deleteLater()
-        self.ui.RefreshButton.click()
+        self.ui.SettingsButton.click()
     
     def EditProjectButtonName(self,ObjectName: str,Title: str):
         button=self.findChildren(QtWidgets.QPushButton,ObjectName)[0]
@@ -148,6 +151,25 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         TaskTodayWidget=TodayTasksWidget(FrameForMainWidget,SortOrder)
         TaskTodayWidget.SortSignal.connect(lambda SortOrder: self.ShowTasksTodayWidget(SortOrder))
         framelayout.addWidget(TaskTodayWidget)
+        layout=self.ui.VLayoutForMainWidget
+        layout.addWidget(FrameForMainWidget)
+        self.WidgetFrame=FrameForMainWidget
+    
+    def Restart(self):
+        self.EXITCODE=678452056
+        app=QtWidgets.QApplication.instance()
+        app.exit(self.EXITCODE)
+    
+    def ShowSettingsWidget(self):
+        #Deletes the current widget frame
+        self.WidgetFrame.deleteLater()
+        #Sets the Title
+        #Show the tasks widget
+        FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
+        framelayout=QtWidgets.QGridLayout(FrameForMainWidget)
+        SettWidget=SettingsWidget(FrameForMainWidget)
+        SettWidget.RestartSignal.connect(lambda SortOrder: self.ShowTasksTodayWidget(SortOrder))
+        framelayout.addWidget(SettWidget)
         layout=self.ui.VLayoutForMainWidget
         layout.addWidget(FrameForMainWidget)
         self.WidgetFrame=FrameForMainWidget

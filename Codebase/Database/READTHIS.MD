@@ -86,6 +86,17 @@ Attributes:-
 task INTEGER NOT NULL
 label INTEGER NOT NULL
 
+settings
+def column has 1 for user settings and 0 for default
+Attributes:-
+def INTEGER PRIMARY KEY 
+stylesheet TEXT NOT NULL
+mintaskdispheight INTEGER NOT NULL
+minsecdispheight INTEGER NOT NULL
+projectminheight INTEGER NOT NULL
+sidebarfactor REAL NOT NULL
+setduedatetoday INTEGER NOT NULL
+
 REMEMBER TO ALSO CHANGE THE CORRESPONDING VALUES IN [INITIALIZE.PY](./Initialize.py) BOTH IN THE DICTIONARY AND IN THE TUPLE
 
 

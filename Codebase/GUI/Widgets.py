@@ -5,7 +5,10 @@ import PyQt5
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
-FilePath=r'\\StyleSheet\\Amberia.qss'
+from Codebase.Functions.Database import ExecuteCommand
+from Codebase.GUI.UserSettings import Stylesheet,MinTaskDispHt,MinSecDispHt,duedatebehaviour,sidebarfactor,ProjMinHt
+
+FilePath=f'\\StyleSheet\\{Stylesheet}'
 path=dirname(__file__)+FilePath
 with open(path) as f:
     StyleSheet=f.read()
@@ -15,8 +18,9 @@ from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
 from Codebase.GUI.UI_Classes.LabelEditor import LabelWidgetUI
 from Codebase.GUI.UI_Classes.ProjectWidget import ProjectWidgetUI
 from Codebase.GUI.UI_Classes.SectionWidget import SectionWidgetUI
+from Codebase.GUI.UI_Classes.Settings import SettingsUI
 from Codebase.GUI.UI_Classes.TaskEdit import TaskEditUI
-from Codebase.Functions.Database import ExecuteCommand
+
 from Codebase.ErrorLogs.logging import ErrorLog
 from Codebase.Functions.Colors import HexFormat
 
@@ -84,7 +88,7 @@ class LabelWidget(QtWidgets.QWidget):
 class TaskWidget(QtWidgets.QWidget):
     #Lambda Function because python somehow doesn't have a method for this
     OrdinalTimeFunction=lambda n : str(n) + {1:'st',2:'nd',3:'rd'}.get(abs(n)%10,'th')
-    MinimumTaskHeight=275
+    MinimumTaskHeight=MinTaskDispHt
 
     def __init__(self,frame,Task: cl.Task=None) -> None:
         super().__init__(frame)
@@ -209,7 +213,10 @@ class TaskWidget(QtWidgets.QWidget):
         self.parentWidget().deleteLater()
 
 class SectionWidget(QtWidgets.QWidget):
-    MinimumSectionHeight=400
+    MinimumSectionHeight=MinSecDispHt
+
+    #1 if you want to set it to today
+    setDueDatetoday=duedatebehaviour
 
     def __init__(self,frame,Section: cl.Section=None) -> None:
         super().__init__(frame)
@@ -266,7 +273,7 @@ class SectionWidget(QtWidgets.QWidget):
             #If the user hit 'ok', then create the task
             #If the input is empty, then do nothing
             if not Title.strip(): return
-            task=cl.Task(ParentSection=cl.Section.Instances[self.SectionID],TaskTitle=Title,DueDate=datetime.datetime.today())
+            task=cl.Task(ParentSection=cl.Section.Instances[self.SectionID],TaskTitle=Title,DueDate=datetime.datetime.today() if self.setDueDatetoday else None)
             frame=QtWidgets.QFrame(self.ui.TasksContents)
             framelayout=QtWidgets.QGridLayout()
             framelayout.addWidget(TaskWidget(frame,task))
@@ -403,8 +410,14 @@ class TaskEditDialog(QtWidgets.QDialog):
             newduedate=newduedate.toPyDateTime()
             Task.ReConfigureTask(newtitle,newdesc,newpr,DueDate=newduedate)
 
+class SettingsWidget(QtWidgets.QWidget):
 
+    RestartSignal=QtCore.pyqtSignal()
 
+    def __init__(self,frame) -> None:
+        super().__init__(frame)
+        self.ui=SettingsUI()
+        self.frame=frame
+        self.setStyleSheet(StyleSheet)
+        self.ui.setupUi(self)
 
-        
-        

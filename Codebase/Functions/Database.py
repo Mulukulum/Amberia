@@ -26,7 +26,6 @@ def CheckIfToday(Date:datetime.datetime):
     else:
         return 0
 
-
 UDF()                                                   #Defines the functions
 
 #Main Functions used to query the DB:

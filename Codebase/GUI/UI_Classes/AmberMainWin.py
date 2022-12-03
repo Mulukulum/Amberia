@@ -78,10 +78,10 @@ class AmberWindowUI(object):
 
         self.gridLayout.addWidget(self.ProjectTitleLabel, 0, 0, 1, -1)
 
-        self.RefreshButton = QPushButton(self.centralwidget)
-        self.RefreshButton.setObjectName(u"SettingsButton")
+        self.SettingsButton = QPushButton(self.centralwidget)
+        self.SettingsButton.setObjectName(u"SettingsButton")
 
-        self.gridLayout.addWidget(self.RefreshButton, 2, 0, 1, 2)
+        self.gridLayout.addWidget(self.SettingsButton, 2, 0, 1, 2)
 
 
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
@@ -100,6 +100,6 @@ class AmberWindowUI(object):
         self.TasksTodayButton.setText(QCoreApplication.translate("MainWindow", u"Today's Task(s)", None))
         self.CurrentWidgetTitleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#ffffff;\">Today's Date: Curdate</span></p></body></html>", None))
         self.ProjectTitleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; color:#ffffff;\">AMBERIA </span><span style=\" font-size:24pt; color:#ffffff; vertical-align:super;\">\u00a92022</span></p><p align=\"center\"><br/></p></body></html>", None))
-        self.RefreshButton.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
+        self.SettingsButton.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
     # retranslateUi
 
