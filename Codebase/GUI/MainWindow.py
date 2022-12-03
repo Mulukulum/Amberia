@@ -16,6 +16,8 @@ from Codebase.GUI.Widgets import (
 
 class AmberMainWindow(QtWidgets.QMainWindow):
 
+    MinimumButtonHeight=65
+
     def __init__(self) -> None:
         #Sets up the mainwindow class
         super(AmberMainWindow,self).__init__()
@@ -81,6 +83,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         button=QtWidgets.QPushButton(self.ui.ProjectContents)
         button.setObjectName(f"AccessProjectButton_{Proj.ID}")
         button.setText(Proj.Title)
+        button.setMinimumHeight(self.MinimumButtonHeight)
         button.setStyleSheet(f"background-color: {HexFormat(Proj.Color)} ; font-size: 20px ; ")
         button.clicked.connect(lambda: self.ShowProjectWidget(Proj))
         #Show the button
@@ -105,6 +108,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
             button=QtWidgets.QPushButton(self.ui.ProjectContents)
             button.setObjectName(f"AccessProjectButton_{Proj.ID}")
             button.setText(Proj.Title)
+            button.setMinimumHeight(self.MinimumButtonHeight)
             button.setStyleSheet(f"background-color: {HexFormat(Proj.Color)} ; font-size: 20px ; ")
             self.ui.ButtonList.addWidget(button)
             button.clicked.connect(lambda: self.ShowProjectWidget(Proj))

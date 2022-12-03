@@ -172,6 +172,7 @@ class TaskWidget(QtWidgets.QWidget):
             self.ui.DaysLeftLabel.hide()
         #Set the Title text
         self.ui.TaskTitle_label.setText(Text)
+        self.ui.TaskTitle_label.setAlignment(QtCore.Qt.AlignCenter)
         if TaskObject.ShowReminder:
             self.ui.ReminderBox.setChecked(True)
             TaskObject.SetReminderState(1)
@@ -223,7 +224,7 @@ class SectionWidget(QtWidgets.QWidget):
         #Button shortcuts
         if Section.IsDefaultSection : self.ui.TaskAddButton.setShortcut("ctrl+t")
         #Signals and slots
-        self.ui.SectionDeleteButton.clicked.connect(lambda: self.parentWidget().deleteLater())
+        self.ui.SectionDeleteButton.clicked.connect(lambda: self.DeleteSectionWidget())
         self.ui.TaskAddButton.clicked.connect(lambda: self.AddTaskClicked())
         if Section==None:
             self.SectionID=-1
@@ -240,6 +241,7 @@ class SectionWidget(QtWidgets.QWidget):
             self.ui.SectionName.hide()
         else:
             self.ui.SectionName.setText(Section.Title)
+            self.ui.SectionName.setAlignment(QtCore.Qt.AlignCenter)
         for Task in Section.Tasks.values():
             #Create the frame to add the widget to
             frame=QtWidgets.QFrame(self.ui.TasksContents)
@@ -269,6 +271,10 @@ class SectionWidget(QtWidgets.QWidget):
             framelayout.addWidget(TaskWidget(frame,task))
             self.ui.VerticalLayoutForTaskWidgets.addWidget(frame)
             #Section Widget added to project Widget now
+        
+    def DeleteSectionWidget(self):
+        cl.Section.Instances[self.SectionID].DeleteSection()
+        self.parentWidget().deleteLater()
 
 class ProjectWidget(QtWidgets.QWidget):
 
@@ -339,7 +345,6 @@ class ProjectWidget(QtWidgets.QWidget):
 
     def AddSectionClicked(self):
         Dialog=QtWidgets.QInputDialog(self)
-        
         Dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
         Dialog.setWindowTitle('Create Section')
         Dialog.setLabelText('Enter the Name of the Section')
