@@ -318,8 +318,9 @@ class ProjectWidget(QtWidgets.QWidget):
             self.ui.LayoutToAddSections.addWidget(frame)
             #Section Widget added to project Widget now
 class TaskEditDialog(QtWidgets.QDialog):
-
+    
     ReturnSignal=QtCore.pyqtSignal(bool)
+
     def __init__(self,Task: cl.Task,PriorityLevel,TaskTitle=None,TaskDesc=None,TaskDueDate: datetime.datetime=None) -> None:
         super().__init__()
         #Set it to be a modal dialog
