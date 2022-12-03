@@ -251,12 +251,12 @@ class SectionWidget(QtWidgets.QWidget):
 
     def AddTaskClicked(self):
         Dialog=QtWidgets.QInputDialog(self)
-        Dialog.resize(400,300)
+        Dialog.resize(300,500)
         Dialog.setStyleSheet("font-size: 16px")
         Dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
         Dialog.setWindowTitle('Create Task')
         Dialog.setLabelText('Enter the Name of the Task')
-        Dialog.setStyleSheet(StyleSheet)
+        Dialog.setStyleSheet(StyleSheet+'; font-size: 16px')
         Ok = Dialog.exec_()
         Title = Dialog.textValue()
         if Ok:
@@ -321,11 +321,11 @@ class ProjectWidget(QtWidgets.QWidget):
             #Section Widget added to project Widget now
     def EditButtonClick(self):
         Dialog=QtWidgets.QInputDialog(self)
-        Dialog.resize(400,300)
         Dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
         Dialog.setWindowTitle('Edit Project Title')
         Dialog.setLabelText('Enter Project Name :')
-        Dialog.setStyleSheet(StyleSheet)
+        Dialog.setStyleSheet(StyleSheet+'; font-size: 16px')
+        Dialog.resize(300,500)
         Ok = Dialog.exec_()
         Title = Dialog.textValue()
         if Ok:
@@ -339,11 +339,11 @@ class ProjectWidget(QtWidgets.QWidget):
 
     def AddSectionClicked(self):
         Dialog=QtWidgets.QInputDialog(self)
-        Dialog.resize(400,300)
+        
         Dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
         Dialog.setWindowTitle('Create Section')
         Dialog.setLabelText('Enter the Name of the Section')
-        Dialog.setStyleSheet(StyleSheet)
+        Dialog.setStyleSheet(StyleSheet+'; font-size: 16px')
         Ok = Dialog.exec_()
         Title = Dialog.textValue()
         if Ok:
