@@ -20,10 +20,8 @@ from Codebase.ErrorLogs.logging import ErrorLog
 from Codebase.Functions.Colors import HexFormat
 
 class TodayTasksWidget(QtWidgets.QWidget):
-
     #Signal to make a new instance of the widget
     SortSignal=QtCore.pyqtSignal(int)
-    
 
     def __init__(self,frame,SortBy) -> None:
         super().__init__(frame)
@@ -34,7 +32,6 @@ class TodayTasksWidget(QtWidgets.QWidget):
         self.ui.SortNameButton.clicked.connect(lambda: self.SortSignal.emit(0))
         self.ui.SortProjectButton.clicked.connect(lambda : self.SortSignal.emit(1))
         self.ui.SortPriorityButton.clicked.connect(lambda : self.SortSignal.emit(2))
-        
         #Sets the SQL Queries
         NameSort="SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_title"
         ProjectSort="SELECT task_id FROM tasks WHERE CheckIfToday(task_duedate)=1 AND task_completed=0 ORDER BY task_projectid"
@@ -50,15 +47,12 @@ class TodayTasksWidget(QtWidgets.QWidget):
                 self.AddTaskToWidget(cl.Task.Instances[ID])
         self.setObjectName(u"TaskTodayWidget")
 
-
     def AddTaskToWidget(self,TaskObject: cl.Task):
-        
         frame=QtWidgets.QFrame(self.ui.ScrollAreaContentsForTaskWidgets)
         framelayout=QtWidgets.QGridLayout()
         framelayout.addWidget(TaskWidget(frame,TaskObject))
         self.ui.VLayoutForTaskWidgets.addWidget(frame)
 
-'''
 class LabelWidget(QtWidgets.QWidget):
 
     def __init__(self,frame,Label=None) -> None:
@@ -82,10 +76,8 @@ class LabelWidget(QtWidgets.QWidget):
             self.ui.ChangeNameButton.setEnabled()
         else:
             self.ui.ChangeNameButton.setDisabled()
-'''
 
 class TaskWidget(QtWidgets.QWidget):
-
     #Lambda Function because python somehow doesn't have a method for this
     OrdinalTimeFunction=lambda n : str(n) + {1:'st',2:'nd',3:'rd'}.get(abs(n)%10,'th')
 
@@ -93,13 +85,18 @@ class TaskWidget(QtWidgets.QWidget):
         super().__init__(frame)
         self.ui=TaskWidgetUI()
         self.ui.setupUi(frame)
-        ss=frame.styleSheet()
-        frame.setStyleSheet(ss+".QFrame:hover { background-color: #7a7a7a;}")
-        #self.ui.TaskFrame.setStyleSheet(ss+"QFrame:hover { background-color: #1c1d21;}")
-        self.ui.TaskDescription.textChanged.connect(lambda: self.TaskDescChanged(self.ui.TaskDescription.toPlainText()) )
-        self.ui.ReminderBox.stateChanged.connect(lambda: self.ReminderStateChanged(self.ui.ReminderBox.isChecked()) )
-        self.ui.TaskDescription.setStyleSheet("color: #c9c15f")
+        #install event filter for taskdesc edit
+        self.ui.TaskDescription.installEventFilter(self)
+
+        #Set StyleSheets
+        frame.setStyleSheet(frame.styleSheet()+".QFrame:hover { background-color: #7a7a7a;}")
+        self.ui.TaskDescription.setStyleSheet("color: #c9c15f ; font-size: 16px ;")
         self.ui.ReminderBox.setStyleSheet("color: #c9c15f")
+        
+        #Set Signals and slots
+        #self.ui.TaskDescription.textChanged.connect(lambda: self.TaskDescChanged(self.ui.TaskDescription.toPlainText()) )
+
+        self.ui.ReminderBox.stateChanged.connect(lambda: self.ReminderStateChanged(self.ui.ReminderBox.isChecked()) )
         if Task==None:
             ErrorLog("WARNING : TaskWidget Constructor called without providing a task")
             self.TaskID=-1
@@ -108,10 +105,8 @@ class TaskWidget(QtWidgets.QWidget):
     
     def ReminderStateChanged(self,ShowReminder: bool):
         Task=cl.Task.Instances[self.TaskID]
-        if ShowReminder:
-            Task.SetReminderState(1)
-        else:
-            Task.SetReminderState(0)
+        if ShowReminder: Task.SetReminderState(1)
+        else: Task.SetReminderState(0)
     
     def TaskDescChanged(self,Text: str):
         Task=cl.Task.Instances[self.TaskID]
@@ -122,7 +117,7 @@ class TaskWidget(QtWidgets.QWidget):
         #Sets the name of the object for easy identification
         self.setObjectName(f"TaskWidget{TaskObject.ID}")
         self.TaskID=TaskObject.ID
-        self.ui.DeleteTaskButton.clicked.connect(lambda: self.parentWidget().deleteLater())
+        self.ui.DeleteTaskButton.clicked.connect(lambda: self.TaskDeleteButtonClicked(TaskObject))
         self.ui.EditTaskButton.clicked.connect(lambda: self.TaskEditButtonClicked() )
         #Sets the Display to show priority Level
         self.ui.PriorityLevelDisplay.display(TaskObject.PriorityLevel)
@@ -140,15 +135,13 @@ class TaskWidget(QtWidgets.QWidget):
 
         #If the task is not given a duedate
         if Due==None:
-
             #Then Hide the days left part
             self.ui.DaysLeftDisplay.hide()
             self.ui.DaysLeftLabel.hide()
             Text=Title
         
-        #The Task is not completed
+        #If the Task is not completed
         elif not Completed:
-            
             DaysLeft=abs(Due-datetime.datetime.now()).days
             Text=f"Due On {Due.strftime(f'%a, {TaskWidget.OrdinalTimeFunction(Due.day)} %b %Y')} "+Title
             self.ui.DaysLeftDisplay.display(DaysLeft)
@@ -156,7 +149,7 @@ class TaskWidget(QtWidgets.QWidget):
             self.ui.DaysLeftDisplay.show()
             self.ui.DaysLeftLabel.show()
             
-        #The Task is complete
+        #If the Task is complete
         else:
             Text=f"Finished at {TaskObject.CompletedDate.strftime('%c')}"+Title
             #We can hide these labels since there's no need for a days left counter
@@ -170,9 +163,8 @@ class TaskWidget(QtWidgets.QWidget):
         else:
             self.ui.ReminderBox.setChecked(False)
         #Adds the Label Widget
-        '''
+    
         for Label in TaskObject.Labels:
-            
             frame=QtWidgets.QFrame(self.ui.LabelsViewScrollContents)
             layout=QtWidgets.QHBoxLayout()
             layout.addWidget(LabelWidget(frame,Label))
@@ -184,13 +176,21 @@ class TaskWidget(QtWidgets.QWidget):
         layout=QtWidgets.QHBoxLayout()
         layout.addWidget(LabelWidget(frame,LabelObject))
         self.ui.LabelsHBoxLayout.addWidget(frame)
-    '''
+
+    def eventFilter(self, TaskDescObj: QtWidgets.QTextBrowser, Event: QtCore.QEvent) -> bool:        
+        if TaskDescObj==self.ui.TaskDescription and Event.type()==QtCore.QEvent.FocusOut:
+            self.TaskDescChanged(self.ui.TaskDescription.toPlainText())
+        return super().eventFilter(TaskDescObj,Event)
+
     def TaskEditButtonClicked(self):
         #First, create the Dialog to popup
         Task=cl.Task.Instances[self.TaskID]
         TaskEditDialog(Task=Task,TaskTitle=Task.TaskTitle,TaskDesc=Task.TaskDesc,TaskDueDate=Task.DueDate,PriorityLevel=Task.PriorityLevel)
         self.SetInformation(Task)
     
+    def TaskDeleteButtonClicked(self,Task: cl.Task):
+        Task.DeleteTask()
+        self.parentWidget().deleteLater()
 
 
 

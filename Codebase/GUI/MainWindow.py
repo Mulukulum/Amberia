@@ -49,7 +49,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.CreateProjectButton.setStyleSheet(self.ui.CreateProjectButton.styleSheet()+"; font-size: 24px ;")
         
         #Set the connections of the buttons
-        self.ui.RefreshButton.clicked.connect(lambda: self.ShowTasksTodayWidget())
+        #self.ui.RefreshButton.clicked.connect(lambda: self.ShowTasksTodayWidget())
         self.ui.TasksTodayButton.clicked.connect(self.ShowTasksTodayWidget)
         self.ui.CreateProjectButton.clicked.connect(self.AddProjectButtonClicked)
 
