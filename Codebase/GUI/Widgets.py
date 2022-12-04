@@ -414,9 +414,9 @@ class SettingsWidget(QtWidgets.QWidget):
 
     ThemesDictionary={
         "DefaultTheme":"Amberia.qss",
-        "DayTheme":"Amberia.qss",
-        "Phantasmagoric":"Amberia.qss",
-        "TwilightTheme":"Amberia.qss",
+        "DayTheme":"Day.qss",
+        "Phantasmagoric":"Phantasmagoric.qss",
+        "TwilightTheme":"Twilight.qss",
         }
     #To be modified after the themes are made
     ThemesBackground={
