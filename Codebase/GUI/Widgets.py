@@ -421,9 +421,9 @@ class SettingsWidget(QtWidgets.QWidget):
     #To be modified after the themes are made
     ThemesBackground={
         "DefaultTheme":"#2a3364",
-        "DayTheme":"#",
-        "Phantasmagoric":"#",
-        "TwilightTheme":"#",
+        "DayTheme":"##cc0000",
+        "Phantasmagoric":"#18191A",
+        "TwilightTheme":"##FD5E53",
     }
 
     def __init__(self,frame,MainWindow) -> None:
