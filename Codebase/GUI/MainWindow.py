@@ -24,7 +24,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
 
     def __init__(self) -> None:
         #Sets up the mainwindow class
-        super(AmberMainWindow,self).__init__()
+        super().__init__()
         #Mainwindow Ui Setup
         self.ui=AmberWindowUI()
         self.ui.setupUi(self)

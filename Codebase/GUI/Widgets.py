@@ -426,6 +426,7 @@ class SettingsWidget(QtWidgets.QWidget):
         self.frame=frame
         self.setStyleSheet(StyleSheet)
         self.ui.setupUi(self)
+        self.MW=MainWindow
 
         #Setup the Constants
         self.SelectedTheme=None
@@ -438,6 +439,7 @@ class SettingsWidget(QtWidgets.QWidget):
         self.ui.SaveChanges.clicked.connect(self.SaveChanges)
         self.ui.CancelChanges.clicked.connect(MainWindow.ShowTasksTodayWidget)
         self.ui.ResetButton.clicked.connect(self.ResetDisplayBehaviours)
+        self.ui.DayTheme.clicked.connect(self.DayTheme)
 
         #Set the values into the corresponding displays
         if duedatebehaviour:
@@ -467,6 +469,8 @@ class SettingsWidget(QtWidgets.QWidget):
         mintaskdispheight=? , minsecdispheight=? , projectminheight=? ,
         sidebarfactor=? , setduedatetoday=? WHERE def=1 """,
         (StyleSheet, TaskDispHt, SectionDispHt,ProjButtonHt,SidebarScale,duebehaviour))
+        #Changes successfully saved, now the restart is initiated
+        self.MW.Restart()
 
     def SaveChanges(self):
         #Get all the values
@@ -476,3 +480,5 @@ class SettingsWidget(QtWidgets.QWidget):
         SidebarScale=self.ui.SidebarScaleFactor
         duebehaviour=self.ui.NewTaskDueBehaviour
 
+    def DayTheme(self):
+        self.SelectedTheme=self.ui.DayTheme
