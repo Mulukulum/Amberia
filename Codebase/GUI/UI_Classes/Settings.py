@@ -315,7 +315,7 @@ class SettingsUI(object):
         self.SecDispHeight.setSuffix(QCoreApplication.translate("Form", u" pixels", None))
         self.SecDispHeight.setPrefix("")
         self.MinTaskHtLabel.setText(QCoreApplication.translate("Form", u"Minimum Task Display Height (Tasks Displayed are atleast this tall)", None))
-        self.MinProjButHtLabel.setText(QCoreApplication.translate("Form", u"Minimum Project Button Height", None))
+        self.MinProjButHtLabel.setText(QCoreApplication.translate("Form", u"Minimum Project Button Height (Requires Manual Restart)", None))
         self.ProjButtonHeight.setSuffix(QCoreApplication.translate("Form", u" pixels", None))
         self.ProjButtonHeight.setPrefix("")
         self.TaskDispHeight.setSuffix(QCoreApplication.translate("Form", u" pixels", None))
