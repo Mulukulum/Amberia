@@ -1,7 +1,7 @@
 #Functions to log errors with other functions
 from datetime import datetime
 from os.path import dirname
-LogPath=((dirname(__file__).partition("Codebase")[0]))+("LogFiles\\")         #Gets the path of the logs Folder
+LogPath=dirname(dirname(dirname(__file__)))+("\\LogFiles\\")         #Gets the path of the logs Folder
 from inspect import stack
 FileConstant=6
 

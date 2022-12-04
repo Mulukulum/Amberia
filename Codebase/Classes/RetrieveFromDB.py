@@ -47,7 +47,7 @@ def AddTasks():
 
     Tasks=ExecuteCommand("""
     SELECT task_id,task_title,task_description,task_projectid,
-    task_sectionid,task_priority,task_completed,task_duedate,task_completed_date FROM tasks
+    task_sectionid,task_priority,task_completed,task_duedate timestamp,task_completed_date timestamp FROM tasks
     """)
     for Task in Tasks:
 

@@ -37,18 +37,20 @@ CheckList=('projects',
             'tasks',
             'texttasks',
             'sections',
-            'prcolors')
+            'prcolors',
+            'settings',)
 #   MODIFY README.MD WHEN MAKING ANY CHANGES TO ANY OF THIS
 #   MODIFY README.MD WHEN MAKING ANY CHANGES TO ANY OF THIS
 #   MODIFY README.MD WHEN MAKING ANY CHANGES TO ANY OF THIS
 AttribDict={
     'projects':'project_id INTEGER PRIMARY KEY, project_title TEXT NOT NULL, project_color INTEGER NOT NULL, project_sectioncount INTEGER NOT NULL',
     'labels':'label_id INTEGER PRIMARY KEY, label_title TEXT UNIQUE, label_color INTEGER NOT NULL,label_taskcount INTEGER NOT NULL',
-    'tasks':'task_id INTEGER PRIMARY KEY, task_description TEXT, task_title TEXT NOT NULL, task_projectid INTEGER NOT NULL, task_sectionid INTEGER NOT NULL, task_priority INTEGER NOT NULL, task_completed INTEGER NOT NULL, task_showreminder INTEGER NOT NULL ,task_duedate DATE, task_completed_date DATE',
+    'tasks':'task_id INTEGER PRIMARY KEY, task_description TEXT, task_title TEXT NOT NULL, task_projectid INTEGER NOT NULL, task_sectionid INTEGER NOT NULL, task_priority INTEGER NOT NULL, task_completed INTEGER NOT NULL, task_showreminder INTEGER NOT NULL ,task_duedate timestamp, task_completed_date timestamp',
     'texttasks':'texttask_id INTEGER PRIMARY KEY, texttask_text TEXT NOT NULL, texttask_sectionid INTEGER NOT NULL, texttask_projectid INTEGER NOT NULL',
     'sections':'section_id INTEGER PRIMARY KEY, section_parentprojectid INTEGER NOT NULL, section_title TEXT NOT NULL, section_taskcount INTEGER NOT NULL, section_activetaskcount INTEGER NOT NULL, section_texttaskcount INTEGER NOT NULL',
     'prcolors':'level INTEGER PRIMARY KEY, clrvalue INTEGER NOT NULL',
-    'labelsfortasks':'task INTEGER NOT NULL, label INTEGER NOT NULL'
+    'labelsfortasks':'task INTEGER NOT NULL, label INTEGER NOT NULL',
+    'settings':'def INTEGER PRIMARY KEY, stylesheet TEXT NOT NULL, mintaskdispheight INTEGER NOT NULL, minsecdispheight INTEGER NOT NULL , projectminheight INTEGER NOT NULL, sidebarfactor REAL NOT NULL, setduedatetoday INTEGER NOT NULL',
     }
 #   DO NOT FORGET TO MODIFY THE READTHIS.MD FILE
 #   DO NOT FORGET TO MODIFY THE READTHIS.MD FILE

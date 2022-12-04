@@ -1,7 +1,7 @@
 import datetime
 import sqlite3                                      
 from Codebase.Variables import DataBasePath         #Get the location of the Database
-ConnectionObject=sqlite3.connect(DataBasePath,detect_types=sqlite3.PARSE_COLNAMES)      #Creates the connection to the databse
+ConnectionObject=sqlite3.connect(DataBasePath,detect_types=sqlite3.PARSE_COLNAMES|sqlite3.PARSE_DECLTYPES)      #Creates the connection to the databse
 
 def UDF() -> None:                                          #Function to call the UserDefinedFunctions
     global ConnectionObject
@@ -18,11 +18,13 @@ def HexFormat(number: int) -> str:
     return "#"+hexcode
 
 def CheckIfToday(Date:datetime.datetime):
+    if Date==None: return 0
+    if type(Date)==type('String'):
+        Date=datetime.datetime.strptime(Date[0:19],"%Y-%m-%d %X")
     if datetime.date.today()==Date.date():
         return 1
     else:
         return 0
-
 
 UDF()                                                   #Defines the functions
 
