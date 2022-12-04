@@ -43,11 +43,11 @@ class AmberWindowUI(object):
         #Creates the CreateProjectButton and TasksTodayButton and sets the colors
         self.CreateProjectButton = QPushButton(self.ProjectContents)
         self.CreateProjectButton.setObjectName(u"CreateProjectButton")
-        self.CreateProjectButton.setStyleSheet(u"background: #2a3364")
+        #self.CreateProjectButton.setStyleSheet(u"background: #2a3364")
         self.ButtonList.addWidget(self.CreateProjectButton, 1, 0, 1, 1)
         self.TasksTodayButton = QPushButton(self.ProjectContents)
         self.TasksTodayButton.setObjectName(u"TasksTodayButton")
-        self.TasksTodayButton.setStyleSheet(u"background: #2a3364")
+        #self.TasksTodayButton.setStyleSheet(u"background: #2a3364")
         self.ButtonList.addWidget(self.TasksTodayButton, 0, 0, 1, 1)
         
         self.ProjectsLabel = QLabel(self.ProjectContents)
