@@ -590,6 +590,7 @@ class SettingsWidget(QtWidgets.QWidget):
     
     def ChangePrColor(self,PrLevel):
         color=self.PopupColorDialog()
+        if color==None: return
         self.findChild(QtWidgets.QPushButton,f"Pr{PrLevel}").setStyleSheet(f"background-color: {color}")
         cl.Priority.UpdateColor(PrLevel,int(str(color).strip('# '),16))
         #Colors updated now
