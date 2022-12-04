@@ -530,6 +530,8 @@ class SettingsWidget(QtWidgets.QWidget):
 
     def SaveChanges(self):
         #Get all the values
+        self.ui.SaveChanges.setText("Changes Saved..")
+        QtCore.QTimer.singleShot(700,lambda: self.RevertText())
         TaskDispHt=self.ui.TaskDispHeight.value()
         SectionDispHt=self.ui.SecDispHeight.value()
         ProjButtonHt=self.ui.ProjButtonHeight.value()
@@ -601,5 +603,9 @@ class SettingsWidget(QtWidgets.QWidget):
         cl.Priority.ColorCache=cl.Priority.DefaultPriorityColors
         #Set the priority Colors again
         self.SetPriorityColors()
-        
+    
+    def RevertText(self):
+        try:
+            self.ui.SaveChanges.setText("Save Changes")
+        except: ...
         

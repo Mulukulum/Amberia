@@ -220,4 +220,41 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical
 	
 }
 
+QSpinBox
+{
+   font-size: 12px;
+   color: #c9c15f;
+}
 
+QCheckBox
+{
+   font-size: 12px;
+   color: #c9c15f;
+}
+
+QDoubleSpinBox
+{
+   font-size: 12px;
+   color: #c9c15f;
+}
+
+QDateTimeEdit
+{
+   font-size: 12px;
+   color: #c9c15f;
+}
+
+QTextBrowser
+{
+   color: #c9c15f;
+}
+
+QTextEdit
+{
+   color: #c9c15f;
+}
+
+QColorDialog
+{
+   color: #c9c15f;
+}
