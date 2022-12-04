@@ -597,7 +597,6 @@ class SettingsWidget(QtWidgets.QWidget):
     
     def ResetPriorityColors(self):
         #Runs the script to set the default priority colors
-        print('A')
         ExecuteScript(cl.Priority.ScriptSetDefaultColors)
         cl.Priority.ColorCache=cl.Priority.DefaultPriorityColors
         #Set the priority Colors again
