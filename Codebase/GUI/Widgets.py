@@ -5,7 +5,7 @@ import PyQt5
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
-from Codebase.Functions.Database import ExecuteCommand
+from Codebase.Functions.Database import ExecuteCommand,ExecuteScript
 from Codebase.GUI.UserSettings import Stylesheet,MinTaskDispHt,MinSecDispHt,duedatebehaviour,sidebarfactor,ProjMinHt
 
 FilePath=f'\\StyleSheet\\{Stylesheet}'
@@ -446,7 +446,20 @@ class SettingsWidget(QtWidgets.QWidget):
         self.ui.Phantasmagoric.clicked.connect(self.Phantasmagoric)
         self.ui.TwilightTheme.clicked.connect(self.TwilightTheme)
         self.ui.DefaultTheme.clicked.connect(self.DefaultTheme)
+        #Priority-Colors
+        self.ui.Pr1.clicked.connect(lambda : self.ChangePrColor(1))
+        self.ui.Pr2.clicked.connect(lambda : self.ChangePrColor(2))
+        self.ui.Pr3.clicked.connect(lambda : self.ChangePrColor(3))
+        self.ui.Pr4.clicked.connect(lambda : self.ChangePrColor(4))
+        self.ui.Pr5.clicked.connect(lambda : self.ChangePrColor(5))
+        self.ui.Pr6.clicked.connect(lambda : self.ChangePrColor(6))
+        self.ui.Pr7.clicked.connect(lambda : self.ChangePrColor(7))
+        self.ui.Pr8.clicked.connect(lambda : self.ChangePrColor(8))
+        self.ui.Pr9.clicked.connect(lambda : self.ChangePrColor(9))
+        self.ui.Pr10.clicked.connect(lambda: self.ChangePrColor(10))
+        self.ui.DefaultValueButton.clicked.connect(lambda : self.ResetPriorityColors())
         #Set the values into the corresponding displays
+        self.SetPriorityColors()
         try:
             res=ExecuteCommand("SELECT stylesheet, mintaskdispheight, minsecdispheight, projectminheight , sidebarfactor, setduedatetoday FROM settings WHERE def=1")[0]
         except:
@@ -555,3 +568,38 @@ class SettingsWidget(QtWidgets.QWidget):
             self.SelectedTheme.setStyleSheet(StyleSheet)
         self.SelectedTheme=self.ui.DefaultTheme
         self.SelectedTheme.setStyleSheet(f"background-color: {self.ThemesBackground[self.SelectedTheme.objectName()]}")
+
+    def SetPriorityColors(self):
+        self.ui.Pr1.setStyleSheet(f"background-color: {HexFormat(cl.Priority.ColorOfLevel(1))}")
+        self.ui.Pr2.setStyleSheet(f"background-color: {HexFormat(cl.Priority.ColorOfLevel(2))}")
+        self.ui.Pr3.setStyleSheet(f"background-color: {HexFormat(cl.Priority.ColorOfLevel(3))}")
+        self.ui.Pr4.setStyleSheet(f"background-color: {HexFormat(cl.Priority.ColorOfLevel(4))}")
+        self.ui.Pr5.setStyleSheet(f"background-color: {HexFormat(cl.Priority.ColorOfLevel(5))}")
+        self.ui.Pr6.setStyleSheet(f"background-color: {HexFormat(cl.Priority.ColorOfLevel(6))}")
+        self.ui.Pr7.setStyleSheet(f"background-color: {HexFormat(cl.Priority.ColorOfLevel(7))}")
+        self.ui.Pr8.setStyleSheet(f"background-color: {HexFormat(cl.Priority.ColorOfLevel(8))}")
+        self.ui.Pr9.setStyleSheet(f"background-color: {HexFormat(cl.Priority.ColorOfLevel(9))}")
+        self.ui.Pr10.setStyleSheet(f"background-color: {HexFormat(cl.Priority.ColorOfLevel(10))}")
+
+    def PopupColorDialog(self):
+        dialog=QtWidgets.QColorDialog(self)
+        dialog.setModal(True)
+        Ok=dialog.exec_()
+        if Ok:
+            return dialog.selectedColor().name()
+    
+    def ChangePrColor(self,PrLevel):
+        color=self.PopupColorDialog()
+        self.findChild(QtWidgets.QPushButton,f"Pr{PrLevel}").setStyleSheet(f"background-color: {color}")
+        cl.Priority.UpdateColor(PrLevel,int(str(color).strip('# '),16))
+        #Colors updated now
+    
+    def ResetPriorityColors(self):
+        #Runs the script to set the default priority colors
+        print('A')
+        ExecuteScript(cl.Priority.ScriptSetDefaultColors)
+        cl.Priority.ColorCache=cl.Priority.DefaultPriorityColors
+        #Set the priority Colors again
+        self.SetPriorityColors()
+        
+        
