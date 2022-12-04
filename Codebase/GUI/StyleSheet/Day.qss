@@ -23,8 +23,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 /*-----QWidget-----*/
 QWidget
 {
-	background-color: #1c1d21;
-	color: #000000;
+	background-color: #F9B279;
+	color: #FDE9C9;
 
 }
 
@@ -32,8 +32,8 @@ QWidget
 /*-----QLabel-----*/
 QLabel
 {
-	background-color: #2A3364;
-	color: #f3ab11;
+	background-color: #cc0000;
+	color: #D4BEBA;
 
 }
 
@@ -41,8 +41,8 @@ QLabel
 /*-----QPushButton-----*/
 QPushButton
 {
-	background-color: #141414;
-	color: #c9c15f;
+	background-color: #c9a91a;
+	color: #cc0000;
 	border: none;
 	padding: 6px;
 
@@ -51,8 +51,8 @@ QPushButton
 
 QPushButton::hover
 {
-	background-color: #141414;
-	color: #c9c15f;
+	background-color: #c9a91a;
+	color: #cc0000;
 	border-bottom-style: groove;
 	border-bottom-color: #c9a91a;
 	border-bottom-width: 3px;
@@ -63,7 +63,7 @@ QPushButton::hover
 
 QPushButton::pressed
 {
-	background-color: #141414;
+	background-color: #c9a91a;
 	color: #df3838;
 	border: none;
 
@@ -77,17 +77,17 @@ QLineEdit
 	color: #c9a91a;
 	border-style: double;
 	border-width: 6px;
-	border-color: #2a3364;
+	border-color: #cc0000;
 
 }
 
 
 /*-----QListView-----*/
 QListView{
-	background-color: #141414;
+	background-color: #c9a91a;
 	font-size: 12pt;
 	border: none;
-	color: #ffffff;
+	color: #fff;
 	show-decoration-selected: 0;
 	padding-left: px;
 
@@ -219,80 +219,42 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical
    background-color: #222222;
 	
 }
-
 QSpinBox
 {
    font-size: 12px;
-   color: #c9c15f;
+   color: #804d00;
 }
 
 QCheckBox
 {
    font-size: 12px;
-   color: #c9c15f;
+   color: #804d00;
 }
 
 QDoubleSpinBox
 {
    font-size: 12px;
-   color: #c9c15f;
+   color: #804d00;
 }
 
 QDateTimeEdit
 {
    font-size: 12px;
-   color: #c9c15f;
+   color: #804d00;
 }
 
 QTextBrowser
 {
-   color: #c9c15f;
+   color: #804d00;
 }
 
 QTextEdit
 {
-   color: #c9c15f;
+   color: #804d00;
 }
 
 QColorDialog
 {
-   color: #c9c15f;
-}
-QSpinBox
-{
-   font-size: 12px;
-   color: #c9c15f;
+   color: #804d00;
 }
 
-QCheckBox
-{
-   font-size: 12px;
-   color: #c9c15f;
-}
-
-QDoubleSpinBox
-{
-   font-size: 12px;
-   color: #c9c15f;
-}
-
-QDateTimeEdit
-{
-   font-size: 12px;
-   color: #c9c15f;
-}
-
-QTextBrowser
-{
-   color: #c9c15f;
-}
-
-QTextEdit
-{
-   color: #c9c15f;
-}
-
-QColorDialog
-{
-   color: #c9c15f;
-}
