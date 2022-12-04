@@ -139,12 +139,17 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.CurrentWidgetTitleLabel.setText(text)
         self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
 
+    def SetLabelForSettings(self):
+        text=f"App Settings" 
+        self.ui.CurrentWidgetTitleLabel.setText(text)
+        self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
+
+
     def ShowTasksTodayWidget(self,SortOrder:int=0):
         #Deletes the current widget frame
         self.WidgetFrame.deleteLater()
         #Sets the Title
         self.SetTasksTodayWidgetTitle()
-
         #Show the tasks widget
         FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
         framelayout=QtWidgets.QGridLayout(FrameForMainWidget)
@@ -164,6 +169,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Deletes the current widget frame
         self.WidgetFrame.deleteLater()
         #Sets the Title
+        self.SetLabelForSettings()
         #Show the tasks widget
         FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
         framelayout=QtWidgets.QGridLayout(FrameForMainWidget)
