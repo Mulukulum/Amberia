@@ -420,7 +420,7 @@ class SettingsWidget(QtWidgets.QWidget):
         }
     #To be modified after the themes are made
     ThemesBackground={
-        "DefaultTheme":"#",
+        "DefaultTheme":"#2a3364",
         "DayTheme":"#",
         "Phantasmagoric":"#",
         "TwilightTheme":"#",
