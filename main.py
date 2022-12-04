@@ -23,8 +23,8 @@ while code:
     #If the application needs to restart
     if code:
         importlib.invalidate_caches()
+        importlib.reload(Codebase.GUI.UserSettings)
         importlib.reload(Codebase.GUI.Widgets)
         importlib.reload(Codebase.GUI.MainWindow)
-        importlib.reload(Codebase.GUI.UserSettings)
 
 Database.CloseConnection()

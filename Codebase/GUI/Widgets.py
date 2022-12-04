@@ -412,13 +412,19 @@ class TaskEditDialog(QtWidgets.QDialog):
 
 class SettingsWidget(QtWidgets.QWidget):
 
-    RestartSignal=QtCore.pyqtSignal()
     ThemesDictionary={
         "DefaultTheme":"Amberia.qss",
-        "DayTheme":"Day.qss",
+        "DayTheme":"Amberia.qss",
         "Phantasmagoric":"Amberia.qss",
         "TwilightTheme":"Amberia.qss",
         }
+    #To be modified after the themes are made
+    ThemesBackground={
+        "DefaultTheme":"#",
+        "DayTheme":"#",
+        "Phantasmagoric":"#",
+        "TwilightTheme":"#",
+    }
 
     def __init__(self,frame,MainWindow) -> None:
         super().__init__(frame)
@@ -427,32 +433,69 @@ class SettingsWidget(QtWidgets.QWidget):
         self.setStyleSheet(StyleSheet)
         self.ui.setupUi(self)
         self.MW=MainWindow
-
         #Setup the Constants
         self.SelectedTheme=None
-        self.ResetDispValues=False
         self.ResetPrValues=False
         self.ResetTheme=False
-
         #Signals and slots setup
         self.ui.SaveChangesRestart.clicked.connect(self.SaveChangesRestart)
         self.ui.SaveChanges.clicked.connect(self.SaveChanges)
         self.ui.CancelChanges.clicked.connect(MainWindow.ShowTasksTodayWidget)
         self.ui.ResetButton.clicked.connect(self.ResetDisplayBehaviours)
         self.ui.DayTheme.clicked.connect(self.DayTheme)
-
+        self.ui.Phantasmagoric.clicked.connect(self.Phantasmagoric)
+        self.ui.TwilightTheme.clicked.connect(self.TwilightTheme)
+        self.ui.DefaultTheme.clicked.connect(self.DefaultTheme)
         #Set the values into the corresponding displays
-        if duedatebehaviour:
+        try:
+            res=ExecuteCommand("SELECT stylesheet, mintaskdispheight, minsecdispheight, projectminheight , sidebarfactor, setduedatetoday FROM settings WHERE def=1")[0]
+        except:
+            res=tuple()
+        if len(res)==0:
+            ExecuteCommand("DELETE FROM settings")
+            ExecuteCommand("INSERT INTO SETTINGS VALUES(0,'Amberia.qss',275,400,65,0.235,1)")
+            ExecuteCommand("INSERT INTO SETTINGS VALUES(1,'Amberia.qss',275,400,65,0.235,1)")
+            res=("Amberia.qss",275,400,65,0.235,1)
+        Stylsht,MinTaskDispHt,MinSecDispHt,ProjMinHt,sidebarfactor,DueBehaviour=res
+        #Duebehaviour setup
+        if DueBehaviour:
             self.ui.NewTaskDueBehaviour.setChecked(True)
         else:
             self.ui.NewTaskDueBehaviour.setChecked(False)
+        #Themes setup
+        for buttonname,ss in self.ThemesDictionary.items():
+            if ss==Stylsht:
+                selectedss=buttonname
+                break
+        self.SelectedTheme=self.findChild(QtWidgets.QPushButton,selectedss)
+        self.SelectedTheme.setStyleSheet(f"background-color: {self.ThemesBackground[self.SelectedTheme.objectName()]}")
+        #Values Setup
+        self.ui.TaskDispHeight.setValue(MinTaskDispHt)
+        self.ui.SecDispHeight.setValue(MinSecDispHt)
+        self.ui.ProjButtonHeight.setValue(ProjMinHt)
+        self.ui.SidebarScaleFactor.setValue(sidebarfactor)
 
     def ResetDisplayBehaviours(self):
-        self.ResetDispValues=True
-        #Disable the button
-        self.ui.ResetButton.setStyleSheet("; background-color: #000000")
-        self.ui.ResetButton.setDisabled(True)
-        
+        #Default Values Set
+        ExecuteCommand("""UPDATE settings SET mintaskdispheight=275 , 
+        minsecdispheight=400 , projectminheight=65 ,
+        sidebarfactor=0.235 , setduedatetoday=1 WHERE def=1 """)
+        try:
+            res=ExecuteCommand("SELECT mintaskdispheight, minsecdispheight, projectminheight , sidebarfactor, setduedatetoday FROM settings WHERE def=1")[0]
+        except:
+            res=(275,400,65,0.235,1)
+        MinTaskDispHt,MinSecDispHt,ProjMinHt,sidebarfactor,DueBehaviour=res
+        #Duebehaviour setup
+        if DueBehaviour:
+            self.ui.NewTaskDueBehaviour.setChecked(True)
+        else:
+            self.ui.NewTaskDueBehaviour.setChecked(False)
+        #Values Setup
+        self.ui.TaskDispHeight.setValue(MinTaskDispHt)
+        self.ui.SecDispHeight.setValue(MinSecDispHt)
+        self.ui.ProjButtonHeight.setValue(ProjMinHt)
+        self.ui.SidebarScaleFactor.setValue(sidebarfactor)
+
 
     def SaveChangesRestart(self):
         #Get all the values
@@ -474,11 +517,41 @@ class SettingsWidget(QtWidgets.QWidget):
 
     def SaveChanges(self):
         #Get all the values
-        TaskDispHt=self.ui.TaskDispHeight
-        SectionDispHt=self.ui.SecDispHeight
-        ProjButtonHt=self.ui.ProjButtonHeight
-        SidebarScale=self.ui.SidebarScaleFactor
-        duebehaviour=self.ui.NewTaskDueBehaviour
+        TaskDispHt=self.ui.TaskDispHeight.value()
+        SectionDispHt=self.ui.SecDispHeight.value()
+        ProjButtonHt=self.ui.ProjButtonHeight.value()
+        SidebarScale=self.ui.SidebarScaleFactor.value()
+        duebehaviour=self.ui.NewTaskDueBehaviour.isChecked()
+        if self.SelectedTheme!=None: 
+            StyleSheet=self.ThemesDictionary.get(self.SelectedTheme.objectName())
+        else: 
+            StyleSheet=Stylesheet
+        ExecuteCommand("""UPDATE settings SET stylesheet=?,
+        mintaskdispheight=? , minsecdispheight=? , projectminheight=? ,
+        sidebarfactor=? , setduedatetoday=? WHERE def=1 """,
+        (StyleSheet, TaskDispHt, SectionDispHt,ProjButtonHt,SidebarScale,duebehaviour))
+        #No restart is called here
 
     def DayTheme(self):
+        if self.SelectedTheme!=None:
+            self.SelectedTheme.setStyleSheet(StyleSheet)
         self.SelectedTheme=self.ui.DayTheme
+        self.SelectedTheme.setStyleSheet(f"background-color: {self.ThemesBackground[self.SelectedTheme.objectName()]}")
+    
+    def TwilightTheme(self):
+        if self.SelectedTheme!=None:
+            self.SelectedTheme.setStyleSheet(StyleSheet)
+        self.SelectedTheme=self.ui.TwilightTheme
+        self.SelectedTheme.setStyleSheet(f"background-color: {self.ThemesBackground[self.SelectedTheme.objectName()]}")
+
+    def Phantasmagoric(self):
+        if self.SelectedTheme!=None:
+            self.SelectedTheme.setStyleSheet(StyleSheet)
+        self.SelectedTheme=self.ui.Phantasmagoric
+        self.SelectedTheme.setStyleSheet(f"background-color: {self.ThemesBackground[self.SelectedTheme.objectName()]}")
+    
+    def DefaultTheme(self):
+        if self.SelectedTheme!=None:
+            self.SelectedTheme.setStyleSheet(StyleSheet)
+        self.SelectedTheme=self.ui.DefaultTheme
+        self.SelectedTheme.setStyleSheet(f"background-color: {self.ThemesBackground[self.SelectedTheme.objectName()]}")

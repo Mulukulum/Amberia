@@ -29,230 +29,12 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-663</y>
+        <y>0</y>
         <width>799</width>
         <height>1271</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QFrame" name="DisplayBehavioursFrame">
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="4" column="0" rowspan="2" colspan="2">
-           <widget class="QLabel" name="SidebarScaleLabel">
-            <property name="font">
-             <font>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>SideBar Scaling Factor</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="3">
-           <widget class="QSpinBox" name="SecDispHeight">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="suffix">
-             <string> pixels</string>
-            </property>
-            <property name="prefix">
-             <string/>
-            </property>
-            <property name="minimum">
-             <number>150</number>
-            </property>
-            <property name="maximum">
-             <number>16777215</number>
-            </property>
-            <property name="singleStep">
-             <number>5</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="2">
-           <widget class="QLabel" name="MinTaskHtLabel">
-            <property name="font">
-             <font>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Minimum Task Display Height (Tasks Displayed are atleast this tall)</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="2">
-           <widget class="QLabel" name="MinProjButHtLabel">
-            <property name="font">
-             <font>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Minimum Project Button Height</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="3">
-           <widget class="QSpinBox" name="ProjButtonHeight">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="suffix">
-             <string> pixels</string>
-            </property>
-            <property name="prefix">
-             <string/>
-            </property>
-            <property name="minimum">
-             <number>150</number>
-            </property>
-            <property name="maximum">
-             <number>16777215</number>
-            </property>
-            <property name="singleStep">
-             <number>5</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <widget class="QSpinBox" name="TaskDispHeight">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="suffix">
-             <string> pixels</string>
-            </property>
-            <property name="prefix">
-             <string/>
-            </property>
-            <property name="minimum">
-             <number>150</number>
-            </property>
-            <property name="maximum">
-             <number>16777215</number>
-            </property>
-            <property name="singleStep">
-             <number>5</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QLabel" name="MinSecHtLabel">
-            <property name="font">
-             <font>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Minimum Section Display Height </string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="3" rowspan="2">
-           <widget class="QDoubleSpinBox" name="SidebarScaleFactor">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="decimals">
-             <number>4</number>
-            </property>
-            <property name="maximum">
-             <double>1.000000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>0.010000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" colspan="4">
-           <widget class="QLabel" name="DisplayBehaviourLabel">
-            <property name="font">
-             <font>
-              <pointsize>16</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Display Behaviours (Requires Program Restart)</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0" colspan="4">
-           <widget class="QCheckBox" name="NewTaskDueBehaviour">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
-            <property name="text">
-             <string>Set Due Date to Current Date when Adding New Tasks</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0" colspan="2">
-           <widget class="QPushButton" name="ResetButton">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Reset Values To Default</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item>
         <widget class="QFrame" name="PrColorSettingsFrame">
          <property name="frameShape">
@@ -275,6 +57,224 @@
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="DisplayBehavioursFrame">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="4" column="0" rowspan="2" colspan="2">
+              <widget class="QLabel" name="SidebarScaleLabel">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>SideBar Scaling Factor</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3">
+              <widget class="QSpinBox" name="SecDispHeight">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="suffix">
+                <string> pixels</string>
+               </property>
+               <property name="prefix">
+                <string/>
+               </property>
+               <property name="minimum">
+                <number>150</number>
+               </property>
+               <property name="maximum">
+                <number>16777215</number>
+               </property>
+               <property name="singleStep">
+                <number>5</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="2">
+              <widget class="QLabel" name="MinTaskHtLabel">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Minimum Task Display Height (Tasks Displayed are atleast this tall)</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0" colspan="2">
+              <widget class="QLabel" name="MinProjButHtLabel">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Minimum Project Button Height</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="3">
+              <widget class="QSpinBox" name="ProjButtonHeight">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="suffix">
+                <string> pixels</string>
+               </property>
+               <property name="prefix">
+                <string/>
+               </property>
+               <property name="minimum">
+                <number>20</number>
+               </property>
+               <property name="maximum">
+                <number>16777215</number>
+               </property>
+               <property name="singleStep">
+                <number>5</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QSpinBox" name="TaskDispHeight">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="suffix">
+                <string> pixels</string>
+               </property>
+               <property name="prefix">
+                <string/>
+               </property>
+               <property name="minimum">
+                <number>150</number>
+               </property>
+               <property name="maximum">
+                <number>16777215</number>
+               </property>
+               <property name="singleStep">
+                <number>5</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0" colspan="2">
+              <widget class="QLabel" name="MinSecHtLabel">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Minimum Section Display Height </string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="3" rowspan="2">
+              <widget class="QDoubleSpinBox" name="SidebarScaleFactor">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="decimals">
+                <number>4</number>
+               </property>
+               <property name="maximum">
+                <double>1.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.010000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" colspan="4">
+              <widget class="QLabel" name="DisplayBehaviourLabel">
+               <property name="font">
+                <font>
+                 <pointsize>16</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Display Behaviours (Requires Program Restart)</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0" colspan="4">
+              <widget class="QCheckBox" name="NewTaskDueBehaviour">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true"/>
+               </property>
+               <property name="text">
+                <string>Set Due Date to Current Date when Adding New Tasks</string>
+               </property>
+               <property name="checked">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="0" colspan="2">
+              <widget class="QPushButton" name="ResetButton">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Reset Values To Default</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
           <item>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'SettingslYGLNc.ui'
+## Form generated from reading UI file 'SettingsXWJbwM.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -26,10 +26,25 @@ class SettingsUI(object):
         self.SettingsScrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, -663, 799, 1271))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 799, 1271))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.DisplayBehavioursFrame = QFrame(self.scrollAreaWidgetContents)
+        self.PrColorSettingsFrame = QFrame(self.scrollAreaWidgetContents)
+        self.PrColorSettingsFrame.setObjectName(u"PrColorSettingsFrame")
+        self.PrColorSettingsFrame.setFrameShape(QFrame.StyledPanel)
+        self.PrColorSettingsFrame.setFrameShadow(QFrame.Raised)
+        self.verticalLayout_2 = QVBoxLayout(self.PrColorSettingsFrame)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.ColorSettingsLabel = QLabel(self.PrColorSettingsFrame)
+        self.ColorSettingsLabel.setObjectName(u"ColorSettingsLabel")
+        font = QFont()
+        font.setPointSize(16)
+        self.ColorSettingsLabel.setFont(font)
+        self.ColorSettingsLabel.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_2.addWidget(self.ColorSettingsLabel)
+
+        self.DisplayBehavioursFrame = QFrame(self.PrColorSettingsFrame)
         self.DisplayBehavioursFrame.setObjectName(u"DisplayBehavioursFrame")
         self.DisplayBehavioursFrame.setFrameShape(QFrame.StyledPanel)
         self.DisplayBehavioursFrame.setFrameShadow(QFrame.Raised)
@@ -37,9 +52,9 @@ class SettingsUI(object):
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.SidebarScaleLabel = QLabel(self.DisplayBehavioursFrame)
         self.SidebarScaleLabel.setObjectName(u"SidebarScaleLabel")
-        font = QFont()
-        font.setPointSize(9)
-        self.SidebarScaleLabel.setFont(font)
+        font1 = QFont()
+        font1.setPointSize(9)
+        self.SidebarScaleLabel.setFont(font1)
         self.SidebarScaleLabel.setAlignment(Qt.AlignCenter)
 
         self.gridLayout_2.addWidget(self.SidebarScaleLabel, 4, 0, 2, 2)
@@ -55,14 +70,14 @@ class SettingsUI(object):
 
         self.MinTaskHtLabel = QLabel(self.DisplayBehavioursFrame)
         self.MinTaskHtLabel.setObjectName(u"MinTaskHtLabel")
-        self.MinTaskHtLabel.setFont(font)
+        self.MinTaskHtLabel.setFont(font1)
         self.MinTaskHtLabel.setAlignment(Qt.AlignCenter)
 
         self.gridLayout_2.addWidget(self.MinTaskHtLabel, 1, 0, 1, 2)
 
         self.MinProjButHtLabel = QLabel(self.DisplayBehavioursFrame)
         self.MinProjButHtLabel.setObjectName(u"MinProjButHtLabel")
-        self.MinProjButHtLabel.setFont(font)
+        self.MinProjButHtLabel.setFont(font1)
         self.MinProjButHtLabel.setAlignment(Qt.AlignCenter)
 
         self.gridLayout_2.addWidget(self.MinProjButHtLabel, 3, 0, 1, 2)
@@ -70,7 +85,7 @@ class SettingsUI(object):
         self.ProjButtonHeight = QSpinBox(self.DisplayBehavioursFrame)
         self.ProjButtonHeight.setObjectName(u"ProjButtonHeight")
         self.ProjButtonHeight.setMinimumSize(QSize(0, 40))
-        self.ProjButtonHeight.setMinimum(150)
+        self.ProjButtonHeight.setMinimum(20)
         self.ProjButtonHeight.setMaximum(16777215)
         self.ProjButtonHeight.setSingleStep(5)
 
@@ -87,7 +102,7 @@ class SettingsUI(object):
 
         self.MinSecHtLabel = QLabel(self.DisplayBehavioursFrame)
         self.MinSecHtLabel.setObjectName(u"MinSecHtLabel")
-        self.MinSecHtLabel.setFont(font)
+        self.MinSecHtLabel.setFont(font1)
         self.MinSecHtLabel.setAlignment(Qt.AlignCenter)
 
         self.gridLayout_2.addWidget(self.MinSecHtLabel, 2, 0, 1, 2)
@@ -103,9 +118,7 @@ class SettingsUI(object):
 
         self.DisplayBehaviourLabel = QLabel(self.DisplayBehavioursFrame)
         self.DisplayBehaviourLabel.setObjectName(u"DisplayBehaviourLabel")
-        font1 = QFont()
-        font1.setPointSize(16)
-        self.DisplayBehaviourLabel.setFont(font1)
+        self.DisplayBehaviourLabel.setFont(font)
         self.DisplayBehaviourLabel.setAlignment(Qt.AlignCenter)
 
         self.gridLayout_2.addWidget(self.DisplayBehaviourLabel, 0, 0, 1, 4)
@@ -128,20 +141,7 @@ class SettingsUI(object):
         self.gridLayout_2.addWidget(self.ResetButton, 7, 0, 1, 2)
 
 
-        self.verticalLayout.addWidget(self.DisplayBehavioursFrame)
-
-        self.PrColorSettingsFrame = QFrame(self.scrollAreaWidgetContents)
-        self.PrColorSettingsFrame.setObjectName(u"PrColorSettingsFrame")
-        self.PrColorSettingsFrame.setFrameShape(QFrame.StyledPanel)
-        self.PrColorSettingsFrame.setFrameShadow(QFrame.Raised)
-        self.verticalLayout_2 = QVBoxLayout(self.PrColorSettingsFrame)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.ColorSettingsLabel = QLabel(self.PrColorSettingsFrame)
-        self.ColorSettingsLabel.setObjectName(u"ColorSettingsLabel")
-        self.ColorSettingsLabel.setFont(font1)
-        self.ColorSettingsLabel.setAlignment(Qt.AlignCenter)
-
-        self.verticalLayout_2.addWidget(self.ColorSettingsLabel)
+        self.verticalLayout_2.addWidget(self.DisplayBehavioursFrame)
 
         self.PRColorLabel = QLabel(self.PrColorSettingsFrame)
         self.PRColorLabel.setObjectName(u"PRColorLabel")
@@ -230,7 +230,7 @@ class SettingsUI(object):
         self.ThemesLabel = QLabel(self.ThemesFrame)
         self.ThemesLabel.setObjectName(u"ThemesLabel")
         self.ThemesLabel.setMinimumSize(QSize(0, 50))
-        self.ThemesLabel.setFont(font1)
+        self.ThemesLabel.setFont(font)
         self.ThemesLabel.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_3.addWidget(self.ThemesLabel)
@@ -310,7 +310,8 @@ class SettingsUI(object):
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
-        self.SidebarScaleLabel.setText(QCoreApplication.translate("Form", u"SideBar Scaling Factor", None))
+        self.ColorSettingsLabel.setText(QCoreApplication.translate("Form", u"Color Settings", None))
+        self.SidebarScaleLabel.setText(QCoreApplication.translate("Form", u"SideBar Scaling Factor (Requires Manual Restart)", None))
         self.SecDispHeight.setSuffix(QCoreApplication.translate("Form", u" pixels", None))
         self.SecDispHeight.setPrefix("")
         self.MinTaskHtLabel.setText(QCoreApplication.translate("Form", u"Minimum Task Display Height (Tasks Displayed are atleast this tall)", None))
@@ -323,7 +324,6 @@ class SettingsUI(object):
         self.DisplayBehaviourLabel.setText(QCoreApplication.translate("Form", u"Display Behaviours (Requires Program Restart)", None))
         self.NewTaskDueBehaviour.setText(QCoreApplication.translate("Form", u"Set Due Date to Current Date when Adding New Tasks", None))
         self.ResetButton.setText(QCoreApplication.translate("Form", u"Reset Values To Default", None))
-        self.ColorSettingsLabel.setText(QCoreApplication.translate("Form", u"Color Settings", None))
         self.PRColorLabel.setText(QCoreApplication.translate("Form", u"Priority Level Color Settings", None))
         self.Pr1.setText(QCoreApplication.translate("Form", u"Priority 1", None))
         self.Pr2.setText(QCoreApplication.translate("Form", u"Priority 2", None))

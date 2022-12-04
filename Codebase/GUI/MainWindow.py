@@ -7,17 +7,22 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 
+from Codebase.Functions.Database import ExecuteCommand
 from Codebase.Functions.Colors import HexFormat
 from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.AmberMainWin import AmberWindowUI
 from Codebase.GUI.Widgets import (
-    TodayTasksWidget, ProjectWidget,SettingsWidget, StyleSheet , sidebarfactor, ProjMinHt
+    TodayTasksWidget, ProjectWidget,SettingsWidget, StyleSheet, ProjMinHt
     )
 
 class AmberMainWindow(QtWidgets.QMainWindow):
 
     ProjectButtonMinimumHeight=ProjMinHt
-    SideBarScaleFactor=sidebarfactor
+    
+    try:
+        SideBarScaleFactor=ExecuteCommand("SELECT sidebarfactor FROM settings WHERE def=1")[0][0]
+    except:
+        SideBarScaleFactor=0.235
     #Constant that is modified when needed
     # 0 implies quit and 678452056 implies that user has requested a restart
     EXITCODE=0
@@ -62,6 +67,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Makes the buttons for the existing projects
         self.RetrieveFromDB()
         #Show Window
+        
         self.showMaximized()
     
     def resizeEvent(self, Event: QtGui.QResizeEvent) -> None:
@@ -174,7 +180,6 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
         framelayout=QtWidgets.QGridLayout(FrameForMainWidget)
         SettWidget=SettingsWidget(FrameForMainWidget,self)
-        SettWidget.RestartSignal.connect(lambda SortOrder: self.ShowTasksTodayWidget(SortOrder))
         framelayout.addWidget(SettWidget)
         layout=self.ui.VLayoutForMainWidget
         layout.addWidget(FrameForMainWidget)
