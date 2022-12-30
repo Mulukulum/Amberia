@@ -311,11 +311,11 @@ class SettingsUI(object):
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.ColorSettingsLabel.setText(QCoreApplication.translate("Form", u"Color Settings", None))
-        self.SidebarScaleLabel.setText(QCoreApplication.translate("Form", u"SideBar Scaling Factor (Requires Manual Restart)", None))
+        self.SidebarScaleLabel.setText(QCoreApplication.translate("Form", u"SideBar Scaling Factor (Requires Restart)", None))
         self.SecDispHeight.setSuffix(QCoreApplication.translate("Form", u" pixels", None))
         self.SecDispHeight.setPrefix("")
         self.MinTaskHtLabel.setText(QCoreApplication.translate("Form", u"Minimum Task Display Height (Tasks Displayed are atleast this tall)", None))
-        self.MinProjButHtLabel.setText(QCoreApplication.translate("Form", u"Minimum Project Button Height (Requires Manual Restart)", None))
+        self.MinProjButHtLabel.setText(QCoreApplication.translate("Form", u"Minimum Project Button Height (Requires Restart)", None))
         self.ProjButtonHeight.setSuffix(QCoreApplication.translate("Form", u" pixels", None))
         self.ProjButtonHeight.setPrefix("")
         self.TaskDispHeight.setSuffix(QCoreApplication.translate("Form", u" pixels", None))

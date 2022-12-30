@@ -1,35 +1,36 @@
-from PyQt5 import QtWidgets
 
-### link to project report
-#! https://docs.google.com/document/d/1KFOKpOE7DtQBwHhA1m_lkW733HMkay-F3xZbWKz7MmE/edit?usp=sharing
-### link to project report
+def main():
 
-#To pass in sys.argv to the app
-import importlib
-from Codebase.Functions import Database
-import sys
-#Setup the Classes, this also sets up the database
-from Codebase.Classes import classes as cl
-#To run the GUI
-from Codebase.GUI.MainWindow import AmberMainWindow
-#To retrieve data from a save, this file retrieves everything
-from Codebase.Classes import RetrieveFromDB
-import Codebase.GUI.MainWindow
-import Codebase.GUI.Widgets
-import Codebase.GUI.UserSettings
+    from PyQt5 import QtWidgets
 
-code=678452056
-while code:
+    #To pass in sys.argv to the app
+    import importlib
+    from Codebase.Functions import Database
+    import sys
+    #Setup the Classes, this also sets up the database
+    from Codebase.Classes import classes as cl
+    #To run the GUI
+    from Codebase.GUI.MainWindow import AmberMainWindow
+    #To retrieve data from a save, this file retrieves everything
+    from Codebase.Classes import RetrieveFromDB
+    import Codebase.GUI.MainWindow
+    import Codebase.GUI.Widgets
+    import Codebase.GUI.UserSettings
+
+    code=678452056
     AmberApp=QtWidgets.QApplication(sys.argv)
     win=AmberMainWindow()
     code=AmberApp.exec_()
     #REQUIRED LINE DO NOT REMOVE THIS
     del AmberApp
     #If the application needs to restart
-    if code:
-        importlib.invalidate_caches()
-        importlib.reload(Codebase.GUI.UserSettings)
-        importlib.reload(Codebase.GUI.Widgets)
-        importlib.reload(Codebase.GUI.MainWindow)
+    importlib.invalidate_caches()
+    importlib.reload(Codebase.GUI.UserSettings)
+    importlib.reload(Codebase.GUI.Widgets)
+    importlib.reload(Codebase.GUI.MainWindow)
+    Database.CloseConnection()
+    importlib.reload(Database)
+    return code
 
-Database.CloseConnection()
+if __name__=='__main__':
+    main()
