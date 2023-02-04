@@ -308,7 +308,7 @@ class ProjectWidget(QtWidgets.QWidget):
         self.ui.EditDetails.clicked.connect(lambda: self.EditButtonClick())
         #Shortcuts
         self.ui.DeleteProject.setShortcut('Delete')
-        self.ui.AddSection.setShortcut('ctrl+s')
+        self.ui.AddSection.setShortcut('ctrl+a')
 
     def DeleteProject(self):
         #Emit the signal to delete the project button

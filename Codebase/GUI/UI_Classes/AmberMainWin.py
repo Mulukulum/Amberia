@@ -44,15 +44,19 @@ class AmberWindowUI(object):
         self.CreateProjectButton = QPushButton(self.ProjectContents)
         self.CreateProjectButton.setObjectName(u"CreateProjectButton")
         #self.CreateProjectButton.setStyleSheet(u"background: #2a3364")
-        self.ButtonList.addWidget(self.CreateProjectButton, 1, 0, 1, 1)
+        self.ButtonList.addWidget(self.CreateProjectButton, 3, 0, 1, 1)
         self.TasksTodayButton = QPushButton(self.ProjectContents)
         self.TasksTodayButton.setObjectName(u"TasksTodayButton")
         #self.TasksTodayButton.setStyleSheet(u"background: #2a3364")
-        self.ButtonList.addWidget(self.TasksTodayButton, 0, 0, 1, 1)
+        self.ButtonList.addWidget(self.TasksTodayButton, 1, 0, 1, 1)
+
+        self.HelpButton=QPushButton(self.ProjectContents)
+        self.HelpButton.setObjectName("HelpButton")
+        self.ButtonList.addWidget(self.HelpButton,0,0,1,1)
         
         self.ProjectsLabel = QLabel(self.ProjectContents)
         self.ProjectsLabel.setObjectName(u"ProjectsLabel")
-        self.ButtonList.addWidget(self.ProjectsLabel, 4, 0, 1, 1)
+        self.ButtonList.addWidget(self.ProjectsLabel, 5, 0, 1, 1)
 
         self.ProjectScrollArea.setWidget(self.ProjectContents)
         self.gridLayout.addWidget(self.ProjectScrollArea, 4, 0, 1, 2)
@@ -96,10 +100,11 @@ class AmberWindowUI(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.CreateProjectButton.setText(QCoreApplication.translate("MainWindow", u"Add Project", None))
-        self.ProjectsLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; color:#ffbc42;\">Project(s)</span></p></body></html>", None))
+        self.ProjectsLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; color:#ffbc42;\">Your Projects:</span></p></body></html>", None))
         self.TasksTodayButton.setText(QCoreApplication.translate("MainWindow", u"Today's Task(s)", None))
         self.CurrentWidgetTitleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#ffffff;\">Today's Date: Curdate</span></p></body></html>", None))
         self.ProjectTitleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; color:#ffffff;\">AMBERIA </span><span style=\" font-size:24pt; color:#ffffff; vertical-align:super;\">\u00a92022</span></p><p align=\"center\"><br/></p></body></html>", None))
         self.SettingsButton.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
+        self.HelpButton.setText(QCoreApplication.translate("MainWindow", u"Help", None))
     # retranslateUi
 

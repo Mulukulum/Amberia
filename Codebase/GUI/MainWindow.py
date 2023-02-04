@@ -41,8 +41,9 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Set the Shortcuts for the Buttons
         self.ui.TasksTodayButton.setShortcut("ctrl+r")
         self.ui.CreateProjectButton.setShortcut("ctrl+n")
-        self.ui.SettingsButton.setShortcut("ctrl+h")
-        
+        self.ui.SettingsButton.setShortcut("ctrl+s")
+        self.ui.HelpButton.setShortcut("ctrl+h")
+
         #Set Minimum Sizes for the widgets
         self.ui.ProjectsLabel.setMaximumHeight(200)
         self.ui.ProjectsLabel.setMinimumHeight(40)
@@ -50,12 +51,16 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.TasksTodayButton.setMinimumHeight(40)
         self.ui.CreateProjectButton.setMaximumHeight(300)
         self.ui.CreateProjectButton.setMinimumHeight(40)
+        self.ui.HelpButton.setMaximumHeight(200)
+        self.ui.HelpButton.setMinimumHeight(40)
+        
 
         #Set the stylesheets
         self.ui.CurrentWidgetTitleLabel.setStyleSheet(self.ui.CurrentWidgetTitleLabel.styleSheet()+"; font-size: 24px")
         self.ui.ProjectsLabel.setStyleSheet(self.ui.ProjectsLabel.styleSheet()+"font-size: 20px")
         self.ui.TasksTodayButton.setStyleSheet(self.ui.TasksTodayButton.styleSheet()+" ; font-size: 24px ;")
         self.ui.CreateProjectButton.setStyleSheet(self.ui.CreateProjectButton.styleSheet()+"; font-size: 24px ;")
+        self.ui.HelpButton.setStyleSheet(self.ui.HelpButton.styleSheet()+"; font-size: 24px ;")
         
         #Set the connections of the buttons
         self.ui.SettingsButton.clicked.connect(self.ShowSettingsWidget)
