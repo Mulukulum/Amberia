@@ -166,7 +166,7 @@ class TaskWidget(QtWidgets.QWidget):
         #If the Task is not completed
         elif not Completed:
             DaysLeft=abs(Due-datetime.datetime.now()).days
-            Text=f"Due On {Due.strftime(f'%a, {TaskWidget.OrdinalTimeFunction(Due.day)} %b %Y')} "+Title
+            Text=(Title[:20]+'... ' if len(Title)>20 else Title)+f" Due On {Due.strftime(f'%a, {TaskWidget.OrdinalTimeFunction(Due.day)} %b %Y')} "
             self.ui.DaysLeftDisplay.display(DaysLeft)
             #Show the labels if they're meant to be shown
             self.ui.DaysLeftDisplay.show()

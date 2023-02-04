@@ -134,6 +134,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
     def ShowProjectWidget(self,ProjectObj):
         #Delete the current Widget that is shown and add the other widget after creating it
         self.WidgetFrame.deleteLater()
+        self.SetTasksTodayWidgetTitle()
         FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
         framelayout=QtWidgets.QGridLayout()
         #Connect the signals and slots
@@ -156,6 +157,15 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         text=f"App Settings" 
         self.ui.CurrentWidgetTitleLabel.setText(text)
         self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
+    
+    def SetLabelForHelp(self):
+        from random import choice
+        if not choice(list(range(1000))):
+            text=f"An endless loop of Phantasmagoria"
+        else:
+            text='Help Window'
+        self.ui.CurrentWidgetTitleLabel.setText(text)
+        self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
 
 
     def ShowTasksTodayWidget(self,SortOrder:int=0):
@@ -175,6 +185,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
     
     def ShowHelpWidget(self):
         self.WidgetFrame.deleteLater()
+        self.SetLabelForHelp()
         FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
         framelayout=QtWidgets.QGridLayout(FrameForMainWidget)
         HelpWidg=HelpWidget(FrameForMainWidget)
