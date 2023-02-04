@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>783</width>
+    <height>533</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::StrongFocus</enum>
+     </property>
+     <property name="contextMenuPolicy">
+      <enum>Qt::DefaultContextMenu</enum>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>765</width>
+        <height>515</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="ShortcutsLabel">
+         <property name="text">
+          <string>Shortcuts</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="ShortcutListVLayout">
+         <item>
+          <widget class="QLabel" name="HelpBox">
+           <property name="text">
+            <string>Show this Help Box: Ctrl+H</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="NewProj">
+           <property name="text">
+            <string>Add New Project: Ctrl+N</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="SettingsMenu">
+           <property name="text">
+            <string>Show Settings Menu: Ctrl+S</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="ShowTodaysTasks">
+           <property name="text">
+            <string>Show Today's Tasks: Ctrl+R</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="AddSection">
+           <property name="text">
+            <string>Add Section: Ctrl+A</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="AddTask">
+           <property name="text">
+            <string>Add Task: Ctrl+T</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
