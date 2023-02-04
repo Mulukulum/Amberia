@@ -503,9 +503,9 @@ class SettingsWidget(QtWidgets.QWidget):
             res=tuple()
         if len(res)==0:
             ExecuteCommand("DELETE FROM settings")
-            ExecuteCommand("INSERT INTO SETTINGS VALUES(0,'Amberia.qss',275,400,65,0.235,1)")
-            ExecuteCommand("INSERT INTO SETTINGS VALUES(1,'Amberia.qss',275,400,65,0.235,1)")
-            res=("Amberia.qss",275,400,65,0.235,1)
+            ExecuteCommand(f"INSERT INTO SETTINGS VALUES{Defaults}")
+            ExecuteCommand(f"INSERT INTO SETTINGS VALUES{Defaults}")
+            res=Defaults
         Stylsht,MinTaskDispHt,MinSecDispHt,ProjMinHt,sidebarfactor,HelpBehaviour=res
         #Help behaviour setup
         if HelpBehaviour:

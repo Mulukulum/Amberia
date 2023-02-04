@@ -7,6 +7,6 @@ if len(res)==1:
 else:
     Settings=Defaults
     ExecuteCommand("DELETE FROM settings")
-    ExecuteCommand("INSERT INTO SETTINGS VALUES(0,'Amberia.qss',275,400,65,0.235,1)")
-    ExecuteCommand("INSERT INTO SETTINGS VALUES(1,'Amberia.qss',275,400,65,0.235,1)")
+    ExecuteCommand(f"INSERT INTO SETTINGS VALUES{Defaults}")
+    ExecuteCommand(f"INSERT INTO SETTINGS VALUES{Defaults}")
 Stylesheet,MinTaskDispHt,MinSecDispHt,ProjMinHt,sidebarfactor,HelpBehaviour=Settings
