@@ -6,7 +6,7 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from Codebase.Functions.Database import ExecuteCommand,ExecuteScript
-from Codebase.GUI.UserSettings import Stylesheet,MinTaskDispHt,MinSecDispHt,duedatebehaviour,sidebarfactor,ProjMinHt,Defaults
+from Codebase.GUI.UserSettings import Stylesheet,MinTaskDispHt,MinSecDispHt,HelpBehaviour,sidebarfactor,ProjMinHt,Defaults
 
 FilePath=f'\\StyleSheet\\{Stylesheet}'
 path=dirname(__file__)+FilePath
@@ -218,7 +218,6 @@ class SectionWidget(QtWidgets.QWidget):
     MinimumSectionHeight=MinSecDispHt
 
     #1 if you want to set it to today
-    setDueDatetoday=duedatebehaviour
 
     def __init__(self,frame,Section: cl.Section=None) -> None:
         super().__init__(frame)
@@ -275,7 +274,7 @@ class SectionWidget(QtWidgets.QWidget):
             #If the user hit 'ok', then create the task
             #If the input is empty, then do nothing
             if not Title.strip(): return
-            task=cl.Task(ParentSection=cl.Section.Instances[self.SectionID],TaskTitle=Title,DueDate=datetime.datetime.today() if self.setDueDatetoday else None)
+            task=cl.Task(ParentSection=cl.Section.Instances[self.SectionID],TaskTitle=Title,DueDate=None)
             frame=QtWidgets.QFrame(self.ui.TasksContents)
             framelayout=QtWidgets.QGridLayout()
             framelayout.addWidget(TaskWidget(frame,task))
@@ -397,12 +396,13 @@ class TaskEditDialog(QtWidgets.QDialog):
     def __init__(self,Task: cl.Task,PriorityLevel,TaskTitle=None,TaskDesc=None,TaskDueDate: datetime.datetime=None) -> None:
         super().__init__()
         #Set it to be a modal dialog
+        self.EditDueDate=False
         self.setModal(True)
         self.ui=TaskEditUI()
         self.setStyleSheet(StyleSheet)
         self.ui.setupUi(self)
         self.setWindowTitle("Edit Task")
-        self.resize(500,300)
+        self.resize(600,300)
         #Sets the date for the datetime edit
         if TaskDueDate==None:
             TaskDueDate=datetime.datetime.now()
@@ -412,6 +412,7 @@ class TaskEditDialog(QtWidgets.QDialog):
         self.ui.PriorityLevelEdit.setValue(PriorityLevel)
         self.ui.TaskTitleEdit.setText(TaskTitle)
         if TaskDesc!=None: self.ui.TaskDescEdit.setText(TaskDesc)
+        self.ui.EnableDueDateButton.toggled.connect(self.Toggle)
 
         #Stylesheets
         self.ui.DueDateEdit.setStyleSheet(" font-size: 16px ; ")
@@ -422,14 +423,29 @@ class TaskEditDialog(QtWidgets.QDialog):
         self.ui.PriorityLabel.setStyleSheet(" font-size: 16px ; ")
         self.ui.CancelButton.setStyleSheet(" font-size: 16px ; ")
         self.ui.SubmitButton.setStyleSheet(" font-size: 16px ; ")
+        self.ui.EnableDueDateButton.setStyleSheet(" font-size: 16px ; ")
         Ok = self.exec_()
         if Ok:
             newpr=self.ui.PriorityLevelEdit.value()
             newtitle=self.ui.TaskTitleEdit.text()
             newdesc=self.ui.TaskDescEdit.toPlainText()
-            newduedate=self.ui.DueDateEdit.dateTime()
-            newduedate=newduedate.toPyDateTime()
-            Task.ReConfigureTask(newtitle,newdesc,newpr,DueDate=newduedate)
+            if self.EditDueDate:
+                newduedate=self.ui.DueDateEdit.dateTime()
+                newduedate=newduedate.toPyDateTime()
+                Task.ReConfigureTask(newtitle,newdesc,newpr,DueDate=newduedate)
+            else:
+                Task.ReConfigureTask(newtitle,newdesc,newpr)
+    
+    def Toggle(self):
+        if self.EditDueDate:
+            self.EditDueDate=False
+            self.ui.DueDateEdit.setDisabled(True)
+        else:
+            self.EditDueDate=True
+            self.ui.DueDateEdit.setDisabled(False)
+        
+        
+        
 
 class SettingsWidget(QtWidgets.QWidget):
 
@@ -538,7 +554,7 @@ class SettingsWidget(QtWidgets.QWidget):
             StyleSheet=Stylesheet
         ExecuteCommand("""UPDATE settings SET stylesheet=?,
         mintaskdispheight=? , minsecdispheight=? , projectminheight=? ,
-        sidebarfactor=? , setduedatetoday=? WHERE def=1 """,
+        sidebarfactor=? , showhelp=? WHERE def=1 """,
         (StyleSheet, TaskDispHt, SectionDispHt,ProjButtonHt,SidebarScale,duebehaviour))
         #Changes successfully saved, now the restart is initiated
         self.MW.Restart()

@@ -322,7 +322,7 @@ class SettingsUI(object):
         self.TaskDispHeight.setPrefix("")
         self.MinSecHtLabel.setText(QCoreApplication.translate("Form", u"Minimum Section Display Height ", None))
         self.DisplayBehaviourLabel.setText(QCoreApplication.translate("Form", u"Display Behaviours (Requires Program Restart)", None))
-        self.NewTaskDueBehaviour.setText(QCoreApplication.translate("Form", u"Set Due Date to Current Date when Adding New Tasks", None))
+        self.NewTaskDueBehaviour.setText(QCoreApplication.translate("Form", u"Show Help Page when Opening up app (Shows today's tasks if this option is turned off)", None))
         self.ResetButton.setText(QCoreApplication.translate("Form", u"Reset Values To Default", None))
         self.PRColorLabel.setText(QCoreApplication.translate("Form", u"Priority Level Color Settings", None))
         self.Pr1.setText(QCoreApplication.translate("Form", u"Priority 1", None))

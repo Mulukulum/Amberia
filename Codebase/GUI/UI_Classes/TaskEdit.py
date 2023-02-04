@@ -34,13 +34,17 @@ class TaskEditUI(object):
         self.TaskDueLabel.setObjectName(u"TaskDueLabel")
         self.TaskDueLabel.setAlignment(Qt.AlignCenter)
 
-        self.gridLayout_2.addWidget(self.TaskDueLabel, 2, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.TaskDueLabel, 3, 0, 1, 1)
 
         self.PriorityLabel = QLabel(self.frame)
         self.PriorityLabel.setObjectName(u"PriorityLabel")
         self.PriorityLabel.setAlignment(Qt.AlignCenter)
 
-        self.gridLayout_2.addWidget(self.PriorityLabel, 3, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.PriorityLabel, 4, 0, 1, 1)
+
+        self.EnableDueDateButton=QRadioButton(self.frame)
+        self.EnableDueDateButton.setText("Choose whether to enable setting a due date")
+        self.gridLayout_2.addWidget(self.EnableDueDateButton,2,0,1,1)
 
         self.PriorityLevelEdit = QDoubleSpinBox(self.frame)
         self.PriorityLevelEdit.setObjectName(u"PriorityLevelEdit")
@@ -50,7 +54,7 @@ class TaskEditUI(object):
         self.PriorityLevelEdit.setMinimum(1.000000000000000)
         self.PriorityLevelEdit.setMaximum(10.000000000000000)
 
-        self.gridLayout_2.addWidget(self.PriorityLevelEdit, 3, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.PriorityLevelEdit, 4, 1, 1, 1)
 
         self.TaskTitleEdit = QLineEdit(self.frame)
         self.TaskTitleEdit.setObjectName(u"TaskTitleEdit")
@@ -79,21 +83,22 @@ class TaskEditUI(object):
         self.DueDateEdit.setMinimumSize(QSize(100, 50))
         self.DueDateEdit.setCalendarPopup(True)
 
-        self.gridLayout_2.addWidget(self.DueDateEdit, 2, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.DueDateEdit, 3, 1, 1, 1)
 
         self.CancelButton = QPushButton(self.frame)
         self.CancelButton.setObjectName(u"CancelButton")
         self.CancelButton.clicked.connect(lambda: Form.reject())
-        self.gridLayout_2.addWidget(self.CancelButton, 4, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.CancelButton, 5, 0, 1, 1)
         
         self.SubmitButton = QPushButton(self.frame)
         self.SubmitButton.setObjectName(u"SubmitButton")
         self.SubmitButton.clicked.connect(lambda: Form.accept())
-        self.gridLayout_2.addWidget(self.SubmitButton, 4, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.SubmitButton, 5, 1, 1, 1)
 
         self.gridLayout.addWidget(self.frame, 0, 0, 1, 1)
         self.retranslateUi(Form)
         QMetaObject.connectSlotsByName(Form)
+        self.DueDateEdit.setDisabled(True)
     # setupUi
 
     def retranslateUi(self, Form):

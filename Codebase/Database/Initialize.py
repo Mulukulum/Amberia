@@ -50,7 +50,7 @@ AttribDict={
     'sections':'section_id INTEGER PRIMARY KEY, section_parentprojectid INTEGER NOT NULL, section_title TEXT NOT NULL, section_taskcount INTEGER NOT NULL, section_activetaskcount INTEGER NOT NULL, section_texttaskcount INTEGER NOT NULL',
     'prcolors':'level INTEGER PRIMARY KEY, clrvalue INTEGER NOT NULL',
     'labelsfortasks':'task INTEGER NOT NULL, label INTEGER NOT NULL',
-    'settings':'def INTEGER PRIMARY KEY, stylesheet TEXT NOT NULL, mintaskdispheight INTEGER NOT NULL, minsecdispheight INTEGER NOT NULL , projectminheight INTEGER NOT NULL, sidebarfactor REAL NOT NULL, setduedatetoday INTEGER NOT NULL',
+    'settings':'def INTEGER PRIMARY KEY, stylesheet TEXT NOT NULL, mintaskdispheight INTEGER NOT NULL, minsecdispheight INTEGER NOT NULL , projectminheight INTEGER NOT NULL, sidebarfactor REAL NOT NULL, showhelp INTEGER NOT NULL',
     }
 #   DO NOT FORGET TO MODIFY THE READTHIS.MD FILE
 #   DO NOT FORGET TO MODIFY THE READTHIS.MD FILE

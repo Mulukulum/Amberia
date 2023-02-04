@@ -12,7 +12,7 @@ from Codebase.Functions.Colors import HexFormat
 from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.AmberMainWin import AmberWindowUI
 from Codebase.GUI.Widgets import (
-    TodayTasksWidget, ProjectWidget,SettingsWidget, HelpWidget,StyleSheet, ProjMinHt
+    TodayTasksWidget, ProjectWidget,SettingsWidget, HelpWidget,StyleSheet, ProjMinHt, HelpBehaviour
     )
 
 class AmberMainWindow(QtWidgets.QMainWindow):
@@ -69,7 +69,11 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.HelpButton.clicked.connect(self.ShowHelpWidget)
 
         #Sets the default widget
-        self.ShowTasksTodayWidget()
+        if not HelpBehaviour:
+            self.ShowTasksTodayWidget()
+        else:
+            self.ShowHelpWidget()
+
         #Makes the buttons for the existing projects
         self.RetrieveFromDB()
         #Show Window
