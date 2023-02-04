@@ -498,7 +498,7 @@ class SettingsWidget(QtWidgets.QWidget):
         #Set the values into the corresponding displays
         self.SetPriorityColors()
         try:
-            res=ExecuteCommand("SELECT stylesheet, mintaskdispheight, minsecdispheight, projectminheight , sidebarfactor, setduedatetoday FROM settings WHERE def=1")[0]
+            res=ExecuteCommand("SELECT stylesheet, mintaskdispheight, minsecdispheight, projectminheight , sidebarfactor, showhelp FROM settings WHERE def=1")[0]
         except:
             res=tuple()
         if len(res)==0:
@@ -528,9 +528,9 @@ class SettingsWidget(QtWidgets.QWidget):
     def ResetDisplayBehaviours(self):
         #Default Values Set
         res=Defaults[1::]
-        MinTaskDispHt,MinSecDispHt,ProjMinHt,sidebarfactor,DueBehaviour=res
+        MinTaskDispHt,MinSecDispHt,ProjMinHt,sidebarfactor,HelpBehaviour=res
         #Duebehaviour setup
-        if DueBehaviour:
+        if HelpBehaviour:
             self.ui.NewTaskDueBehaviour.setChecked(True)
         else:
             self.ui.NewTaskDueBehaviour.setChecked(False)
