@@ -85,9 +85,10 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         button.deleteLater()
         self.ui.SettingsButton.click()
     
-    def EditProjectButtonName(self,ObjectName: str,Title: str):
+    def EditProjectButtonName(self,ObjectName: str,Title: str,Color: str):
         button=self.findChildren(QtWidgets.QPushButton,ObjectName)[0]
         button.setText(Title)
+        button.setStyleSheet(f"background-color: {Color} ; font-size: 20px ; ")
     
     def RetrieveFromDB(self):
         #Function to update the UI with project buttons
@@ -138,7 +139,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         #Connect the signals and slots
         ProjWid=ProjectWidget(frame=FrameForMainWidget, Project=ProjectObj)
         ProjWid.SignalDeleteProjectButton.connect(lambda objname: self.RemoveProjectButton(objname))
-        ProjWid.SignalEditProjectButton.connect(lambda Objname,Title: self.EditProjectButtonName(Objname,Title))
+        ProjWid.SignalEditProjectButton.connect(lambda Objname,Title,Color: self.EditProjectButtonName(Objname,Title,Color))
 
         framelayout.addWidget(ProjWid)
         layout=self.ui.VLayoutForMainWidget

@@ -311,7 +311,7 @@ class ProjectEditWidget(QtWidgets.QDialog):
 class ProjectWidget(QtWidgets.QWidget):
 
     SignalDeleteProjectButton=QtCore.pyqtSignal(str)
-    SignalEditProjectButton=QtCore.pyqtSignal(str,str)
+    SignalEditProjectButton=QtCore.pyqtSignal(str,str,str)
 
     def __init__(self,frame,Project=None) -> None:
         super().__init__(frame)
@@ -363,13 +363,14 @@ class ProjectWidget(QtWidgets.QWidget):
         if Ok:
             Proj=cl.Project.Instances[self.ProjectID]
             Title=dialog.ui.lineEdit.text()
-            print(Title)
-            print(int(dialog.ui.ColorEdit.selectedColor().name().strip('#')))
             if dialog.ChangeColor:
-                Proj.SetColor(int(dialog.ui.ColorEdit.selectedColor().name().strip('#'),16))
+                Proj.SetColor(dialog.Color)
+            else:
+                dialog.Color=Proj.Color
             Proj.SetName(Title.strip())
             self.ui.ProjectName.setText(Title.strip())
-            self.SignalEditProjectButton.emit(f"AccessProjectButton_{self.ProjectID}",Title.strip())
+            self.ui.ProjectName.setStyleSheet(self.ui.ProjectName.styleSheet()+f'; background-color:{HexFormat(dialog.Color)};')
+            self.SignalEditProjectButton.emit(f"AccessProjectButton_{self.ProjectID}",Title.strip(),HexFormat(dialog.Color))
 
     def AddSectionClicked(self):
         Dialog=QtWidgets.QInputDialog(self)
