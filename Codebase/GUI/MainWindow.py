@@ -155,11 +155,6 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         text=f"App Settings" 
         self.ui.CurrentWidgetTitleLabel.setText(text)
         self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
-    
-    def SetLabelForHelp(self):
-        text=f"Help Window" 
-        self.ui.CurrentWidgetTitleLabel.setText(text)
-        self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
 
 
     def ShowTasksTodayWidget(self,SortOrder:int=0):
@@ -179,7 +174,6 @@ class AmberMainWindow(QtWidgets.QMainWindow):
     
     def ShowHelpWidget(self):
         self.WidgetFrame.deleteLater()
-        self.SetLabelForHelp()
         FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
         framelayout=QtWidgets.QGridLayout(FrameForMainWidget)
         HelpWidg=HelpWidget(FrameForMainWidget)

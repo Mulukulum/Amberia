@@ -17,6 +17,7 @@ from Codebase.GUI.UI_Classes.TasksTodayWindow import TaskTodayUI
 from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
 from Codebase.GUI.UI_Classes.HelpWidget import HelpWidgetUI
 from Codebase.GUI.UI_Classes.LabelEditor import LabelWidgetUI
+from Codebase.GUI.UI_Classes.ProjectEditor import ProjectEditDialog 
 from Codebase.GUI.UI_Classes.ProjectWidget import ProjectWidgetUI
 from Codebase.GUI.UI_Classes.SectionWidget import SectionWidgetUI
 from Codebase.GUI.UI_Classes.Settings import SettingsUI
@@ -284,6 +285,28 @@ class SectionWidget(QtWidgets.QWidget):
     def DeleteSectionWidget(self):
         cl.Section.Instances[self.SectionID].DeleteSection()
         self.parentWidget().deleteLater()
+class ProjectEditWidget(QtWidgets.QDialog):
+
+    def __init__(self,ProjectName):
+        super().__init__()
+        self.ChangeColor=False
+        self.Color=-1
+        self.ui=ProjectEditDialog()
+        self.ui.setupUi(self,ProjectName)
+        self.setStyleSheet(StyleSheet)
+        self.ui.ToggleColorEdit.toggled.connect(self.ToggleColorEdit)
+        self.ui.ColorEdit.currentColorChanged.connect(self.UpdateCurrentColor)
+    
+    def UpdateCurrentColor(self):
+        self.Color=int(self.ui.ColorEdit.currentColor().name().strip('#'),16)
+    
+    def ToggleColorEdit(self):
+        if self.ChangeColor:
+            self.ChangeColor=False
+            self.ui.ColorEdit.setDisabled(True)
+        else:
+            self.ChangeColor=True
+            self.ui.ColorEdit.setDisabled(False)
 
 class ProjectWidget(QtWidgets.QWidget):
 
@@ -335,19 +358,15 @@ class ProjectWidget(QtWidgets.QWidget):
             self.ui.LayoutToAddSections.addWidget(frame)
             #Section Widget added to project Widget now
     def EditButtonClick(self):
-        Dialog=QtWidgets.QInputDialog(self)
-        Dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
-        Dialog.setWindowTitle('Edit Project Title')
-        Dialog.setLabelText('Enter Project Name :')
-        Dialog.setStyleSheet(StyleSheet+'; font-size: 16px')
-        Dialog.resize(300,500)
-        Ok = Dialog.exec_()
-        Title = Dialog.textValue()
+        dialog=ProjectEditWidget(self.ui.ProjectName.text())
+        Ok=dialog.exec_()
         if Ok:
-            #If the user hit 'ok', then create the project
-            #If the input is empty, then do nothing
-            if not Title.strip(): return
             Proj=cl.Project.Instances[self.ProjectID]
+            Title=dialog.ui.lineEdit.text()
+            print(Title)
+            print(int(dialog.ui.ColorEdit.selectedColor().name().strip('#')))
+            if dialog.ChangeColor:
+                Proj.SetColor(int(dialog.ui.ColorEdit.selectedColor().name().strip('#'),16))
             Proj.SetName(Title.strip())
             self.ui.ProjectName.setText(Title.strip())
             self.SignalEditProjectButton.emit(f"AccessProjectButton_{self.ProjectID}",Title.strip())
@@ -584,6 +603,7 @@ class SettingsWidget(QtWidgets.QWidget):
         Ok=dialog.exec_()
         if Ok:
             return dialog.selectedColor().name()
+        
     
     def ChangePrColor(self,PrLevel):
         color=self.PopupColorDialog()
@@ -605,10 +625,7 @@ class SettingsWidget(QtWidgets.QWidget):
         except: ...
         
 class HelpWidget(QtWidgets.QWidget):
-    
     def __init__(self,frame) -> None:
         super().__init__(frame)
         self.ui=HelpWidgetUI()
         self.ui.setupUi(self)
-        
-        

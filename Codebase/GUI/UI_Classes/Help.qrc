@@ -1,5 +1,6 @@
 <RCC>
   <qresource>
+    <file>Images/Project.png</file>
     <file>Images/Main UI.png</file>
     <file>Images/Sidebar.png</file>
   </qresource>
