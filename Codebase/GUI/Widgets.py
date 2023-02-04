@@ -506,12 +506,12 @@ class SettingsWidget(QtWidgets.QWidget):
             ExecuteCommand("INSERT INTO SETTINGS VALUES(0,'Amberia.qss',275,400,65,0.235,1)")
             ExecuteCommand("INSERT INTO SETTINGS VALUES(1,'Amberia.qss',275,400,65,0.235,1)")
             res=("Amberia.qss",275,400,65,0.235,1)
-        Stylsht,MinTaskDispHt,MinSecDispHt,ProjMinHt,sidebarfactor,DueBehaviour=res
-        #Duebehaviour setup
-        if DueBehaviour:
-            self.ui.NewTaskDueBehaviour.setChecked(True)
+        Stylsht,MinTaskDispHt,MinSecDispHt,ProjMinHt,sidebarfactor,HelpBehaviour=res
+        #Help behaviour setup
+        if HelpBehaviour:
+            self.ui.HelpBehaviour.setChecked(True)
         else:
-            self.ui.NewTaskDueBehaviour.setChecked(False)
+            self.ui.HelpBehaviour.setChecked(False)
         #Themes setup
         for buttonname,ss in self.ThemesDictionary.items():
             if ss==Stylsht:
@@ -529,11 +529,11 @@ class SettingsWidget(QtWidgets.QWidget):
         #Default Values Set
         res=Defaults[1::]
         MinTaskDispHt,MinSecDispHt,ProjMinHt,sidebarfactor,HelpBehaviour=res
-        #Duebehaviour setup
+        #Help behaviour setup
         if HelpBehaviour:
-            self.ui.NewTaskDueBehaviour.setChecked(True)
+            self.ui.HelpBehaviour.setChecked(True)
         else:
-            self.ui.NewTaskDueBehaviour.setChecked(False)
+            self.ui.HelpBehaviour.setChecked(False)
         #Values Setup
         self.ui.TaskDispHeight.setValue(MinTaskDispHt)
         self.ui.SecDispHeight.setValue(MinSecDispHt)
@@ -547,7 +547,7 @@ class SettingsWidget(QtWidgets.QWidget):
         SectionDispHt=self.ui.SecDispHeight.value()
         ProjButtonHt=self.ui.ProjButtonHeight.value()
         SidebarScale=self.ui.SidebarScaleFactor.value()
-        duebehaviour=self.ui.NewTaskDueBehaviour.isChecked()
+        HelpBehaviour=self.ui.HelpBehaviour.isChecked()
         if self.SelectedTheme!=None: 
             StyleSheet=self.ThemesDictionary.get(self.SelectedTheme.objectName())
         else: 
@@ -555,7 +555,7 @@ class SettingsWidget(QtWidgets.QWidget):
         ExecuteCommand("""UPDATE settings SET stylesheet=?,
         mintaskdispheight=? , minsecdispheight=? , projectminheight=? ,
         sidebarfactor=? , showhelp=? WHERE def=1 """,
-        (StyleSheet, TaskDispHt, SectionDispHt,ProjButtonHt,SidebarScale,duebehaviour))
+        (StyleSheet, TaskDispHt, SectionDispHt,ProjButtonHt,SidebarScale,HelpBehaviour))
         #Changes successfully saved, now the restart is initiated
         self.MW.Restart()
 
@@ -567,7 +567,7 @@ class SettingsWidget(QtWidgets.QWidget):
         SectionDispHt=self.ui.SecDispHeight.value()
         ProjButtonHt=self.ui.ProjButtonHeight.value()
         SidebarScale=self.ui.SidebarScaleFactor.value()
-        duebehaviour=self.ui.NewTaskDueBehaviour.isChecked()
+        HelpBehaviour=self.ui.HelpBehaviour.isChecked()
         if self.SelectedTheme!=None: 
             StyleSheet=self.ThemesDictionary.get(self.SelectedTheme.objectName())
         else: 
@@ -575,7 +575,7 @@ class SettingsWidget(QtWidgets.QWidget):
         ExecuteCommand("""UPDATE settings SET stylesheet=?,
         mintaskdispheight=? , minsecdispheight=? , projectminheight=? ,
         sidebarfactor=? , setduedatetoday=? WHERE def=1 """,
-        (StyleSheet, TaskDispHt, SectionDispHt,ProjButtonHt,SidebarScale,duebehaviour))
+        (StyleSheet, TaskDispHt, SectionDispHt,ProjButtonHt,SidebarScale,HelpBehaviour))
         #No restart is called here
 
     def DayTheme(self):

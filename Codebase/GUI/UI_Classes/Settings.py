@@ -123,16 +123,16 @@ class SettingsUI(object):
 
         self.gridLayout_2.addWidget(self.DisplayBehaviourLabel, 0, 0, 1, 4)
 
-        self.NewTaskDueBehaviour = QCheckBox(self.DisplayBehavioursFrame)
-        self.NewTaskDueBehaviour.setObjectName(u"NewTaskDueBehaviour")
-        self.NewTaskDueBehaviour.setMinimumSize(QSize(0, 30))
+        self.HelpBehaviour = QCheckBox(self.DisplayBehavioursFrame)
+        self.HelpBehaviour.setObjectName(u"HelpBehaviour")
+        self.HelpBehaviour.setMinimumSize(QSize(0, 30))
         font2 = QFont()
         font2.setPointSize(10)
-        self.NewTaskDueBehaviour.setFont(font2)
-        self.NewTaskDueBehaviour.setStyleSheet(u"")
-        self.NewTaskDueBehaviour.setChecked(False)
+        self.HelpBehaviour.setFont(font2)
+        self.HelpBehaviour.setStyleSheet(u"")
+        self.HelpBehaviour.setChecked(False)
 
-        self.gridLayout_2.addWidget(self.NewTaskDueBehaviour, 6, 0, 1, 4)
+        self.gridLayout_2.addWidget(self.HelpBehaviour, 6, 0, 1, 4)
 
         self.ResetButton = QPushButton(self.DisplayBehavioursFrame)
         self.ResetButton.setObjectName(u"ResetButton")
@@ -322,7 +322,7 @@ class SettingsUI(object):
         self.TaskDispHeight.setPrefix("")
         self.MinSecHtLabel.setText(QCoreApplication.translate("Form", u"Minimum Section Display Height ", None))
         self.DisplayBehaviourLabel.setText(QCoreApplication.translate("Form", u"Display Behaviours (Requires Program Restart)", None))
-        self.NewTaskDueBehaviour.setText(QCoreApplication.translate("Form", u"Show Help Page when Opening up app (Shows today's tasks if this option is turned off)", None))
+        self.HelpBehaviour.setText(QCoreApplication.translate("Form", u"Show Help Page when Opening up app (Shows today's tasks if this option is turned off)", None))
         self.ResetButton.setText(QCoreApplication.translate("Form", u"Reset Values To Default", None))
         self.PRColorLabel.setText(QCoreApplication.translate("Form", u"Priority Level Color Settings", None))
         self.Pr1.setText(QCoreApplication.translate("Form", u"Priority 1", None))
