@@ -6,7 +6,7 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from Codebase.Functions.Database import ExecuteCommand,ExecuteScript
-from Codebase.GUI.UserSettings import Stylesheet,MinTaskDispHt,MinSecDispHt,duedatebehaviour,sidebarfactor,ProjMinHt
+from Codebase.GUI.UserSettings import Stylesheet,MinTaskDispHt,MinSecDispHt,duedatebehaviour,sidebarfactor,ProjMinHt,Defaults
 
 FilePath=f'\\StyleSheet\\{Stylesheet}'
 path=dirname(__file__)+FilePath
@@ -15,6 +15,7 @@ with open(path) as f:
 from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.TasksTodayWindow import TaskTodayUI
 from Codebase.GUI.UI_Classes.TaskWidget import TaskWidgetUI
+from Codebase.GUI.UI_Classes.HelpWidget import HelpWidgetUI
 from Codebase.GUI.UI_Classes.LabelEditor import LabelWidgetUI
 from Codebase.GUI.UI_Classes.ProjectWidget import ProjectWidgetUI
 from Codebase.GUI.UI_Classes.SectionWidget import SectionWidgetUI
@@ -490,13 +491,7 @@ class SettingsWidget(QtWidgets.QWidget):
 
     def ResetDisplayBehaviours(self):
         #Default Values Set
-        ExecuteCommand("""UPDATE settings SET mintaskdispheight=275 , 
-        minsecdispheight=400 , projectminheight=65 ,
-        sidebarfactor=0.235 , setduedatetoday=1 WHERE def=1 """)
-        try:
-            res=ExecuteCommand("SELECT mintaskdispheight, minsecdispheight, projectminheight , sidebarfactor, setduedatetoday FROM settings WHERE def=1")[0]
-        except:
-            res=(275,400,65,0.235,1)
+        res=Defaults[1::]
         MinTaskDispHt,MinSecDispHt,ProjMinHt,sidebarfactor,DueBehaviour=res
         #Duebehaviour setup
         if DueBehaviour:
@@ -608,4 +603,12 @@ class SettingsWidget(QtWidgets.QWidget):
         try:
             self.ui.SaveChanges.setText("Save Changes")
         except: ...
+        
+class HelpWidget(QtWidgets.QWidget):
+    
+    def __init__(self,frame) -> None:
+        super().__init__(frame)
+        self.ui=HelpWidgetUI()
+        self.ui.setupUi(self)
+        
         

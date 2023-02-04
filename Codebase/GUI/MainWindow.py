@@ -12,7 +12,7 @@ from Codebase.Functions.Colors import HexFormat
 from Codebase.Classes import classes as cl
 from Codebase.GUI.UI_Classes.AmberMainWin import AmberWindowUI
 from Codebase.GUI.Widgets import (
-    TodayTasksWidget, ProjectWidget,SettingsWidget, StyleSheet, ProjMinHt
+    TodayTasksWidget, ProjectWidget,SettingsWidget, HelpWidget,StyleSheet, ProjMinHt
     )
 
 class AmberMainWindow(QtWidgets.QMainWindow):
@@ -66,6 +66,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui.SettingsButton.clicked.connect(self.ShowSettingsWidget)
         self.ui.TasksTodayButton.clicked.connect(self.ShowTasksTodayWidget)
         self.ui.CreateProjectButton.clicked.connect(self.AddProjectButtonClicked)
+        self.ui.HelpButton.clicked.connect(self.ShowHelpWidget)
 
         #Sets the default widget
         self.ShowTasksTodayWidget()
@@ -154,6 +155,11 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         text=f"App Settings" 
         self.ui.CurrentWidgetTitleLabel.setText(text)
         self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
+    
+    def SetLabelForHelp(self):
+        text=f"Help Window" 
+        self.ui.CurrentWidgetTitleLabel.setText(text)
+        self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
 
 
     def ShowTasksTodayWidget(self,SortOrder:int=0):
@@ -167,6 +173,17 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         TaskTodayWidget=TodayTasksWidget(FrameForMainWidget,SortOrder)
         TaskTodayWidget.SortSignal.connect(lambda SortOrder: self.ShowTasksTodayWidget(SortOrder))
         framelayout.addWidget(TaskTodayWidget)
+        layout=self.ui.VLayoutForMainWidget
+        layout.addWidget(FrameForMainWidget)
+        self.WidgetFrame=FrameForMainWidget
+    
+    def ShowHelpWidget(self):
+        self.WidgetFrame.deleteLater()
+        self.SetLabelForHelp()
+        FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
+        framelayout=QtWidgets.QGridLayout(FrameForMainWidget)
+        HelpWidg=HelpWidget(FrameForMainWidget)
+        framelayout.addWidget(HelpWidg)
         layout=self.ui.VLayoutForMainWidget
         layout.addWidget(FrameForMainWidget)
         self.WidgetFrame=FrameForMainWidget
