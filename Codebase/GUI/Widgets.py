@@ -561,7 +561,8 @@ class SettingsWidget(QtWidgets.QWidget):
 
     def SaveChanges(self):
         #Get all the values
-        self.ui.SaveChanges.setText("Changes Saved..")
+        from random import choice
+        self.ui.SaveChanges.setText("Changes Saved.." if choice(range(40)) else "Too real da🔥" )
         QtCore.QTimer.singleShot(700,lambda: self.RevertText())
         TaskDispHt=self.ui.TaskDispHeight.value()
         SectionDispHt=self.ui.SecDispHeight.value()

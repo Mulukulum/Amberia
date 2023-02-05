@@ -152,20 +152,23 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.WidgetFrame=FrameForMainWidget
 
     def SetTasksTodayWidgetTitle(self):
-        date=datetime.date.today().strftime("%A %B %d %Y")
-        text=f"Today : {date}" 
+        from random import choice
+        date=datetime.date.today().strftime("%A %B %d %Y") if choice(range(30)) else "Doomsday"
+        text=f"Today : {date}" if choice(range(20)) else f"Bucket-list for {date}"  
+
         self.ui.CurrentWidgetTitleLabel.setText(text)
         self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
 
     def SetLabelForSettings(self):
-        text=f"App Settings" 
+        from random import choice
+        text=f"App Settings" if choice(range(100)) else 'Kya re Setting ah'
         self.ui.CurrentWidgetTitleLabel.setText(text)
         self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
     
     def SetLabelForHelp(self):
         from random import choice
         if not choice(list(range(1000))):
-            text=f"An endless loop of Phantasmagoria"
+            text=f"☝️✍️⛪"
         else:
             text='Help Window'
         self.ui.CurrentWidgetTitleLabel.setText(text)
