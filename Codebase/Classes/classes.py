@@ -579,7 +579,7 @@ class Task:
             title=Title,
             message=Message,
             app_name='Amberia',
-            app_icon=PathOfCodebase+r'\\GUI\\UI_Files\\AppIcon.ico',
+            app_icon=PathOfCodebase+r'//GUI//UI_Files//AppIcon.ico',
             timeout=5
             )
 
@@ -591,7 +591,7 @@ class TextTask:
             title=Title,
             message=Message,
             app_name='Amberia',
-            app_icon=PathOfCodebase+r'\\GUI\\UI_Files\\AppIcon.ico',
+            app_icon=PathOfCodebase+r'//GUI//UI_Files//AppIcon.ico',
             timeout=5
             )
     

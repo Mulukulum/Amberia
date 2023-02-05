@@ -34,7 +34,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         self.ui=AmberWindowUI()
         self.ui.setupUi(self)
         self.setStyleSheet(StyleSheet)
-        self.setWindowIcon(QtGui.QIcon(os.path.dirname(__file__)+r"\\UI_Files\\AppIcon.ico"))
+        self.setWindowIcon(QtGui.QIcon(os.path.dirname(__file__)+r"//UI_Files//AppIcon.ico"))
         self.setWindowTitle("Amberia")
         self.WidgetFrame=QtWidgets.QFrame()
         #Basic UI Setup Done
