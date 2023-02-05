@@ -7,6 +7,6 @@ if len(res)==1:
 else:
     Settings=Defaults
     ExecuteCommand("DELETE FROM settings")
-    ExecuteCommand(f"INSERT INTO SETTINGS VALUES{Defaults}")
-    ExecuteCommand(f"INSERT INTO SETTINGS VALUES{Defaults}")
+    ExecuteCommand(f"INSERT INTO SETTINGS VALUES{(0,)+Defaults}")
+    ExecuteCommand(f"INSERT INTO SETTINGS VALUES{(1,)+Defaults}")
 Stylesheet,MinTaskDispHt,MinSecDispHt,ProjMinHt,sidebarfactor,HelpBehaviour=Settings

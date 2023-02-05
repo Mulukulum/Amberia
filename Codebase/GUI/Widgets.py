@@ -503,8 +503,8 @@ class SettingsWidget(QtWidgets.QWidget):
             res=tuple()
         if len(res)==0:
             ExecuteCommand("DELETE FROM settings")
-            ExecuteCommand(f"INSERT INTO SETTINGS VALUES{Defaults}")
-            ExecuteCommand(f"INSERT INTO SETTINGS VALUES{Defaults}")
+            ExecuteCommand(f"INSERT INTO SETTINGS VALUES{(0,)+Defaults}")
+            ExecuteCommand(f"INSERT INTO SETTINGS VALUES{(1,)+Defaults}")
             res=Defaults
         Stylsht,MinTaskDispHt,MinSecDispHt,ProjMinHt,sidebarfactor,HelpBehaviour=res
         #Help behaviour setup
