@@ -8,7 +8,7 @@ from PyQt5 import QtGui
 from Codebase.Functions.Database import ExecuteCommand,ExecuteScript
 from Codebase.GUI.UserSettings import Stylesheet,MinTaskDispHt,MinSecDispHt,HelpBehaviour,sidebarfactor,ProjMinHt,Defaults
 
-FilePath=f'\\StyleSheet\\{Stylesheet}'
+FilePath=f'//StyleSheet//{Stylesheet}'
 path=dirname(__file__)+FilePath
 with open(path) as f:
     StyleSheet=f.read()
