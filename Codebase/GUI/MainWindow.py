@@ -214,6 +214,9 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         FrameForMainWidget=QtWidgets.QFrame(self.ui.MainWidgetFrame)
         framelayout=QtWidgets.QGridLayout(FrameForMainWidget)
         SettWidget=SettingsWidget(FrameForMainWidget,self)
+        from random import choice
+        if not choice(range(50)) :
+            SettWidget.ui.ColorSettingsLabel.setText('Qt-en Up your Colors')
         framelayout.addWidget(SettWidget)
         layout=self.ui.VLayoutForMainWidget
         layout.addWidget(FrameForMainWidget)
