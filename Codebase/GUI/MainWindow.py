@@ -87,7 +87,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
     def RemoveProjectButton(self,ObjectName: str):
         button=self.findChildren(QtWidgets.QPushButton,ObjectName)[0]
         button.deleteLater()
-        self.ui.SettingsButton.click()
+        self.ui.TasksTodayButton.click()
     
     def EditProjectButtonName(self,ObjectName: str,Title: str,Color: str):
         button=self.findChildren(QtWidgets.QPushButton,ObjectName)[0]
@@ -153,8 +153,8 @@ class AmberMainWindow(QtWidgets.QMainWindow):
 
     def SetTasksTodayWidgetTitle(self):
         from random import choice
-        date=datetime.date.today().strftime("%A %B %d %Y") if choice(range(30)) else "Doomsday"
-        text=choice(("Today : ","Today is ",'Bucket list for ','Your work for ','Its already '))+ f"{date}" if choice(range(20)) else "Doomsday"  
+        date=datetime.date.today().strftime("%A %B %d %Y")
+        text=choice(("Today : ","Today is ",'Bucket list for ','Your work for ','Its already '))+  (f"{date}" if choice(range(100)) else "Doomsday")  
         self.ui.CurrentWidgetTitleLabel.setText(text)
         self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
 
@@ -163,7 +163,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         text=f"App Settings" if choice(range(100)) else 'Kya re Setting ah'
         self.ui.CurrentWidgetTitleLabel.setText(text)
         self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
-    
+ 
     def SetLabelForHelp(self):
         from random import choice
         if not choice(list(range(100))):
