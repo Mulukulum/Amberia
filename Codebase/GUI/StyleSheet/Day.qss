@@ -255,6 +255,7 @@ QTextEdit
 
 QColorDialog
 {
+   font-size: 12px;
    color: #804d00;
 }
 
