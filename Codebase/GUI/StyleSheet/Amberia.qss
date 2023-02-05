@@ -265,6 +265,12 @@ QSpinBox
    color: #c9c15f;
 }
 
+QRadioButton
+{
+   font-size: 12px;
+   color: #c9c15f;
+}
+
 QCheckBox
 {
    font-size: 12px;
