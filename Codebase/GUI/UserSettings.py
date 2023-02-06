@@ -1,6 +1,6 @@
 from Codebase.Functions.Database import ExecuteCommand
 
-Defaults=("Amberia.qss",275,400,65,0.235,1)
+Defaults=("Amberia.qss",150,250,50,0.15,1)
 res=ExecuteCommand("SELECT stylesheet, mintaskdispheight, minsecdispheight, projectminheight , sidebarfactor, showhelp FROM settings WHERE def=1")
 if len(res)==1:
     Settings=res[0]
