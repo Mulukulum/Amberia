@@ -87,7 +87,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
     def RemoveProjectButton(self,ObjectName: str):
         button=self.findChildren(QtWidgets.QPushButton,ObjectName)[0]
         button.deleteLater()
-        self.ui.TasksTodayButton.click()
+        self.ui.HelpButton.click()
     
     def EditProjectButtonName(self,ObjectName: str,Title: str,Color: str):
         button=self.findChildren(QtWidgets.QPushButton,ObjectName)[0]
