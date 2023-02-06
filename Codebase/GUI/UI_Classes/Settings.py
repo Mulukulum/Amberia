@@ -62,7 +62,7 @@ class SettingsUI(object):
         self.SecDispHeight = QSpinBox(self.DisplayBehavioursFrame)
         self.SecDispHeight.setObjectName(u"SecDispHeight")
         self.SecDispHeight.setMinimumSize(QSize(0, 40))
-        self.SecDispHeight.setMinimum(150)
+        self.SecDispHeight.setMinimum(80)
         self.SecDispHeight.setMaximum(16777215)
         self.SecDispHeight.setSingleStep(5)
 
@@ -94,7 +94,7 @@ class SettingsUI(object):
         self.TaskDispHeight = QSpinBox(self.DisplayBehavioursFrame)
         self.TaskDispHeight.setObjectName(u"TaskDispHeight")
         self.TaskDispHeight.setMinimumSize(QSize(0, 40))
-        self.TaskDispHeight.setMinimum(150)
+        self.TaskDispHeight.setMinimum(80)
         self.TaskDispHeight.setMaximum(16777215)
         self.TaskDispHeight.setSingleStep(5)
 
