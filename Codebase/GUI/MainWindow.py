@@ -164,16 +164,16 @@ class AmberMainWindow(QtWidgets.QMainWindow):
 
     def SetLabelForSettings(self):
         from random import choice
-        text=f"App Settings" if choice(range(100)) else 'Kya re Setting ah'
+        text=f"App Settings" if choice(range(500)) else 'Kya re Setting ah'
         self.ui.CurrentWidgetTitleLabel.setText(text)
         self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
  
     def SetLabelForHelp(self):
         from random import choice
-        if not choice(list(range(100))):
+        if not choice(list(range(300))):
             text=f"☝️✍️"
         else:
-            text='Help Window' if choice(range(15)) else choice(("Thank you Sanjeb!","Check out discard chat app at https://github.com/sanjeb/Chat-App"))
+            text='Help Window' if choice(range(30)) else choice(("Thank you Sanjeb!","Check out discard chat app at https://github.com/sanjeb/Chat-App"))
         self.ui.CurrentWidgetTitleLabel.setText(text)
         self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
 
@@ -220,7 +220,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         SettWidget=SettingsWidget(FrameForMainWidget,self)
         from random import choice
         if not choice(range(50)) :
-            SettWidget.ui.ColorSettingsLabel.setText('Qt-en Up your Colors')
+            SettWidget.ui.ColorSettingsLabel.setText('  Qt-en Up your Colors  ')
         framelayout.addWidget(SettWidget)
         layout=self.ui.VLayoutForMainWidget
         layout.addWidget(FrameForMainWidget)

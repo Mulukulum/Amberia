@@ -475,7 +475,12 @@ class SettingsWidget(QtWidgets.QWidget):
         self.ResetPrValues=False
         self.ResetTheme=False
         #Settings margins and borders
-        self.ui.ColorSettingsLabel.setStyleSheet(f'{self.ui.ColorSettingsLabel.styleSheet()} ; margin-right: 500% ; margin-left: 500% ; border-radius: 12%')
+        
+        self.ui.ColorSettingsLabel.setStyleSheet(f'{self.ui.ColorSettingsLabel.styleSheet()} ; padding-left: 550% ; padding-right: 550% ; background-clip: content ; border-radius: 12%')
+        self.ui.DisplayBehaviourLabel.setStyleSheet(f'{self.ui.DisplayBehaviourLabel.styleSheet()} ; padding-right: 400% ; padding-left: 400% ; border-radius: 12% ; background-clip: content ; ')
+        self.ui.PRColorLabel.setStyleSheet(f'{self.ui.PRColorLabel.styleSheet()} ; padding-right: 500% ; padding-left: 500% ; border-radius: 12% ; font-size: 20px ; background-clip : content ')
+        self.ui.ThemesLabel.setStyleSheet(f'{self.ui.PRColorLabel.styleSheet()} ; padding-right: 500% ; padding-left: 500% ; border-radius: 12% ; background-clip : content ')
+
         #Signals and slots setup
         self.ui.SaveChangesRestart.clicked.connect(self.SaveChangesRestart)
         self.ui.SaveChanges.clicked.connect(self.SaveChanges)
