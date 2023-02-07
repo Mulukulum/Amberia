@@ -56,6 +56,10 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         
 
         #Set the stylesheets
+        self.ui.ProjectTitleLabel.setStyleSheet('border-top-right-radius: 6px ; border-bottom-right-radius: 0px; border-top-left-radius: 6px; border-bottom-left-radius: 0px ; ')
+        self.ui.CurrentWidgetTitleLabel.setStyleSheet('border-top-right-radius: 0px ; border-bottom-right-radius: 6px; border-top-left-radius: 0px; border-bottom-left-radius: 0px ;')
+        self.ui.SettingsButton.setStyleSheet('border-top-right-radius: 0px ; border-bottom-right-radius: 0px; border-top-left-radius: 0px; border-bottom-left-radius: 6px ; ')
+
         self.ui.CurrentWidgetTitleLabel.setStyleSheet(self.ui.CurrentWidgetTitleLabel.styleSheet()+"; font-size: 24px")
         self.ui.ProjectsLabel.setStyleSheet(self.ui.ProjectsLabel.styleSheet()+"font-size: 20px")
         self.ui.TasksTodayButton.setStyleSheet(self.ui.TasksTodayButton.styleSheet()+" ; font-size: 24px ;")
