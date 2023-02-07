@@ -122,6 +122,7 @@ QListView::item:selected:hover{
 
 
 /*-----QScrollBar-----*/
+
 QScrollBar:vertical 
 {
    border: none;
@@ -133,7 +134,7 @@ QScrollBar:vertical
 QScrollBar::handle:vertical 
 {
    border: none;
-   border-radius : 0px;
+   border-radius : 6px;
    background-color: #7a7a7a;
    min-height: 80px;
    width : 12px;
