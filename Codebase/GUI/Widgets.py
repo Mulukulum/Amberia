@@ -575,7 +575,7 @@ class SettingsWidget(QtWidgets.QWidget):
             StyleSheet=Stylesheet
         ExecuteCommand("""UPDATE settings SET stylesheet=?,
         mintaskdispheight=? , minsecdispheight=? , projectminheight=? ,
-        sidebarfactor=? , setduedatetoday=? WHERE def=1 """,
+        sidebarfactor=? , showhelp=? WHERE def=1 """,
         (StyleSheet, TaskDispHt, SectionDispHt,ProjButtonHt,SidebarScale,HelpBehaviour))
         #No restart is called here
 
