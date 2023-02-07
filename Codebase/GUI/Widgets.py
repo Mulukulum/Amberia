@@ -474,6 +474,8 @@ class SettingsWidget(QtWidgets.QWidget):
         self.SelectedTheme=None
         self.ResetPrValues=False
         self.ResetTheme=False
+        #Settings margins and borders
+        self.ui.ColorSettingsLabel.setStyleSheet(f'{self.ui.ColorSettingsLabel.styleSheet()} ; margin-right: 500% ; margin-left: 500% ; border-radius: 12%')
         #Signals and slots setup
         self.ui.SaveChangesRestart.clicked.connect(self.SaveChangesRestart)
         self.ui.SaveChanges.clicked.connect(self.SaveChanges)

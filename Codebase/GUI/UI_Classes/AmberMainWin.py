@@ -22,7 +22,7 @@ class AmberWindowUI(object):
 
         #Set the Minimum Size   
         MainWindow.resize(800,1000)
-        MainWindow.setMinimumSize(QSize(800, 625))
+        MainWindow.setMinimumSize(QSize(1000, 800))
 
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
