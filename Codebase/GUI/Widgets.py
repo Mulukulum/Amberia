@@ -292,6 +292,8 @@ class ProjectEditWidget(QtWidgets.QDialog):
         self.ui=ProjectEditDialog()
         self.ui.setupUi(self,ProjectName)
         self.setStyleSheet(StyleSheet)
+        self.ui.lineEdit.setStyleSheet('font-size: 14px')
+        self.ui.ColorEdit.setStyleSheet('QLabel{ border-radius: 0px ; font-size: 14px }')
         self.ui.ToggleColorEdit.toggled.connect(self.ToggleColorEdit)
         self.ui.ColorEdit.currentColorChanged.connect(self.UpdateCurrentColor)
     
@@ -624,6 +626,7 @@ class SettingsWidget(QtWidgets.QWidget):
     def PopupColorDialog(self):
         dialog=QtWidgets.QColorDialog(self)
         dialog.setModal(True)
+        dialog.setStyleSheet('QLabel{ border-radius: 0px ; font-size: 14px }')
         Ok=dialog.exec_()
         if Ok:
             return dialog.selectedColor().name()
