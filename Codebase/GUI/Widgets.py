@@ -445,8 +445,6 @@ class TaskEditDialog(QtWidgets.QDialog):
             self.EditDueDate=True
             self.ui.DueDateEdit.setDisabled(False)
         
-        
-        
 
 class SettingsWidget(QtWidgets.QWidget):
 
@@ -481,6 +479,20 @@ class SettingsWidget(QtWidgets.QWidget):
         self.ui.DisplayBehaviourLabel.setStyleSheet(f'{self.ui.DisplayBehaviourLabel.styleSheet()} ; padding-right: 400% ; padding-left: 400% ; border-radius: 12% ; background-clip: content ; ')
         self.ui.PRColorLabel.setStyleSheet(f'{self.ui.PRColorLabel.styleSheet()} ; padding-right: 500% ; padding-left: 500% ; border-radius: 12% ; font-size: 20px ; background-clip : content ')
         self.ui.ThemesLabel.setStyleSheet(f'{self.ui.PRColorLabel.styleSheet()} ; padding-right: 500% ; padding-left: 500% ; border-radius: 12% ; background-clip : content ')
+        
+        FontSizeStyle='font-size: 16px'
+        self.ui.MinTaskHtLabel.setStyleSheet(FontSizeStyle)
+        self.ui.MinSecHtLabel.setStyleSheet(FontSizeStyle)
+        self.ui.MinProjButHtLabel.setStyleSheet(FontSizeStyle)
+        self.ui.SidebarScaleLabel.setStyleSheet(FontSizeStyle)
+        self.ui.TaskDispHeight.setStyleSheet(FontSizeStyle)
+        self.ui.SecDispHeight.setStyleSheet(FontSizeStyle)
+        self.ui.ProjButtonHeight.setStyleSheet(FontSizeStyle)
+        self.ui.SidebarScaleFactor.setStyleSheet(FontSizeStyle)
+        self.ui.HelpBehaviour.setStyleSheet(FontSizeStyle)
+        self.ui.ResetButton.setStyleSheet(FontSizeStyle)
+        self.ui.PrColorSettingsFrame.setStyleSheet('QPushButton{ font-size: 16px } ')
+        self.ui.ThemesFrame.setStyleSheet('QPushButton{ font-size: 14px } ')
 
         #Signals and slots setup
         self.ui.SaveChangesRestart.clicked.connect(self.SaveChangesRestart)
