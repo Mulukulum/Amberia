@@ -301,16 +301,16 @@ class Priority:
     #Sets a tuple containing the valid priority Levels
     #Tuple contains integers from 1 to Upperbound (1 to 10)
     DefaultPriorityColors={
-        1:16399941,
-        2:16070549,
-        3:8069048,
-        4:9201120,
-        5:2287801,
-        6:5177211,
-        7:432432,
-        8:13419293,
-        9:16729344,
-        10:16249827,
+        1:10820909,
+        2:12994048,
+        3:9526818,
+        4:10525202,
+        5:5278230,
+        6:878910,
+        7:1209197,
+        8:804465,
+        9:4393866,
+        10:7605130,
     }
     ScriptSetDefaultColors=f"""
     -- The Following Commands sets the Default Colors again
