@@ -34,6 +34,7 @@ QLabel
 {
 	background-color: #FD5E53;
 	color: #FFE373;
+   border-radius: 10%;
 
 }
 
@@ -45,6 +46,7 @@ QPushButton
 	color: #FC9C54;
 	border: none;
 	padding: 6px;
+   border-radius: 12%;
 
 }
 
@@ -220,6 +222,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical
    background-color: #222222;
 	
 }
+
 QSpinBox
 {
    font-size: 12px;
@@ -247,7 +250,15 @@ QDateTimeEdit
 QTextBrowser
 {
    color: #c9c15f;
+   border: 1px inset #fd5e53; 
+   border-radius: 10%;
 }
+
+QLCDNumber{
+   border: 1px solid black;
+   border-radius: 10%;
+}
+
 
 QTextEdit
 {

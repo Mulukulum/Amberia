@@ -99,7 +99,6 @@ class TaskWidget(QtWidgets.QWidget):
         frame.setMinimumHeight(self.MinimumTaskHeight)
         #install event filter for taskdesc edit
         self.ui.TaskDescription.installEventFilter(self)
-
         #Set StyleSheets
         frame.setStyleSheet(frame.styleSheet()+".QFrame:hover { background-color: #7a7a7a;}")
         self.ui.TaskDescription.setStyleSheet("color: #c9c15f ; font-size: 16px ;")
@@ -112,8 +111,8 @@ class TaskWidget(QtWidgets.QWidget):
         #Labels have their bg colors tied to priority level so its important to set that in the reconfigure function
         self.ui.TaskTitle_label.setStyleSheet(self.ui.TaskTitle_label.styleSheet()+f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(Task.PriorityLevel))} ")
         self.ui.DaysLeftLabel.setStyleSheet(self.ui.DaysLeftLabel.styleSheet()+f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(Task.PriorityLevel))}")
-        self.ui.PriorityLabel.setStyleSheet(self.ui.PriorityLabel.styleSheet()+f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(Task.PriorityLevel))}")
-        
+        self.ui.PriorityLabel.setStyleSheet(f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(Task.PriorityLevel))} ; background-clip: content ; padding-left: 100% ; ")
+
         #Set the style of the LCD Screens
         self.ui.PriorityLevelDisplay.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
         self.ui.DaysLeftDisplay.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
@@ -654,3 +653,4 @@ class HelpWidget(QtWidgets.QWidget):
         super().__init__(frame)
         self.ui=HelpWidgetUI()
         self.ui.setupUi(self)
+        self.ui.textBrowser.setStyleSheet('border: 0px solid transparent ; ')
