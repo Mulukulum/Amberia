@@ -35,7 +35,7 @@ QLabel
 {
 	background-color: #18191A;
 	color: #B0B3B8;
-
+   border-radius: 10%;
 }
 
 
@@ -46,7 +46,7 @@ QPushButton
 	color: #c9c15f;
 	border: none;
 	padding: 6px;
-
+   border-radius: 10%;
 }
 
 
@@ -344,11 +344,18 @@ QDateTimeEdit
 QTextBrowser
 {
    color: #c9c15f;
+   border: 1px inset #4d004d;
+   border-radius: 10%;
 }
 
 QTextEdit
 {
    color: #c9c15f;
+}
+
+QLCDNumber{
+   border: 1px solid black;
+   border-radius: 10%;
 }
 
 QColorDialog
@@ -361,4 +368,9 @@ QRadioButton
 {
    font-size: 12px;
    color: #c9c15f;
+}
+
+QScrollArea{
+   border: 2px double #ffffff ;
+   border-radius: 5%;
 }

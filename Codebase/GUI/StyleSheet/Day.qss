@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+
 /*-----QWidget-----*/
 QWidget
 {
@@ -35,7 +36,7 @@ QLabel
 {
 	background-color: #cc0000;
 	color: #D4BEBA;
-
+   border-radius: 10%;
 }
 
 
@@ -46,6 +47,7 @@ QPushButton
 	color: #cc0000;
 	border: none;
 	padding: 6px;
+   border-radius: 10%;
 
 }
 
@@ -57,7 +59,6 @@ QPushButton::hover
 	border-bottom-style: groove;
 	border-bottom-color: #c9a91a;
 	border-bottom-width: 3px;
-	
 
 }
 
@@ -350,6 +351,14 @@ QDateTimeEdit
 QTextBrowser
 {
    color: #804d00;
+   border: 1px inset #ed8b02;
+   border-radius: 10%;
+}
+
+QLCDNumber{
+   color: red;
+   border: 1px solid black;
+   border-radius: 10%;
 }
 
 QTextEdit
@@ -368,3 +377,9 @@ QRadioButton
    font-size: 12px;
    color: #804d00;
 }
+
+QScrollArea{
+   border: 2px double #ffffff ;
+   border-radius: 5%;
+}
+
