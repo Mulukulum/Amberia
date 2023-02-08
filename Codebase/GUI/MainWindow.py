@@ -159,7 +159,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
     def SetTasksTodayWidgetTitle(self):
         from random import choice
         date=datetime.date.today().strftime("%A %B %d %Y")
-        text=choice(("Today : ","Today is ",'Bucket list for ','Your work for ','Its already ','14 Days until Boards, today is '))+  (f"{date}" if choice(range(100)) else "Doomsday")  
+        text=choice(("Today : ","Today is ",'Bucket list for ','Your work for ',"It's already ",'14 Days until Boards, today is '))+  (f"{date}" if choice(range(100)) else "Doomsday")  
         self.ui.CurrentWidgetTitleLabel.setText(text)
         self.ui.CurrentWidgetTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
 
