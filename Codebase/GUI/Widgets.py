@@ -100,7 +100,7 @@ class TaskWidget(QtWidgets.QWidget):
         #install event filter for taskdesc edit
         self.ui.TaskDescription.installEventFilter(self)
         #Set StyleSheets
-        frame.setStyleSheet(frame.styleSheet()+".QFrame:hover { background-color: #7a7a7a;}")
+        frame.setStyleSheet(frame.styleSheet()+".QFrame:hover { background-color: #7a7a7a; border-radius: 12% ; }")
         self.ui.TaskDescription.setStyleSheet("color: #c9c15f ; font-size: 16px ;")
         self.ui.ReminderBox.setStyleSheet("color: #c9c15f ; ")
         self.ui.PriorityLevelDisplay.setStyleSheet("color : #c9c15f ; ")
@@ -225,7 +225,7 @@ class SectionWidget(QtWidgets.QWidget):
         frame.setMinimumHeight(self.MinimumSectionHeight)
         #Main setup completed
         #StyleSheets
-        frame.setStyleSheet(frame.styleSheet()+".QFrame:hover {background-color: #2a3364}")
+        frame.setStyleSheet(frame.styleSheet()+".QFrame:hover {background-color: #2a3364 ; border-radius: 12% ; }")
         self.ui.SectionName.setStyleSheet(self.ui.SectionName.styleSheet()+f"; font-size: 14px ; background-color: {HexFormat(Section.ParentProject.Color)}")
         self.ui.TaskAddButton.setStyleSheet(self.ui.TaskAddButton.styleSheet()+f"; font-size: 14px ; ")
         self.ui.SectionDeleteButton.setStyleSheet(self.ui.SectionDeleteButton.styleSheet()+f"; font-size: 14px ; ")
