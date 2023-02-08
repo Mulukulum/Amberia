@@ -404,3 +404,8 @@ QColorDialog
 {
    color: #c9c15f;
 }
+
+QScrollArea{
+   border: 2px double #ffffff ;
+   border-radius: 5%;
+}

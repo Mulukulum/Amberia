@@ -377,3 +377,9 @@ QRadioButton
    font-size: 12px;
    color: #804d00;
 }
+
+QScrollArea{
+   border: 2px double #ffffff ;
+   border-radius: 5%;
+}
+
