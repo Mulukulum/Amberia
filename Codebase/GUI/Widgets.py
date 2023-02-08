@@ -334,6 +334,14 @@ class ProjectWidget(QtWidgets.QWidget):
         self.ui.AddSection.setShortcut('ctrl+a')
 
     def DeleteProject(self):
+        popup=QtWidgets.QMessageBox()
+        popup.setModal(True)
+        popup.resize(400,250)
+        box=popup.question(self,' Delete Project ?','<font size=5> Do you want to permanently delete this project? </font>',QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+        if box==QtWidgets.QMessageBox.Yes:
+            ...
+        else:
+            return
         #Emit the signal to delete the project button
         self.SignalDeleteProjectButton.emit(f"AccessProjectButton_{self.ProjectID}")
         (cl.Project.Instances[self.ProjectID]).DeleteProject()
