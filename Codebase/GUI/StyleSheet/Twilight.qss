@@ -34,6 +34,7 @@ QLabel
 {
 	background-color: #FD5E53;
 	color: #FFE373;
+   border-radius: 10%;
 
 }
 
@@ -45,6 +46,7 @@ QPushButton
 	color: #FC9C54;
 	border: none;
 	padding: 6px;
+   border-radius: 12%;
 
 }
 
@@ -122,22 +124,21 @@ QListView::item:selected:hover{
 
 
 /*-----QScrollBar-----*/
+
 QScrollBar:vertical 
 {
    border: none;
    width: 12px;
-
+   
 }
-
 
 QScrollBar::handle:vertical 
 {
    border: none;
-   border-radius : 0px;
    background-color: #f202ba;
    min-height: 80px;
    width : 12px;
-
+   border-radius : 6px;
 }
 
 
@@ -219,6 +220,110 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical
    background-color: #53018d;
 	
 }
+
+/* Horizontal Scroll bar */
+
+QScrollBar:horizontal 
+{
+   border: none;
+   height: 12px;
+
+}
+
+QScrollBar::handle:horizontal 
+{
+   border: none;
+   border-radius : 6px;
+   background-color: #f202ba;
+   min-width: 80px;
+   height : 12px;
+
+}
+
+
+QScrollBar::handle:horizontal:pressed
+{
+   background-color: #830165; 
+
+}
+
+
+QScrollBar::add-line:horizontal
+{
+   border: none;
+   background: transparent;
+   width: 0px;
+   subcontrol-position: bottom;
+   subcontrol-origin: margin;
+
+}
+
+
+QScrollBar::add-line:horizontal:hover 
+{
+   background-color: transparent;
+
+}
+
+
+QScrollBar::add-line:horizontal:pressed 
+{
+   background-color: #3f3f3f;
+
+}
+
+
+QScrollBar::sub-line:horizontal
+{
+   border: none;
+   background: transparent;
+   width: 0px;
+
+}
+
+
+QScrollBar::sub-line:horizontal:hover 
+{
+   background-color: transparent;
+
+}
+
+
+QScrollBar::sub-line:horizontal:pressed 
+{
+   background-color: #3f3f3f;
+
+}
+
+
+QScrollBar::right-arrow:horizontal
+{
+   width: 0px;
+   height: 0px;
+   background: transparent;
+
+}
+
+
+QScrollBar::left-arrow:horizontal 
+{
+   width: 0px;
+   height: 0px;
+   background: transparent;
+
+}
+
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal
+{
+   background-color: #222222;
+	
+}
+
+
+
+/* Other Widgets */
+
 QSpinBox
 {
    font-size: 12px;
@@ -246,7 +351,15 @@ QDateTimeEdit
 QTextBrowser
 {
    color: #c9c15f;
+   border: 1px inset #fd5e53; 
+   border-radius: 10%;
 }
+
+QLCDNumber{
+   border: 1px solid black;
+   border-radius: 10%;
+}
+
 
 QTextEdit
 {

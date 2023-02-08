@@ -99,9 +99,8 @@ class TaskWidget(QtWidgets.QWidget):
         frame.setMinimumHeight(self.MinimumTaskHeight)
         #install event filter for taskdesc edit
         self.ui.TaskDescription.installEventFilter(self)
-
         #Set StyleSheets
-        frame.setStyleSheet(frame.styleSheet()+".QFrame:hover { background-color: #7a7a7a;}")
+        frame.setStyleSheet(frame.styleSheet()+".QFrame:hover { background-color: #7a7a7a; border-radius: 12% ; }")
         self.ui.TaskDescription.setStyleSheet("color: #c9c15f ; font-size: 16px ;")
         self.ui.ReminderBox.setStyleSheet("color: #c9c15f ; ")
         self.ui.PriorityLevelDisplay.setStyleSheet("color : #c9c15f ; ")
@@ -112,8 +111,8 @@ class TaskWidget(QtWidgets.QWidget):
         #Labels have their bg colors tied to priority level so its important to set that in the reconfigure function
         self.ui.TaskTitle_label.setStyleSheet(self.ui.TaskTitle_label.styleSheet()+f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(Task.PriorityLevel))} ")
         self.ui.DaysLeftLabel.setStyleSheet(self.ui.DaysLeftLabel.styleSheet()+f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(Task.PriorityLevel))}")
-        self.ui.PriorityLabel.setStyleSheet(self.ui.PriorityLabel.styleSheet()+f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(Task.PriorityLevel))}")
-        
+        self.ui.PriorityLabel.setStyleSheet(f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(Task.PriorityLevel))} ; background-clip: content ; padding-left: 100% ; ")
+
         #Set the style of the LCD Screens
         self.ui.PriorityLevelDisplay.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
         self.ui.DaysLeftDisplay.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
@@ -226,7 +225,7 @@ class SectionWidget(QtWidgets.QWidget):
         frame.setMinimumHeight(self.MinimumSectionHeight)
         #Main setup completed
         #StyleSheets
-        frame.setStyleSheet(frame.styleSheet()+".QFrame:hover {background-color: #2a3364}")
+        frame.setStyleSheet(frame.styleSheet()+".QFrame:hover {background-color: #2a3364 ; border-radius: 12% ; }")
         self.ui.SectionName.setStyleSheet(self.ui.SectionName.styleSheet()+f"; font-size: 14px ; background-color: {HexFormat(Section.ParentProject.Color)}")
         self.ui.TaskAddButton.setStyleSheet(self.ui.TaskAddButton.styleSheet()+f"; font-size: 14px ; ")
         self.ui.SectionDeleteButton.setStyleSheet(self.ui.SectionDeleteButton.styleSheet()+f"; font-size: 14px ; ")
@@ -293,6 +292,8 @@ class ProjectEditWidget(QtWidgets.QDialog):
         self.ui=ProjectEditDialog()
         self.ui.setupUi(self,ProjectName)
         self.setStyleSheet(StyleSheet)
+        self.ui.lineEdit.setStyleSheet('font-size: 14px')
+        self.ui.ColorEdit.setStyleSheet('QLabel{ border-radius: 0px ; font-size: 14px }')
         self.ui.ToggleColorEdit.toggled.connect(self.ToggleColorEdit)
         self.ui.ColorEdit.currentColorChanged.connect(self.UpdateCurrentColor)
     
@@ -444,8 +445,6 @@ class TaskEditDialog(QtWidgets.QDialog):
             self.EditDueDate=True
             self.ui.DueDateEdit.setDisabled(False)
         
-        
-        
 
 class SettingsWidget(QtWidgets.QWidget):
 
@@ -474,6 +473,27 @@ class SettingsWidget(QtWidgets.QWidget):
         self.SelectedTheme=None
         self.ResetPrValues=False
         self.ResetTheme=False
+        #Settings margins and borders
+        
+        self.ui.ColorSettingsLabel.setStyleSheet(f'{self.ui.ColorSettingsLabel.styleSheet()} ; padding-left: 550% ; padding-right: 550% ; background-clip: content ; border-radius: 12%')
+        self.ui.DisplayBehaviourLabel.setStyleSheet(f'{self.ui.DisplayBehaviourLabel.styleSheet()} ; padding-right: 400% ; padding-left: 400% ; border-radius: 12% ; background-clip: content ; ')
+        self.ui.PRColorLabel.setStyleSheet(f'{self.ui.PRColorLabel.styleSheet()} ; padding-right: 500% ; padding-left: 500% ; border-radius: 12% ; font-size: 20px ; background-clip : content ')
+        self.ui.ThemesLabel.setStyleSheet(f'{self.ui.PRColorLabel.styleSheet()} ; padding-right: 500% ; padding-left: 500% ; border-radius: 12% ; background-clip : content ')
+        
+        FontSizeStyle='font-size: 16px'
+        self.ui.MinTaskHtLabel.setStyleSheet(FontSizeStyle)
+        self.ui.MinSecHtLabel.setStyleSheet(FontSizeStyle)
+        self.ui.MinProjButHtLabel.setStyleSheet(FontSizeStyle)
+        self.ui.SidebarScaleLabel.setStyleSheet(FontSizeStyle)
+        self.ui.TaskDispHeight.setStyleSheet(FontSizeStyle)
+        self.ui.SecDispHeight.setStyleSheet(FontSizeStyle)
+        self.ui.ProjButtonHeight.setStyleSheet(FontSizeStyle)
+        self.ui.SidebarScaleFactor.setStyleSheet(FontSizeStyle)
+        self.ui.HelpBehaviour.setStyleSheet(FontSizeStyle)
+        self.ui.ResetButton.setStyleSheet(FontSizeStyle)
+        self.ui.PrColorSettingsFrame.setStyleSheet('QPushButton{ font-size: 16px } ')
+        self.ui.ThemesFrame.setStyleSheet('QPushButton{ font-size: 14px } ')
+
         #Signals and slots setup
         self.ui.SaveChangesRestart.clicked.connect(self.SaveChangesRestart)
         self.ui.SaveChanges.clicked.connect(self.SaveChanges)
@@ -575,7 +595,7 @@ class SettingsWidget(QtWidgets.QWidget):
             StyleSheet=Stylesheet
         ExecuteCommand("""UPDATE settings SET stylesheet=?,
         mintaskdispheight=? , minsecdispheight=? , projectminheight=? ,
-        sidebarfactor=? , setduedatetoday=? WHERE def=1 """,
+        sidebarfactor=? , showhelp=? WHERE def=1 """,
         (StyleSheet, TaskDispHt, SectionDispHt,ProjButtonHt,SidebarScale,HelpBehaviour))
         #No restart is called here
 
@@ -618,6 +638,7 @@ class SettingsWidget(QtWidgets.QWidget):
     def PopupColorDialog(self):
         dialog=QtWidgets.QColorDialog(self)
         dialog.setModal(True)
+        dialog.setStyleSheet('QLabel{ border-radius: 0px ; font-size: 14px }')
         Ok=dialog.exec_()
         if Ok:
             return dialog.selectedColor().name()
@@ -647,3 +668,4 @@ class HelpWidget(QtWidgets.QWidget):
         super().__init__(frame)
         self.ui=HelpWidgetUI()
         self.ui.setupUi(self)
+        self.ui.textBrowser.setStyleSheet('border: 0px solid transparent ; ')
