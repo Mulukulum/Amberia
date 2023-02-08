@@ -97,6 +97,7 @@ class AmberMainWindow(QtWidgets.QMainWindow):
         button=self.findChildren(QtWidgets.QPushButton,ObjectName)[0]
         button.setText(Title)
         button.setStyleSheet(f"background-color: {Color} ; font-size: 20px ; ")
+        button.click()
     
     def RetrieveFromDB(self):
         #Function to update the UI with project buttons
