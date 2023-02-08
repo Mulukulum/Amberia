@@ -208,6 +208,14 @@ class TaskWidget(QtWidgets.QWidget):
         self.SetInformation(Task)
     
     def TaskDeleteButtonClicked(self,Task: cl.Task):
+        popup=QtWidgets.QMessageBox()
+        popup.setModal(True)
+        popup.resize(400,250)
+        box=popup.question(self,' Delete Task? ',f'<font size=5> Do you want to permanently delete task {Task.TaskTitle[0:20]}? </font>',QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+        if box==QtWidgets.QMessageBox.Yes:
+            ...
+        else:
+            return
         Task.DeleteTask()
         self.parentWidget().deleteLater()
 
@@ -280,7 +288,16 @@ class SectionWidget(QtWidgets.QWidget):
             #Section Widget added to project Widget now
         
     def DeleteSectionWidget(self):
-        cl.Section.Instances[self.SectionID].DeleteSection()
+        Section=cl.Section.Instances[self.SectionID]
+        popup=QtWidgets.QMessageBox()
+        popup.setModal(True)
+        popup.resize(400,250)
+        box=popup.question(self,' Delete Section? ',f'<font size=5> Do you want to permanently delete Section {Section.Title[0:20]}? </font>',QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+        if box==QtWidgets.QMessageBox.Yes:
+            ...
+        else:
+            return
+        Section.DeleteSection()
         self.parentWidget().deleteLater()
 class ProjectEditWidget(QtWidgets.QDialog):
 
@@ -337,7 +354,7 @@ class ProjectWidget(QtWidgets.QWidget):
         popup=QtWidgets.QMessageBox()
         popup.setModal(True)
         popup.resize(400,250)
-        box=popup.question(self,' Delete Project ?','<font size=5> Do you want to permanently delete this project? </font>',QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+        box=popup.question(self,' Delete Project? ','<font size=5> Do you want to permanently delete this project? </font>',QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
         if box==QtWidgets.QMessageBox.Yes:
             ...
         else:
