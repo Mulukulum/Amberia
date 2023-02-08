@@ -37,7 +37,6 @@ QLabel
 	background-color: #cc0000;
 	color: #D4BEBA;
    border-radius: 10%;
-
 }
 
 
@@ -60,7 +59,6 @@ QPushButton::hover
 	border-bottom-style: groove;
 	border-bottom-color: #c9a91a;
 	border-bottom-width: 3px;
-	
 
 }
 
