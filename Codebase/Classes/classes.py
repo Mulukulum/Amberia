@@ -539,12 +539,12 @@ class Task:
     def SetReminderState(self,State:int,Title=None,msg=None):
         if Title==None:
             if len(self.TaskTitle)>20:
-                Title=f"{self.TaskTitle[0:20]}... is Due"
+                Title=f"{self.TaskTitle[0:20]}... is Due Today"
             else:
-                Title=f"{self.TaskTitle} is Due"
+                Title=f"{self.TaskTitle} is Due Today"
         if msg==None:
             TaskDesc="" if self.TaskDesc==None else self.TaskDesc
-            msg=f"Priority {self.PriorityLevel} in {self.ParentSection.ParentProject.Title[0:20]}\n {TaskDesc[0:31]}"
+            msg=f"Priority {int(self.PriorityLevel)} in {self.ParentSection.ParentProject.Title[0:20]}\n {TaskDesc[0:31]}"
         self.ShowReminder=State
         ExecuteCommand("UPDATE tasks SET task_showreminder=? WHERE task_id=?",(self.ShowReminder,self.ID))
         #If reminder is to be set
