@@ -7,38 +7,19 @@ FileConstant=6
 
 
 def ErrorLog(text=None,FileName=stack()[FileConstant].filename):
-    if text==None or type(text) != str :
-        return None
-    else:
-        _WriteToMaster(text,FileName,type='ERROR')
-        _WriteToErrors(text,FileName)
+    ...
 
 def Log(text=None,FileName=stack()[FileConstant].filename):
-    if text==None or type(text) != str :
-        return None
-    else:
-        _WriteToMaster(text,FileName,type='LOG')
-        _WriteToLogs(text,FileName)
+    ...
 
 def StartLog(text=None,FileName=stack()[FileConstant].filename):
-    if text==None or type(text) != str :
-        return None
-    else:
-        _WriteToMaster(text,FileName,type='STARTUP')
-        _WriteToStartLogs(text,FileName)
+    ...
 
 def DBLog(text=None,FileName=stack()[FileConstant].filename):
-    if text==None or type(text) != str :
-        return None
-    else:
-        _WriteToMaster(text,FileName,type='DATABASE')
-        _WriteToDBLogs(text,FileName)
+    ...
 
 def DBOnlyLog(text=None,FileName=stack()[FileConstant].filename):
-    if text==None or type(text) != str :
-        return None
-    else:
-        _WriteToDBLogs(text,FileName)
+    ...
 
 #This function is for testing purposes only
 def _Test(text=None,FileName=stack()):
