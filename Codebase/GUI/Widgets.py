@@ -92,7 +92,7 @@ class TaskWidget(QtWidgets.QWidget):
     OrdinalTimeFunction=lambda n : str(n) + {1:'st',2:'nd',3:'rd'}.get(abs(n)%10,'th')
     MinimumTaskHeight=MinTaskDispHt
 
-    def __init__(self,frame,Task: cl.Task=None) -> None:
+    def __init__(self,frame: QtWidgets.QFrame,Task: cl.Task=None) -> None:
         super().__init__(frame)
         self.ui=TaskWidgetUI()
         self.ui.setupUi(frame)
@@ -100,11 +100,9 @@ class TaskWidget(QtWidgets.QWidget):
         #install event filter for taskdesc edit
         self.ui.TaskDescription.installEventFilter(self)
         #Set StyleSheets
-        frame.setStyleSheet(frame.styleSheet()+".QFrame:hover { background-color: #7a7a7a; border-radius: 12% ; }")
-        self.ui.TaskDescription.setStyleSheet("color: #c9c15f ; font-size: 16px ;")
-        self.ui.ReminderBox.setStyleSheet("color: #c9c15f ; ")
-        self.ui.PriorityLevelDisplay.setStyleSheet("color : #c9c15f ; ")
-        self.ui.DaysLeftDisplay.setStyleSheet("color : #c9c15f ; ")
+        color=StyleSheet[2:8]
+        frame.setStyleSheet(frame.styleSheet()+".QFrame:hover {background-color: "+f"#{color}"+" ; border-radius: 12% ; }")
+        self.ui.TaskDescription.setStyleSheet(" font-size: 16px ;")
         self.ui.EditTaskButton.setStyleSheet(self.ui.EditTaskButton.styleSheet()+"; font-size: 16px ; ")
         self.ui.ReminderBox.setStyleSheet(self.ui.ReminderBox.styleSheet()+"; font-size: 16px ; ")
         self.ui.DeleteTaskButton.setStyleSheet(self.ui.DeleteTaskButton.styleSheet()+"; font-size: 16px ; ")
@@ -225,7 +223,8 @@ class SectionWidget(QtWidgets.QWidget):
         frame.setMinimumHeight(self.MinimumSectionHeight)
         #Main setup completed
         #StyleSheets
-        frame.setStyleSheet(frame.styleSheet()+".QFrame:hover {background-color: #2a3364 ; border-radius: 12% ; }")
+        color=StyleSheet[9:15]
+        frame.setStyleSheet(frame.styleSheet()+".QFrame:hover {background-color: #"+f"{color}"+"; border-radius: 12% ; }")
         self.ui.SectionName.setStyleSheet(self.ui.SectionName.styleSheet()+f"; font-size: 14px ; background-color: {HexFormat(Section.ParentProject.Color)}")
         self.ui.TaskAddButton.setStyleSheet(self.ui.TaskAddButton.styleSheet()+f"; font-size: 14px ; ")
         self.ui.SectionDeleteButton.setStyleSheet(self.ui.SectionDeleteButton.styleSheet()+f"; font-size: 14px ; ")
