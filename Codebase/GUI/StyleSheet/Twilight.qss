@@ -380,6 +380,6 @@ QRadioButton
 }
 
 QScrollArea{
-   border: 2px double #ffffff ;
+   border: 2px dashed #AA336A ;
    border-radius: 5%;
 }
