@@ -89,7 +89,7 @@ class LabelWidget(QtWidgets.QWidget):
 
 class TaskWidget(QtWidgets.QWidget):
     #Lambda Function because python somehow doesn't have a method for this
-    OrdinalTimeFunction=lambda n : str(n) + {1:'st',2:'nd',3:'rd'}.get(abs(n)%10,'th')
+    OrdinalTimeFunction=lambda n : str(n) + (({1:'st',2:'nd',3:'rd'}.get(abs(n)%10,'th')) if n not in range(10,20) else 'th' )
     MinimumTaskHeight=MinTaskDispHt
 
     def __init__(self,frame: QtWidgets.QFrame,Task: cl.Task=None) -> None:
@@ -211,7 +211,7 @@ class TaskWidget(QtWidgets.QWidget):
         popup=QtWidgets.QMessageBox()
         popup.setModal(True)
         popup.resize(400,250)
-        box=popup.question(self,' Delete Task? ',f'<font size=5> Do you want to permanently delete task {Task.TaskTitle[0:20]}? </font>',QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+        box=popup.question(self,' Delete Task? ',f'<font size=5> Do you want to permanently delete task {Task.TaskTitle[0:20]}...? </font>',QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
         if box==QtWidgets.QMessageBox.Yes:
             ...
         else:
@@ -292,7 +292,7 @@ class SectionWidget(QtWidgets.QWidget):
         popup=QtWidgets.QMessageBox()
         popup.setModal(True)
         popup.resize(400,250)
-        box=popup.question(self,' Delete Section? ',f'<font size=5> Do you want to permanently delete Section {Section.Title[0:20]}? </font>',QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+        box=popup.question(self,' Delete Section? ',f'<font size=5> Do you want to permanently delete Section {Section.Title[0:20]}...? </font>',QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
         if box==QtWidgets.QMessageBox.Yes:
             ...
         else:

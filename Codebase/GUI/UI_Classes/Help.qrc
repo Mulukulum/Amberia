@@ -1,7 +1,13 @@
 <RCC>
   <qresource>
-    <file>Images/Project.png</file>
+    <file>Images/Csbutton.png</file>
     <file>Images/Main UI.png</file>
+    <file>Images/Project.png</file>
+    <file>Images/ProjectName.png</file>
+    <file>Images/ProjectWithTasks.png</file>
+    <file>Images/Sections1.png</file>
+    <file>Images/Sections2.png</file>
     <file>Images/Sidebar.png</file>
+    <file>Images/TaskEdit.png</file>
   </qresource>
 </RCC>
