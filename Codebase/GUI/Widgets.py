@@ -369,7 +369,7 @@ class ProjectWidget(QtWidgets.QWidget):
         self.ui.AddSection.clicked.connect(lambda: self.AddSectionClicked())
         self.ProjectID=ProjectObj.ID
         self.setObjectName(f"ProjectWidget{self.ProjectID}")
-        
+        self.ui.ProjectName.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignCenter)
         #Sets the Label to display the Project name
         self.ui.ProjectName.setText(ProjectObj.Title)
         self.ui.ProjectName.setStyleSheet(f"background-color: {HexFormat(ProjectObj.Color)} ;")

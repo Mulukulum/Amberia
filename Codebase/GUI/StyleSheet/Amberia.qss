@@ -406,6 +406,6 @@ QColorDialog
 }
 
 QScrollArea{
-   border: 2px dashed #FFD700 ;
+   border: 2px dashed #a18b12 ;
    border-radius: 5%;
 }
