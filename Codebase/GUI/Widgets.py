@@ -152,7 +152,7 @@ class TaskWidget(QtWidgets.QWidget):
         Due=TaskObject.DueDate
         Completed=TaskObject.Completed
         self.ui.TaskTitle_label.setStyleSheet(self.ui.TaskTitle_label.styleSheet()+f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(TaskObject.PriorityLevel))} ")
-        self.ui.DaysLeftLabel.setStyleSheet(self.ui.DaysLeftLabel.styleSheet()+f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(TaskObject.PriorityLevel))}")
+        self.ui.DaysLeftLabel.setStyleSheet(self.ui.DaysLeftLabel.styleSheet()+f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(TaskObject.PriorityLevel))} ; padding-left: 40% ; padding-right : 40% ; background-clip: content ; ")
         self.ui.PriorityLabel.setStyleSheet(self.ui.PriorityLabel.styleSheet()+f"; font-size: 16px ; background-color: {HexFormat(cl.Priority.ColorOfLevel(TaskObject.PriorityLevel))}")
         #If the task is not given a duedate
         if Due==None:
@@ -421,7 +421,6 @@ class TaskEditDialog(QtWidgets.QDialog):
     def __init__(self,Task: cl.Task,PriorityLevel,TaskTitle=None,TaskDesc=None,TaskDueDate: datetime.datetime=None) -> None:
         super().__init__()
         #Set it to be a modal dialog
-        self.EditDueDate=False
         self.setModal(True)
         self.ui=TaskEditUI()
         self.setStyleSheet(StyleSheet)
@@ -429,8 +428,13 @@ class TaskEditDialog(QtWidgets.QDialog):
         self.setWindowTitle("Edit Task")
         self.resize(600,300)
         #Sets the date for the datetime edit
-        if TaskDueDate==None:
+        if TaskDueDate!=None:
+            self.ui.EnableDueDateButton.setChecked(True)
+            self.EditDueDate=True
+        else:
             TaskDueDate=datetime.datetime.now()
+            self.ui.EnableDueDateButton.setChecked(False)
+            self.EditDueDate=False
         #Setting the displays
         self.ui.DueDateEdit.setDisplayFormat("dd-MM-yyyy HH:mm:ss")
         self.ui.DueDateEdit.setDateTime(QtCore.QDateTime.fromString(str(TaskDueDate)[0:19],"yyyy-MM-dd HH:mm:ss"))
@@ -459,7 +463,7 @@ class TaskEditDialog(QtWidgets.QDialog):
                 newduedate=newduedate.toPyDateTime()
                 Task.ReConfigureTask(newtitle,newdesc,newpr,DueDate=newduedate)
             else:
-                Task.ReConfigureTask(newtitle,newdesc,newpr)
+                Task.ReConfigureTask(newtitle,newdesc,newpr,DueDate=datetime.date.today(),ClearDueDate=True)
     
     def Toggle(self):
         if self.EditDueDate:

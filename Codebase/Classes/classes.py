@@ -474,13 +474,16 @@ class Task:
         Label.LabelInstances[LabelID].Tasks.remove(self.ID)
         self.Labels.remove(LabelID)
 
-    def ReConfigureTask(self, TaskTitle: str=None, TaskDesc: str=None, PriorityLevel: int=None, Reminder: int=None, DueDate: datetime.datetime=None, Labels: list=None,Remindertitle=None,Remindermsg=None):
+    def ReConfigureTask(self, TaskTitle: str=None, TaskDesc: str=None, PriorityLevel: int=None, Reminder: int=None, DueDate: datetime.datetime=None, Labels: list=None,Remindertitle=None,Remindermsg=None,ClearDueDate: bool=False):
         if TaskTitle!=None:
             self.TaskTitle=TaskTitle                    #Changes the title to a newly provided title, if not provided stays the same
         if TaskDesc!=None:
             self.TaskDesc=TaskDesc                      #Changes the desc to a newly provided desc
         if DueDate!=None:
-            self.DueDate=DueDate                        #Changes the due date to a newly provided due date
+            if ClearDueDate:
+                self.DueDate=None
+            else:
+                self.DueDate=DueDate                        #Changes the due date to a newly provided due date
         if Reminder==None:
             Reminder=0
         else:        

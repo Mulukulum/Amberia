@@ -42,8 +42,8 @@ class TaskEditUI(object):
 
         self.gridLayout_2.addWidget(self.PriorityLabel, 4, 0, 1, 1)
 
-        self.EnableDueDateButton=QRadioButton(self.frame)
-        self.EnableDueDateButton.setText("Choose whether to enable setting a due date")
+        self.EnableDueDateButton=QCheckBox(self.frame)
+        self.EnableDueDateButton.setText("Choose whether to enable setting a due date")# (clears Wdue date when unchecked)")
         self.gridLayout_2.addWidget(self.EnableDueDateButton,2,0,1,1)
 
         self.PriorityLevelEdit = QDoubleSpinBox(self.frame)
@@ -78,6 +78,8 @@ class TaskEditUI(object):
         sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
+        self.DueDateEdit.setMinimumDate(QDate.currentDate())
+        self.DueDateEdit.setMaximumDate(QDate.currentDate().addYears(200))
         sizePolicy1.setHeightForWidth(self.DueDateEdit.sizePolicy().hasHeightForWidth())
         self.DueDateEdit.setSizePolicy(sizePolicy1)
         self.DueDateEdit.setMinimumSize(QSize(100, 50))

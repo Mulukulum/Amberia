@@ -30,6 +30,7 @@ class TaskWidgetUI(object):
 
         self.DaysLeftLabel = QLabel(Form)
         self.DaysLeftLabel.setObjectName(u"DaysLeftLabel")
+        self.DaysLeftLabel.setAlignment(Qt.AlignHCenter)
 
         self.gridLayout.addWidget(self.DaysLeftLabel, 0, 3, 1, 1)
 
@@ -100,7 +101,7 @@ class TaskWidgetUI(object):
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.DeleteTaskButton.setText(QCoreApplication.translate("Form", u"Delete Task", None))
-        self.DaysLeftLabel.setText(QCoreApplication.translate("Form", u"Days Left:", None))
+        self.DaysLeftLabel.setText(QCoreApplication.translate("Form", u"Days Left :", None))
         self.TaskDescription.setMarkdown("")
         self.TaskDescription.setHtml(QCoreApplication.translate("Form", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
