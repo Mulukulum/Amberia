@@ -431,8 +431,10 @@ class TaskEditDialog(QtWidgets.QDialog):
         if TaskDueDate!=None:
             self.ui.EnableDueDateButton.setChecked(True)
             self.EditDueDate=True
+            self.ui.DueDateEdit.setDisabled(False)
         else:
             TaskDueDate=datetime.datetime.now()
+            self.ui.DueDateEdit.setDisabled(True)
             self.ui.EnableDueDateButton.setChecked(False)
             self.EditDueDate=False
         #Setting the displays
