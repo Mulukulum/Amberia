@@ -301,13 +301,14 @@ class SectionWidget(QtWidgets.QWidget):
         self.parentWidget().deleteLater()
 class ProjectEditWidget(QtWidgets.QDialog):
 
-    def __init__(self,ProjectName):
+    def __init__(self,ProjectName,CurrentColor):
         super().__init__()
         self.ChangeColor=False
         self.Color=-1
         self.ui=ProjectEditDialog()
         self.ui.setupUi(self,ProjectName)
         self.setStyleSheet(StyleSheet)
+        self.ui.ColorEdit.setCurrentColor(QtGui.QColor(CurrentColor))
         self.ui.lineEdit.setStyleSheet('font-size: 14px')
         self.ui.ColorEdit.setStyleSheet('QLabel{ border-radius: 0px ; font-size: 14px }')
         self.ui.ToggleColorEdit.toggled.connect(self.ToggleColorEdit)
@@ -345,7 +346,7 @@ class ProjectWidget(QtWidgets.QWidget):
         self.ui.DeleteProject.setStyleSheet(self.ui.DeleteProject.styleSheet()+"; font-size: 14px")
         #Setup buttons
         self.ui.DeleteProject.clicked.connect(lambda: self.DeleteProject())
-        self.ui.EditDetails.clicked.connect(lambda: self.EditButtonClick())
+        self.ui.EditDetails.clicked.connect(lambda: self.EditButtonClick(Project.Color))
         #Shortcuts
         self.ui.DeleteProject.setShortcut('Delete')
         self.ui.AddSection.setShortcut('ctrl+a')
@@ -381,8 +382,8 @@ class ProjectWidget(QtWidgets.QWidget):
             framelayout.addWidget(SectionWidget(frame,Section))
             self.ui.LayoutToAddSections.addWidget(frame)
             #Section Widget added to project Widget now
-    def EditButtonClick(self):
-        dialog=ProjectEditWidget(self.ui.ProjectName.text())
+    def EditButtonClick(self,Color):
+        dialog=ProjectEditWidget(self.ui.ProjectName.text(),Color)
         Ok=dialog.exec_()
         if Ok:
             Proj=cl.Project.Instances[self.ProjectID]
@@ -665,8 +666,9 @@ class SettingsWidget(QtWidgets.QWidget):
         self.ui.Pr9.setStyleSheet(f"background-color: {HexFormat(cl.Priority.ColorOfLevel(9))}")
         self.ui.Pr10.setStyleSheet(f"background-color: {HexFormat(cl.Priority.ColorOfLevel(10))}")
 
-    def PopupColorDialog(self):
+    def PopupColorDialog(self,Color):
         dialog=QtWidgets.QColorDialog(self)
+        dialog.setCurrentColor(QtGui.QColor(Color))
         dialog.setModal(True)
         dialog.setStyleSheet('QLabel{ border-radius: 0px ; font-size: 14px }')
         Ok=dialog.exec_()
@@ -675,7 +677,7 @@ class SettingsWidget(QtWidgets.QWidget):
         
     
     def ChangePrColor(self,PrLevel):
-        color=self.PopupColorDialog()
+        color=self.PopupColorDialog(cl.Priority.ColorOfLevel(PrLevel))
         if color==None: return
         self.findChild(QtWidgets.QPushButton,f"Pr{PrLevel}").setStyleSheet(f"background-color: {color}")
         cl.Priority.UpdateColor(PrLevel,int(str(color).strip('# '),16))

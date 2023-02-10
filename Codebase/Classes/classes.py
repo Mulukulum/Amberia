@@ -339,7 +339,7 @@ class Priority:
 
     #Method to get the Color of a Priority Level
     @classmethod
-    def ColorOfLevel(cls,PrLevel: int) -> str :
+    def ColorOfLevel(cls,PrLevel: int) -> int :
         #If Priority is invalid, return None
         if cls.IsValid(PrLevel)==False:          
             ErrorLog(f"Unable to get Priority Color due to Invalid Priority Level input {PrLevel}")
