@@ -409,3 +409,18 @@ QScrollArea{
    border: 2px ridge #a18b12 ;
    border-radius: 5%;
 }
+
+QCalendarWidget QAbstractItemView:enabled 
+{
+	font-size:14px;  
+	color: white;  
+	background-color: #2a3364; 
+	selection-background-color: #2a3364; 
+	selection-color: #c9c15f; 
+}
+
+QCalendarWidget QToolButton {
+   color: white;
+   font-size: 14px;
+   background-color: #2a3364
+}
